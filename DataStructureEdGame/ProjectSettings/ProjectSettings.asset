@@ -4,14 +4,14 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  productGUID: 455b2db8047a8934e8dfd69c8d70af1c
+  productGUID: 4de0fa7289ad3324ab6abaf2a8d7f166
   AndroidProfiler: 0
   defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: Data Structures Ed Game
+  productName: DataStructureEdGame
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21176471, a: 1}
@@ -500,14 +500,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: Data Structures Ed Game
+  metroPackageName: DataStructureEdGame
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: Data Structures Ed Game
+  metroApplicationDescription: DataStructureEdGame
   wsaImages: {}
   metroTileShortName: 
   metroCommandLineArgsFile: 
@@ -578,12 +578,11 @@ PlayerSettings:
     daydream:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
-  cloudServicesEnabled:
-    UNet: 1
+  cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
-  cloudProjectId: 1b16f9a1-29f6-4429-8090-1d6a83492ba8
-  projectName: Data Structures Ed Game
+  cloudProjectId: f22f340c-aafa-4963-9df0-2ace7285e9b8
+  projectName: DataStructureEdGame
   organizationId: nalytle
   cloudEnabled: 0
   enableNewInputSystem: 0
