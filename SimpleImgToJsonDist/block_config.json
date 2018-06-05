@@ -1,0 +1,15 @@
+{
+	"blocks_def": [{
+			"type": "NORMAL_BLOCK",
+			"color_red": 0,
+			"color_green": 0,
+			"color_blue": 0
+		},
+		{
+			"type": "PLAYER",
+			"color_red": 0,
+			"color_green": 0,
+			"color_blue": 255
+		}
+	]
+}

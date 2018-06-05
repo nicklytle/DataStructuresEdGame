@@ -211,3 +211,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ground: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b, type: 2}
   player: {fileID: 4509033331052830, guid: 4990b57ee73830049b58617bdd094e85, type: 2}
+  levelDescriptionJson: {fileID: 4900000, guid: cb46064c1743fbb47b7746eb7cde722b,
+    type: 3}
