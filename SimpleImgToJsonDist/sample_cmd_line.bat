@@ -1,3 +1,3 @@
 @echo ON
-java -jar SimpleImageToJson.jar 	block_config.json	level1.png	level1.json
+java -jar SimpleImageToJson.jar 	block_config.json	level2.png	level2.json
 PAUSE

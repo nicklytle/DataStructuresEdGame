@@ -6,6 +6,7 @@ using UnityEngine;
 public class TestScence : MonoBehaviour {
     public Transform ground;
     public Transform player;
+    public Transform interactTest;
     public TextAsset levelDescriptionJson;
     
     public Transform GetAssocInstanceFromType(string type)
@@ -16,7 +17,10 @@ public class TestScence : MonoBehaviour {
         } else if (type.Equals("PLAYER"))
         {
             return player;
-        } 
+        } else if (type.Equals("INTERACT_TEST"))
+        {
+            return interactTest;
+        }
         return null;
     }
 
