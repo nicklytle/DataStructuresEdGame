@@ -14,9 +14,9 @@ public class PlayerMovement : MonoBehaviour {
         rb2 = gameObject.GetComponent<Rigidbody2D>();
         onGround = true; // initially assumed to not be on the ground. 
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
@@ -26,29 +26,12 @@ public class PlayerMovement : MonoBehaviour {
         {
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed);
-        }
+        } 
+    }
 
-        /*
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(new Vector2(0, 0.1f));
-
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(new Vector2(0, -0.1f));
-
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(new Vector2(-0.1f,0));
-
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(new Vector2(0.1f,0));
-
-        }
-        */
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Collide");
+        onGround = true;
     }
 }

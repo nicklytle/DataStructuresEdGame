@@ -8,7 +8,8 @@ public class TestScence : MonoBehaviour {
     public Transform player;
     public Transform interactTest;
     public TextAsset levelDescriptionJson;
-    
+    public Transform playerRef;
+
     public Transform GetAssocInstanceFromType(string type)
     {
         if (type.Equals("NORMAL_BLOCK"))
@@ -33,7 +34,11 @@ public class TestScence : MonoBehaviour {
             Transform objToInstances = GetAssocInstanceFromType(world.blocks[i].type);
             if (objToInstances != null)
             {
-                Instantiate(objToInstances, blockPos, Quaternion.identity);
+                Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
+                if (objToInstances == player)
+                {
+                    playerRef = obj;
+                }
             }
         }
     }
@@ -48,5 +53,9 @@ public class TestScence : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {		
+        if (playerRef != null)
+        {
+            transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
+        }
 	}
 }
