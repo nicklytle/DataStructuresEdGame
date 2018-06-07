@@ -42,11 +42,11 @@ public class TestScence : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         CreateWorldFromLevelDescription();
+		//Cursor.visible = false;
 
     }
-	
+
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {		
 	}
 }
