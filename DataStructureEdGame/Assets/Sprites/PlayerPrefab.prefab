@@ -20,10 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4509033331052830}
   - component: {fileID: 212106642893559230}
-  - component: {fileID: 114400382208196354}
   - component: {fileID: 61012371454760642}
   - component: {fileID: 50783321307089798}
-  - component: {fileID: 114788419868536602}
+  - component: {fileID: 114400382208196354}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -101,19 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 400
-  jumpSpeed: 5
+  jumpSpeed: 6
   onGround: 0
---- !u!114 &114788419868536602
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1717342736783918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2a07f37e05c52f4e94b13f4aafb60e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &212106642893559230
 SpriteRenderer:
   m_ObjectHideFlags: 1

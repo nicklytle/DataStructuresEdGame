@@ -3,22 +3,26 @@ using System.Collections.Generic;
 using Assets.Scripts.WorldGeneration;
 using UnityEngine;
 
-public class TestScence : MonoBehaviour {
+public class GameController : MonoBehaviour {
+
     public Transform ground;
     public Transform player;
     public Transform interactTest;
     public TextAsset levelDescriptionJson;
     public Transform playerRef;
+    public bool generateWorld;
 
     public Transform GetAssocInstanceFromType(string type)
     {
         if (type.Equals("NORMAL_BLOCK"))
         {
             return ground;
-        } else if (type.Equals("PLAYER"))
+        }
+        else if (type.Equals("PLAYER"))
         {
             return player;
-        } else if (type.Equals("INTERACT_TEST"))
+        }
+        else if (type.Equals("INTERACT_TEST"))
         {
             return interactTest;
         }
@@ -44,18 +48,21 @@ public class TestScence : MonoBehaviour {
     }
 
 
-	// Use this for initialization
-	void Start () {
-        CreateWorldFromLevelDescription();
-		//Cursor.visible = false;
-
+    // Use this for initialization
+    void Start()
+    {
+        if (generateWorld) { 
+            CreateWorldFromLevelDescription();
+            //Cursor.visible = fa}lse;
+        }
     }
 
-	// Update is called once per frame
-	void Update () {		
+    // Update is called once per frame
+    void Update()
+    {
         if (playerRef != null)
         {
             transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
         }
-	}
+    }
 }

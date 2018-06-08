@@ -22,11 +22,13 @@ public class PlayerMovement : MonoBehaviour {
         float vert = Input.GetAxis("Vertical");
         rb2.velocity = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
 
-        if (onGround && vert > 0 )
+        if (onGround && Input.GetKeyDown(KeyCode.Space))
         {
-            onGround = false;
+            // onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed);
+            // this.gameObject.GetComponent<Rigidbody2D>().AddForce(-Vector2.up * jumpSpeed);
         } 
+
     }
 
     void OnCollisionEnter2D(Collision2D collision)
