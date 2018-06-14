@@ -45,15 +45,14 @@ public class PlayerMovement : MonoBehaviour {
         if (onGround && Input.GetKeyDown(KeyCode.Space))
         {
             onGround = false;
-            rb2.velocity += new Vector2(0, jumpSpeed);
-            // this.gameObject.GetComponent<Rigidbody2D>().AddForce(-Vector2.up * jumpSpeed);
+            rb2.velocity += new Vector2(0, jumpSpeed); 
         } 
 
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Collide");
+        // Debug.Log("Collide");
         onGround = true;
     }
 }
