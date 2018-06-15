@@ -23,7 +23,7 @@
 	
 	"blocks" : [
 		{
-			"type":"NORMAL_BLOCK",
+			"type":"GROUND",
 			"x":2,
 			"y":0
 		}

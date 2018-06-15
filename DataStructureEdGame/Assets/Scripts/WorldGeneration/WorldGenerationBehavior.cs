@@ -38,18 +38,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public Transform GetAssocInstanceFromType(string type)
     {
-        if (type.Equals("NORMAL_BLOCK"))
+        if (type.Equals("GROUND"))
         {
             return groundPreFab;
         }
-        else if (type.Equals("PLAYER"))
-        {
-            return playerPreFab;
-        }
-        else if (type.Equals("START_LINK"))
-        {
-            return linkBlockPreFab;
-        }
+
         return null;
     }
 
