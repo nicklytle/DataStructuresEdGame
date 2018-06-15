@@ -45,6 +45,14 @@
 			"y":1,
 			"objId" : "A",
 			"value" : "24",
+			"childLinkBlockConnectId" : "B"
+		},
+		{
+			"type":"SINGLE_LL_PLATFORM",
+			"x":10,
+			"y":2,
+			"objId" : "B",
+			"value" : "24",
 			"childLinkBlockConnectId" : ""
 		}
 	]

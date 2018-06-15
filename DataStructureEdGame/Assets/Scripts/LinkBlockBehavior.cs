@@ -24,7 +24,7 @@ public class LinkBlockBehavior : MonoBehaviour {
     /**
      * Update the Link Arrow to match the data of the platform. 
      */
-    protected void UpdateLinkArrow()
+    public void UpdateLinkArrow()
     {
         if (connectingPlatform == null)
         {

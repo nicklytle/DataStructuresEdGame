@@ -72,7 +72,11 @@ public class PlatformBehavior : MonoBehaviour {
         if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null) // update all blocks in the future chain 
         {
             childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.updatePlatformValuesAndSprite();
-        } 
+        }
+        // update the link block arrow for the inner child
+        childLink.SetActive(true);
+        childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
+
         // set the visibility of the children objects based on hidden value 
         childLink.SetActive(!isHidden);
         childValueBlock.SetActive(!isHidden);
