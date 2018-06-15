@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
-   
+
+    public WorldGenerationBehavior worldGenerator;
+
     // References to important objects in the scene. 
     public Transform playerRef;
     public LinkBlockBehavior startingLink; // what is this level's starting link block?

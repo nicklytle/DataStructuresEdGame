@@ -11,6 +11,7 @@ namespace Assets.Scripts.WorldGeneration
         // the specific player and startLink objects in this level.
         public Block player;
         public LinkBlock startLink;
+        public Block goalPortal;
 
         public Block[] blocks; // basic blocks
         public LinkBlock[] linkBlocks; 

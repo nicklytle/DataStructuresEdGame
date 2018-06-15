@@ -52,12 +52,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  levelDescriptionJson: {fileID: 4900000, guid: 88b303e267e27324e844258776a38996,
-    type: 3}
+  levelFileIndex: 0
+  levelDescriptionJsonFiles:
+  - {fileID: 4900000, guid: 88b303e267e27324e844258776a38996, type: 3}
   generateWorld: 1
+  levelEntities: []
   groundPreFab: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b,
     type: 2}
   playerPreFab: {fileID: 4509033331052830, guid: 4990b57ee73830049b58617bdd094e85,
+    type: 2}
+  goalPortalPreFab: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845,
     type: 2}
   linkBlockPreFab: {fileID: 4305965019959856, guid: 0a4afe0f813d7844a91776882ba27e36,
     type: 2}

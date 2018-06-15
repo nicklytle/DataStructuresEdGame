@@ -10,6 +10,11 @@
 		"y" : 2,
 		"objIDConnectingTo" : "A"
 	},
+	"goalPortal" : {
+		"type":"GOAL_PORAL",
+		"x":7,
+		"y":4
+	},
 	
 	"blocks" : [
 		{

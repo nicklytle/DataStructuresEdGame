@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerBehavior : MonoBehaviour {
+
+    public GameController gameController;
 
     private Rigidbody2D rb2;
     private SpriteRenderer sr;
@@ -51,7 +53,21 @@ public class PlayerMovement : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Debug.Log("Collide");
+        Debug.Log("COLLISION HAPPENED ");
         onGround = true;
+    }
+
+    void OnTriggerEnter2D(Collider2D c2d)
+    {
+        if (c2d.tag == "BottomOfWorld")
+        { 
+            Debug.Log("YOU DIED! :(");
+            gameController.worldGenerator.resetLevel();
+        }
+        else if (c2d.tag == "GoalPortal")
+        {
+            gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
+            gameController.worldGenerator.resetLevel();
+        }
     }
 }

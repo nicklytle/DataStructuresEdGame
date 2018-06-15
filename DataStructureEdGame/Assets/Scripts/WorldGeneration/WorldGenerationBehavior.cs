@@ -8,15 +8,19 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public GameController gameController;
 
     // world generation properties.
-    public TextAsset levelDescriptionJson;
+    public int levelFileIndex;
+    public TextAsset[] levelDescriptionJsonFiles;
     public bool generateWorld;
+    public List<Transform> levelEntities; // all of the entities that were generated for the level.
 
     // references to PreFabs
     public Transform groundPreFab;
     public Transform playerPreFab;
+    public Transform goalPortalPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
 
+    // references to Sprite
     public Sprite startLinkBlockSprite;
 
     // Use this for initialization
@@ -53,7 +57,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void CreateWorldFromLevelDescription()
     {
-        LevelEntities level = JsonUtility.FromJson<LevelEntities>(levelDescriptionJson.text);
+        LevelEntities level = JsonUtility.FromJson<LevelEntities>(levelDescriptionJsonFiles[levelFileIndex].text);
+        // while generating the level, add things to levelEntities list so it can be destroyed for the next level generated.
         for (int i = 0; i < level.blocks.Length; i++)
         {
             Vector2 blockPos = new Vector2((int)level.blocks[i].x, (int)level.blocks[i].y);
@@ -61,12 +66,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
             if (objToInstances != null)
             {
                 Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
+                levelEntities.Add(obj);
             }
         }
         // create the player
         if (level.player != null)
         {
             gameController.playerRef = Instantiate(playerPreFab, new Vector2((int)level.player.x, (int)level.player.y), Quaternion.identity);
+            gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
+            levelEntities.Add(gameController.playerRef);
+        }
+        if (level.goalPortal != null)
+        {
+            Transform goal = Instantiate(goalPortalPreFab, new Vector2((int)level.goalPortal.x, (int)level.goalPortal.y), Quaternion.identity);
+            levelEntities.Add(goal);
         }
         List<LinkBlockBehavior> levelLinkBlocks = new List<LinkBlockBehavior>();
         List<string> levelLinkBlocksConnIds = new List<string>();
@@ -82,6 +95,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
             levelLinkBlocksConnIds.Add(level.startLink.objIDConnectingTo);
+            levelEntities.Add(startLinkTran);
         }
 
         // create the link blocks
@@ -92,6 +106,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             lb.gameController = gameController;
             levelLinkBlocks.Add(lb);
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
+            levelEntities.Add(newLink);
         }
 
         // create the platforms.
@@ -109,6 +124,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
+            levelEntities.Add(newLLPlatform);
         }
 
         // establishing links for the link blocks with the platforms
@@ -123,6 +139,31 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
     }
 
+    /**
+     * Reset the level, rebuilding the level that is in the levelDescriptionFile value.
+     */
+    public void resetLevel()
+    {
+        foreach (Transform t in levelEntities)
+        {
+            // delete any arrows associated with link blocks.
+            if (t.GetComponent<LinkBlockBehavior>() != null && t.GetComponent<LinkBlockBehavior>().linkArrow != null)
+            {
+                Destroy(t.GetComponent<LinkBlockBehavior>().linkArrow.gameObject);
+            }
+            Destroy(t.gameObject);
+        }
+        levelEntities.Clear();
+
+        // make sure there is a level file for this
+        if (levelFileIndex < levelDescriptionJsonFiles.Length)
+        {
+            CreateWorldFromLevelDescription();
+        } else
+        {
+            Debug.Log("GAME IS WON!");
+        }
+    }
 
     // Update is called once per frame
     void Update () {
