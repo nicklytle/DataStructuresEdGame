@@ -1,56 +1,56 @@
 {
 	"player" : {
 		"type" : "PLAYER",
-		"x" : 4,
-		"y" : 4
+		"x" : 8,
+		"y" : 3
 	},
 	"startLink" : {
 		"type" : "LINK_BLOCK",
-		"x" : 2,
+		"x" : 5,
 		"y" : 2,
 		"objIDConnectingTo" : "A"
 	},
 	"goalPortal" : {
 		"type":"GOAL_PORAL",
-		"x":16,
-		"y":4
+		"x":2,
+		"y":6
 	},
 	"helicopterRobot" : {
 		"type":"HELICOPTER_ROBOT",
-		"x":4,
-		"y":6
+		"x":6,
+		"y":4
 	},
 	
 	"blocks" : [
 		{
 			"type":"GROUND",
 			"x":2,
-			"y":0
+			"y":5
+		},
+			{
+			"type":"GROUND",
+			"x":3,
+			"y":5
 		}
+		
 	],
 	
 	"linkBlocks" : [
-		{
-			"type" : "LINK_BLOCK",
-			"x" : 0,
-			"y" : 3,
-			"objIDConnectingTo" : ""
-		}
 	],
 	
 	"singleLinkedListPlatforms" : [
 		{
 			"type":"SINGLE_LL_PLATFORM",
-			"x":4,
+			"x":8,
 			"y":2,
 			"objId" : "A",
 			"value" : "3",
-			"childLinkBlockConnectId" : ""
+			"childLinkBlockConnectId" : "B"
 		},
 		{
 			"type":"SINGLE_LL_PLATFORM",
 			"x":8,
-			"y":2,
+			"y":6,
 			"objId" : "B",
 			"value" : "5",
 			"childLinkBlockConnectId" : ""
@@ -58,7 +58,7 @@
 		{
 			"type":"SINGLE_LL_PLATFORM",
 			"x":12,
-			"y":2,
+			"y":4,
 			"objId" : "C",
 			"value" : "9",
 			"childLinkBlockConnectId" : ""

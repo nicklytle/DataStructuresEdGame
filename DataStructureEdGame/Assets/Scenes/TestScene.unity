@@ -257,6 +257,11 @@ Prefab:
       propertyPath: levelDescriptionJsonFiles.Array.data[1]
       value: 
       objectReference: {fileID: 4900000, guid: cb46064c1743fbb47b7746eb7cde722b, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: 064db2e23999c8b4d82e86b82293bd60, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
