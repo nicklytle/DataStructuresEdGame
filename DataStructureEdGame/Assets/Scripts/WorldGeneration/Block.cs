@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    /**
+     * A Basic Block in the World
+     */
     [Serializable]
     class Block
     {

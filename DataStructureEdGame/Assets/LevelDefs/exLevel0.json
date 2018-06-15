@@ -1,0 +1,41 @@
+{
+	"player" : {
+		"type" : "PLAYER",
+		"x" : 2,
+		"y" : 2
+	},
+	"startLink" : {
+		"type" : "LINK_BLOCK",
+		"x" : 2,
+		"y" : 2,
+		"objIDConnectingTo" : "A"
+	},
+	
+	"blocks" : [
+		{
+			"type":"NORMAL_BLOCK",
+			"x":2,
+			"y":0
+		}
+	],
+	
+	"linkBlocks" : [
+		{
+			"type" : "LINK_BLOCK",
+			"x" : 0,
+			"y" : 3,
+			"objIDConnectingTo" : ""
+		}
+	],
+	
+	"singleLinkedListPlatforms" : [
+		{
+			"type":"SINGLE_LL_PLATFORM",
+			"x":5,
+			"y":1,
+			"objId" : "A",
+			"value" : "24",
+			"childLinkBlockConnectId" : ""
+		}
+	]
+}

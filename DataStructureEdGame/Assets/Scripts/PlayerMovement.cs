@@ -40,8 +40,7 @@ public class PlayerMovement : MonoBehaviour {
             sr.sprite = leftSideView;
             sr.flipX = true;
         }
-
-
+        
         if (onGround && Input.GetKeyDown(KeyCode.Space))
         {
             onGround = false;

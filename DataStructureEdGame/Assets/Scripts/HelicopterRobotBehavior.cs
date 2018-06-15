@@ -12,9 +12,11 @@ public class HelicopterRobotBehavior : MonoBehaviour {
         childLink.GetComponent<LinkBlockBehavior>().isHelicopterLink = true;
         childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update() {
+        if (gameController.playerRef != null) { 
+        //    transform.position = gameController.playerRef.Find("HelicopterPosition").transform.position;
+        }   
+    }
 }

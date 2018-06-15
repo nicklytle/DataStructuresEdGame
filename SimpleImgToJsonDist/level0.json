@@ -1,5 +1,10 @@
 {"blocks":[
 {
+"type":"START_LINK",
+"x":0,
+"y":6
+},
+{
 "type":"NORMAL_BLOCK",
 "x":0,
 "y":1

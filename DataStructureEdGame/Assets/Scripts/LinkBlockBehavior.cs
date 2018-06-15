@@ -10,7 +10,7 @@ public class LinkBlockBehavior : MonoBehaviour {
     public Transform linkArrow; // this is the current arrow that is instantiated 
     public Transform linkArrowPreFab;
     public Sprite nullLinkSprite; // what to show when it is null.
-    private Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
+    public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
     
     // special flags for the type of link block.
     public bool isStartingLink; 
@@ -18,7 +18,6 @@ public class LinkBlockBehavior : MonoBehaviour {
 
     void Start () {
         linkArrow = null; 
-        defaultSprite = GetComponent<SpriteRenderer>().sprite;
         UpdateLinkArrow();
     }
 	
@@ -50,7 +49,6 @@ public class LinkBlockBehavior : MonoBehaviour {
             // find the closest points on both bounding boxes to the center point to make the arrow.
             Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2, 
                 (linkBounds.center.y + platBounds.center.y) / 2, 0);
-            Debug.Log(betweenPoint);
             Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint); 
             Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
             betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point

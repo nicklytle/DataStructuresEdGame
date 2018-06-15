@@ -1,18 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.WorldGeneration;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
-
-    // References to PreFabs for generating the level
-    public Transform ground;
-    public Transform player;
-
-    // world generation properties.
-    public TextAsset levelDescriptionJson;
-    public bool generateWorld;
-
+   
     // References to important objects in the scene. 
     public Transform playerRef;
     public LinkBlockBehavior startingLink; // what is this level's starting link block?
@@ -26,49 +17,6 @@ public class GameController : MonoBehaviour {
         if (startingLink != null)
         {
             startingLink.isStartingLink = true;
-        }
-
-        if (generateWorld)
-        {
-            CreateWorldFromLevelDescription();
-            Debug.Log("CREATED WORLD");
-        }
-    }
-
-    /**
-     * This function maps a string value to a PreFab value for level generation.
-     */ 
-    public Transform GetAssocInstanceFromType(string type)
-    {
-        if (type.Equals("NORMAL_BLOCK"))
-        {
-            return ground;
-        }
-        else if (type.Equals("PLAYER"))
-        {
-            return player;
-        }
-        return null;
-    }
-
-    /**
-     * Generate a world using the given .JSON file in 'levelDescriptionJson'
-     */
-    public void CreateWorldFromLevelDescription()
-    {
-        BlockCollection world = JsonUtility.FromJson<BlockCollection>(levelDescriptionJson.text);
-        for (int i = 0; i < world.blocks.Length; i++)
-        {
-            Vector2 blockPos = new Vector2((int)world.blocks[i].x, (int)world.blocks[i].y);
-            Transform objToInstances = GetAssocInstanceFromType(world.blocks[i].type);
-            if (objToInstances != null)
-            {
-                Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
-                if (objToInstances == player)
-                {
-                    playerRef = obj;
-                }
-            }
         }
     }
 

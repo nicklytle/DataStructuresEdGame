@@ -249,7 +249,7 @@ MonoBehaviour:
   incomingConnectionLinkBlocks: []
   childLink: {fileID: 0}
   childValueBlock: {fileID: 0}
-  defaultSprite: {fileID: 0}
+  defaultSprite: {fileID: 21300000, guid: 753c61c662d006c4585014584c1e3a85, type: 3}
   phasedOutSprite: {fileID: 21300000, guid: bd57a9e945429814493fccac3ee007b0, type: 3}
   isHidden: 0
   isPhasedOut: 0
