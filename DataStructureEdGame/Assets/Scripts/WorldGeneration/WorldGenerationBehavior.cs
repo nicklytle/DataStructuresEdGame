@@ -19,7 +19,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform goalPortalPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
-
+    public Transform helicopterRobotPreFab;
+    
     // references to Sprite
     public Sprite startLinkBlockSprite;
 
@@ -81,6 +82,15 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Transform goal = Instantiate(goalPortalPreFab, new Vector2((int)level.goalPortal.x, (int)level.goalPortal.y), Quaternion.identity);
             levelEntities.Add(goal);
         }
+        if (level.helicopterRobot != null)
+        {
+            Transform robot = Instantiate(helicopterRobotPreFab, new Vector2((int)level.helicopterRobot.x, (int)level.helicopterRobot.y), Quaternion.identity);
+            HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
+            robotBehavior.gameController = gameController;
+            robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
+            levelEntities.Add(robot);
+        }
+        
         List<LinkBlockBehavior> levelLinkBlocks = new List<LinkBlockBehavior>();
         List<string> levelLinkBlocksConnIds = new List<string>();
         // create the start link

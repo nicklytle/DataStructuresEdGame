@@ -12,6 +12,7 @@ namespace Assets.Scripts.WorldGeneration
         public Block player;
         public LinkBlock startLink;
         public Block goalPortal;
+        public Block helicopterRobot;
 
         public Block[] blocks; // basic blocks
         public LinkBlock[] linkBlocks; 

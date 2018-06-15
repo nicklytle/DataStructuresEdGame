@@ -15,6 +15,11 @@
 		"x":7,
 		"y":4
 	},
+	"helicopterRobot" : {
+		"type":"HELICOPTER_ROBOT",
+		"x":3,
+		"y":5
+	},
 	
 	"blocks" : [
 		{

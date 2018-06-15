@@ -61,7 +61,6 @@ public class PlayerBehavior : MonoBehaviour {
     {
         if (c2d.tag == "BottomOfWorld")
         { 
-            Debug.Log("YOU DIED! :(");
             gameController.worldGenerator.resetLevel();
         }
         else if (c2d.tag == "GoalPortal")
