@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
     public WorldGenerationBehavior worldGenerator;
+    public int debugLinkControlVersion; // 0 for Link->Platform, 1 for Link=Link version.
 
     // References to important objects in the scene. 
     public Transform playerRef;
@@ -69,15 +70,22 @@ public class GameController : MonoBehaviour {
             transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
         }
 
-        if (addingLink != null && !Input.GetMouseButton(0)) // mouse was released 
-        {
-            if (connectingPlatform != null)
+        if (debugLinkControlVersion == 0) {  // Link -> Platform controls
+
+            if (addingLink != null && !Input.GetMouseButton(0)) // mouse was released 
             {
-                addingLink.setConnectingPlatform(connectingPlatform);
+                if (connectingPlatform != null)
+                {
+                    addingLink.setConnectingPlatform(connectingPlatform);
+                }
+                // deselect when you release the mouse button.
+                setConnectingPlatform(null);
+                setAddingLink(null); 
             }
-            // deselect when you release the mouse button.
-            setConnectingPlatform(null);
-            setAddingLink(null); 
+        } 
+        else if (debugLinkControlVersion == 1)
+        {
+
         }
     }
 }

@@ -792,6 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   worldGenerator: {fileID: 111316952}
+  debugLinkControlVersion: 0
   playerRef: {fileID: 0}
   startingLink: {fileID: 0}
   addingLink: {fileID: 0}
