@@ -124,6 +124,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             newPlat.gameController = gameController;
             newPlat.childLink = innerLink.gameObject;
             newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
+            newPlat.setValue(level.singleLinkedListPlatforms[i].value);
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);

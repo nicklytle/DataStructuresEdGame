@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlatformBehavior : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class PlatformBehavior : MonoBehaviour {
     public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to.
     public GameObject childLink; // reference to the child link object.
     public GameObject childValueBlock; // reference to the child link object.
+    private string value;
 
     public Sprite defaultSprite; // initial sprite
     public Sprite phasedOutSprite; // sprite to display when phased out.
@@ -15,7 +17,7 @@ public class PlatformBehavior : MonoBehaviour {
     // game specific values
     public bool isHidden; // if not Hidden, then Revealed.
     public bool isPhasedOut; // if not Phased Out, then Solid.
-    
+
     /**
      * Remove an incoming link reference to this platform. 
      */
@@ -120,6 +122,14 @@ public class PlatformBehavior : MonoBehaviour {
     public void setDisplaySelected(bool b)
     { 
         transform.Find("SelectMarker").gameObject.SetActive(b);
+    }
+
+    public void setValue(string s)
+    {
+        if (childValueBlock != null) { 
+            value = s;
+            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = value;
+        }
     }
     
     // Use this for initialization
