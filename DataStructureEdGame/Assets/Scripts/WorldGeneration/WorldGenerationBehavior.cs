@@ -12,6 +12,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public TextAsset[] levelDescriptionJsonFiles;
     public bool generateWorld;
     public List<Transform> levelEntities; // all of the entities that were generated for the level.
+    public List<LinkBlockBehavior> levelLinkBlocks;
 
     // references to PreFabs
     public Transform groundPreFab;
@@ -65,6 +66,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public void CreateWorldFromLevelDescription()
     {
         LevelEntities level = JsonUtility.FromJson<LevelEntities>(levelDescriptionJsonFiles[levelFileIndex].text);
+        gameController.winConditon = GetWinConditionFromString(level.winCondition);
         // while generating the level, add things to levelEntities list so it can be destroyed for the next level generated.
         for (int i = 0; i < level.blocks.Length; i++)
         {
@@ -97,7 +99,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelEntities.Add(robot);
         }
         
-        List<LinkBlockBehavior> levelLinkBlocks = new List<LinkBlockBehavior>();
+        levelLinkBlocks = new List<LinkBlockBehavior>();
+        gameController.objectiveBlocks = new List<ObjectiveBlockBehavior>();
+        gameController.platformEntities = new List<PlatformBehavior>();
         List<string> levelLinkBlocksConnIds = new List<string>();
         // create the start link
         if (level.startLink != null)
@@ -130,9 +134,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
             Transform newOBlock = Instantiate(objectiveBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
-            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
-            ob.gameController = gameController;
-            ob.winConditon = GetWinConditionFromString(level.objectiveBlocks[i].winCondition);
+            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>(); 
             gameController.objectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
@@ -154,6 +156,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
             levelEntities.Add(newLLPlatform);
+            gameController.platformEntities.Add(newPlat);
         }
 
         // establishing links for the link blocks with the platforms
@@ -169,6 +172,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
         // update the win conditions for the objective blocks
         gameController.updateObjectiveBlocks();
+        gameController.updatePlatformEntities();
     }
 
     /**
@@ -176,15 +180,28 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
+        foreach (LinkBlockBehavior lb in levelLinkBlocks)
+        {
+            if (lb.linkArrow != null)
+            {
+                Destroy(lb.linkArrow.gameObject);
+                lb.linkArrow = null;
+            }
+        }
+
         foreach (Transform t in levelEntities)
         {
             // delete any arrows associated with link blocks.
-            if (t.GetComponent<LinkBlockBehavior>() != null && t.GetComponent<LinkBlockBehavior>().linkArrow != null)
+            if (t.GetComponent<HelicopterRobotBehavior>() != null && t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>() != null)
             {
-                Destroy(t.GetComponent<LinkBlockBehavior>().linkArrow.gameObject);
-            }
+                if (t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow != null)
+                {
+                    Destroy(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow.gameObject);
+                }
+            } 
             Destroy(t.gameObject);
         }
+        gameController.clearReferenceLists(); // clear the references here
         levelEntities.Clear();
 
         // make sure there is a level file for this

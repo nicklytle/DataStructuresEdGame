@@ -30,6 +30,7 @@ public class LinkBlockBehavior : MonoBehaviour {
         // always reset the linkArrow when updating
         if (linkArrow != null)
         {
+            Debug.Log("delete the link arrow");
             Destroy(linkArrow.gameObject);
             linkArrow = null;
         }
@@ -163,6 +164,7 @@ public class LinkBlockBehavior : MonoBehaviour {
                 removeLinkConnection();
                 gameController.setStatusText("Removed link");
                 gameController.updateObjectiveBlocks(); // update any objective blocks
+                gameController.updatePlatformEntities();
             }
             if (gameController.addingLink == null && !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))) // you are not deleting it
             {
@@ -180,16 +182,17 @@ public class LinkBlockBehavior : MonoBehaviour {
                         gameController.addingLink.removeLinkConnection();
                     } 
                     gameController.addingLink.setConnectingPlatform(connectingPlatform);
-                    if (gameController.addingLink.parentPlatform != null) // see if the updated link was inside of a platform.
+                    /*if (gameController.addingLink.parentPlatform != null) // see if the updated link was inside of a platform.
                     {
                         gameController.addingLink.parentPlatform.updatePlatformValuesAndSprite(); // update that platform and all connected platforms
                     } else
                     {
                         connectingPlatform.updatePlatformValuesAndSprite(); // update connected platform only.
-                    }
+                    }*/
                 } 
                 gameController.setAddingLink(null);
                 gameController.updateObjectiveBlocks(); // update any objective blocks
+                gameController.updatePlatformEntities();
             }
         }
     }

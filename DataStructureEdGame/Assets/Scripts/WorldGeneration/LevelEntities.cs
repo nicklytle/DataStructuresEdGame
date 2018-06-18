@@ -8,6 +8,7 @@ namespace Assets.Scripts.WorldGeneration
     [Serializable]
     class LevelEntities
     {
+        public string winCondition;
         // the specific player and startLink objects in this level.
         public Block player;
         public LinkBlock startLink;
@@ -16,7 +17,7 @@ namespace Assets.Scripts.WorldGeneration
 
         public Block[] blocks; // basic blocks
         public LinkBlock[] linkBlocks;
-        public ObjectiveBlock[] objectiveBlocks;
+        public Block[] objectiveBlocks;
 
         // stuff specific to single-linked lists.
         public SingleLinkedListPlatform[] singleLinkedListPlatforms;

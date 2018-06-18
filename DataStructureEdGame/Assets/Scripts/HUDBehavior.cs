@@ -23,8 +23,8 @@ public class HUDBehavior : MonoBehaviour {
 
     public void OnResetButtonClick()
     {
-        Debug.Log("Reset Level");
-        Debug.Log(debounce);
+        //Debug.Log("Reset Level");
+        //Debug.Log(debounce);
         if (debounce > 1.0f) { 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 

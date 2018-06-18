@@ -1,4 +1,5 @@
 {
+	"winCondition" : "SortListAscending",
 	"player" : {
 		"type" : "PLAYER",
 		"x" : 8,
@@ -38,8 +39,7 @@
 		{
 			"type" : "OBJECTIVE_BLOCK",
 			"x" : 2,
-			"y" : 12,
-			"winCondition" : "SortListAscending"
+			"y" : 12
 		}
 	],
 	

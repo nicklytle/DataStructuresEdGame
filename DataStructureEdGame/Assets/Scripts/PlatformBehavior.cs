@@ -18,6 +18,8 @@ public class PlatformBehavior : MonoBehaviour {
     public bool isHidden; // if not Hidden, then Revealed.
     public bool isPhasedOut; // if not Phased Out, then Solid.
 
+    public bool aleadyUpdatedThisFrame;
+
     /**
      * Remove an incoming link reference to this platform. 
      */
@@ -25,7 +27,7 @@ public class PlatformBehavior : MonoBehaviour {
     {
         incomingConnectionLinkBlocks.Remove(link); // remove this reference to the link
         link.connectingPlatform = null; // remove the reference to this platform in the link 
-        updatePlatformValuesAndSprite();
+        gameController.updatePlatformEntities(); //  updatePlatformValuesAndSprite();
     }
 
     /**
@@ -34,7 +36,7 @@ public class PlatformBehavior : MonoBehaviour {
     public void addIncomingConnectingLink(LinkBlockBehavior link)
     {
         incomingConnectionLinkBlocks.Add(link);
-        updatePlatformValuesAndSprite();
+        gameController.updatePlatformEntities(); // updatePlatformValuesAndSprite();
     }
 
     /**
@@ -71,10 +73,10 @@ public class PlatformBehavior : MonoBehaviour {
             }
         }
 
-        if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null) // update all blocks in the future chain 
+        /*if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null) // update all blocks in the future chain 
         {
             childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.updatePlatformValuesAndSprite();
-        }
+        }*/
         // update the link block arrow for the inner child
         childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
 
@@ -88,16 +90,21 @@ public class PlatformBehavior : MonoBehaviour {
      */
     public bool isPlatformConnectingToStart()
     {
+        List<PlatformBehavior> alreadySearchedPlatforms = new List<PlatformBehavior>();
         PlatformBehavior temp = gameController.startingLink.connectingPlatform;
         while (temp != null)
         {
+            if (alreadySearchedPlatforms.Contains(temp)) {
+                return true;
+            }
             if (temp == this)
             {
                 return true;
             }
             if (temp.childLink != null)
             {
-                temp = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
+                alreadySearchedPlatforms.Add(temp);
+                temp = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform; 
             }
         }
         return false;
@@ -145,11 +152,12 @@ public class PlatformBehavior : MonoBehaviour {
         childValueBlock = transform.Find("ValueBlock").gameObject;
         childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
         childLink.GetComponent<LinkBlockBehavior>().parentPlatform = this;
-        updatePlatformValuesAndSprite();
+        // updatePlatformValuesAndSprite();
     }
 
     // Update is called once per frame
     void Update () {
-		
-	}
+        aleadyUpdatedThisFrame = false; // reset this each frame.
+
+    }
 }
