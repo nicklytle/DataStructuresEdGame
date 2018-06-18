@@ -117,13 +117,11 @@ public class PlatformBehavior : MonoBehaviour {
         }
     }
 
-
     public void setDisplaySelected(bool b)
     { 
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }
-
-
+    
     // Use this for initialization
     void Start () {
         // defaultSprite = GetComponent<SpriteRenderer>().sprite;
