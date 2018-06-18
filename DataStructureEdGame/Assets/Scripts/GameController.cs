@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -11,11 +12,14 @@ public class GameController : MonoBehaviour {
     public Transform playerRef;
     public LinkBlockBehavior startingLink; // what is this level's starting link block?
     public LinkBlockBehavior addingLink; // what Link block the player is adding a connection to, if any
-    public PlatformBehavior connectingPlatform; 
+    public PlatformBehavior connectingPlatform;
+
+    public Text statusTextUI;
 
     void Start()
     {
         addingLink = null;
+        setStatusText("");
         // ensure the starting link has the proper property
         if (startingLink != null)
         {
@@ -38,6 +42,14 @@ public class GameController : MonoBehaviour {
         { 
             addingLink.setDisplaySelected(true);
         }
+    }
+
+    /**
+     * Set the game's status text
+     */
+    public void setStatusText(string t)
+    {
+        statusTextUI.text = t;
     }
 
     /**
@@ -85,7 +97,11 @@ public class GameController : MonoBehaviour {
         } 
         else if (debugLinkControlVersion == 1)
         {
-
+            if (addingLink != null && (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)))
+            {
+                setAddingLink(null); // deselect adding link to deselect
+                setStatusText("Deselected link block");
+            } 
         }
     }
 }

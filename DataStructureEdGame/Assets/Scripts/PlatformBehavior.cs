@@ -74,7 +74,6 @@ public class PlatformBehavior : MonoBehaviour {
             childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.updatePlatformValuesAndSprite();
         }
         // update the link block arrow for the inner child
-        childLink.SetActive(true);
         childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
 
         // set the visibility of the children objects based on hidden value 
@@ -127,7 +126,7 @@ public class PlatformBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        defaultSprite = GetComponent<SpriteRenderer>().sprite;
+        // defaultSprite = GetComponent<SpriteRenderer>().sprite;
         // establish child link connections
         childLink = transform.Find("LinkBlock").gameObject;
         childValueBlock = transform.Find("ValueBlock").gameObject;

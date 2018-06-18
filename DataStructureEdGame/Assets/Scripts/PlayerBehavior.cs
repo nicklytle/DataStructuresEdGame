@@ -47,8 +47,7 @@ public class PlayerBehavior : MonoBehaviour {
         {
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
-        } 
-
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)

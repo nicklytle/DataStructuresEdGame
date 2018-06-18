@@ -26,24 +26,25 @@ public class LinkBlockBehavior : MonoBehaviour {
      * Update the Link Arrow to match the data of the platform. 
      */
     public void UpdateLinkArrow()
-    { 
-        if (connectingPlatform == null)
+    {
+        // always reset the linkArrow when updating
+        if (linkArrow != null)
+        {
+            Destroy(linkArrow.gameObject);
+            linkArrow = null;
+        }
+
+        if (connectingPlatform == null) // only update the sprite if there is no connection
         {
             if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
             {
                 GetComponent<SpriteRenderer>().sprite = nullLinkSprite;
             }
-            // always reset the linkArrow when updating
-            if (linkArrow != null)
-            {
-                Destroy(linkArrow.gameObject);
-                linkArrow = null;
-            }
         }
         else
         {
-            if (linkArrow == null) // only make a link if there is none
-            {
+            //if (linkArrow == null) // only make a link if there is none
+            //{
                 Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
                 if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
                 {
@@ -85,7 +86,7 @@ public class LinkBlockBehavior : MonoBehaviour {
             {
                 GetComponent<SpriteRenderer>().sprite = defaultSprite;
             }
-        }
+        //}
     }
 
     /**
@@ -122,6 +123,22 @@ public class LinkBlockBehavior : MonoBehaviour {
         transform.Find("SelectMarker").gameObject.SetActive(b); 
     }
 
+
+    void OnMouseEnter()
+    {
+        if (gameController.addingLink == null) { 
+            gameController.setStatusText("Click to set this as the adding link. Shift + Click to delte the connection");
+        }
+    }
+
+    void OnMouseExit()
+    {
+        if (gameController.addingLink == null)
+        {
+            gameController.setStatusText("");
+        }
+    }
+
     // if the user clicks on this block.
     void OnMouseDown()
     {
@@ -139,19 +156,37 @@ public class LinkBlockBehavior : MonoBehaviour {
         {
             if (gameController.addingLink == null)
             {
-                if (isConnectedToPlatform())  // there is a link block there.
+                if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
                 {
                     gameController.setAddingLink(null);
                     removeLinkConnection();
+                    gameController.setStatusText("Removed link");
                 }
-                else // the link block is empty
+                else if (!(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) // you are not deleting it
                 {
                     gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
+                    gameController.setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
                 }
-            } else if (gameController.addingLink != null && gameController.addingLink != this)
+            // make sure it is OK to make addingLink's connectingPlatform equal to this connectingPlatform
+            } else if (gameController.addingLink != null && gameController.addingLink != this) // don't connect to yourself
             {
-                // if there is already an adding link, then set this link equal to the second link. 
-                setConnectingPlatform(gameController.addingLink.connectingPlatform);
+                if (gameController.addingLink.connectingPlatform != connectingPlatform && connectingPlatform != gameController.addingLink.parentPlatform)
+                {
+                    // this means there is a valid connection!
+                    // before establishing the connection for the addingLink, remove any links current there.
+                    if (gameController.addingLink.isConnectedToPlatform()) { 
+                        gameController.addingLink.removeLinkConnection();
+                    } 
+                    Debug.Log("UPDATING LINKS");
+                    gameController.addingLink.setConnectingPlatform(connectingPlatform);
+                    if (gameController.addingLink.parentPlatform != null) // see if the updated link was inside of a platform.
+                    {
+                        gameController.addingLink.parentPlatform.updatePlatformValuesAndSprite(); // update that platform and all connected platforms
+                    } else
+                    {
+                        connectingPlatform.updatePlatformValuesAndSprite(); // update connected platform only.
+                    }
+                } 
                 gameController.setAddingLink(null);
             }
         }
