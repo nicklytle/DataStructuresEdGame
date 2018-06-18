@@ -126,9 +126,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
 
         // create the objective blocks
+        Debug.Log(level.objectiveBlocks);
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
-            Transform newOBlock = Instantiate(linkBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
+            Transform newOBlock = Instantiate(objectiveBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
             ob.gameController = gameController;
             ob.winConditon = GetWinConditionFromString(level.objectiveBlocks[i].winCondition);
@@ -165,6 +166,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
             }
         }
+
+        // update the win conditions for the objective blocks
+        gameController.updateObjectiveBlocks();
     }
 
     /**

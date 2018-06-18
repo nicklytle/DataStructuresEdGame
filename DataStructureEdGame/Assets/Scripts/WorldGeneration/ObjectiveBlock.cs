@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    [Serializable]
     class ObjectiveBlock : Block
     {
         public string winCondition;

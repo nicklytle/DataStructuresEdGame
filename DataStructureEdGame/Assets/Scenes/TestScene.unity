@@ -224,53 +224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameController: {fileID: 1909570818}
   resetButton: {fileID: 462850116}
---- !u!1001 &262876870
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 9.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 5.72
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114976197208652354, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6,
-        type: 2}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1909570818}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1001 &332821811
 Prefab:
   m_ObjectHideFlags: 0
@@ -881,12 +834,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1659865208}
---- !u!114 &1865838118 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114976197208652354, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6,
-    type: 2}
-  m_PrefabInternal: {fileID: 262876870}
-  m_Script: {fileID: 11500000, guid: aa58fa41b2c41274c930908884bce0ba, type: 3}
 --- !u!1 &1892864577
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,7 +1002,7 @@ MonoBehaviour:
   playerRef: {fileID: 0}
   addingLink: {fileID: 0}
   objectiveBlocks:
-  - {fileID: 1865838118}
+  - {fileID: 0}
   startingLink: {fileID: 0}
   connectingPlatform: {fileID: 0}
   statusTextUI: {fileID: 1950673981}
