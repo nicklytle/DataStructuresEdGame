@@ -31,8 +31,16 @@
 			"type":"GROUND",
 			"x":1,
 			"y":11
+		} 
+	],
+	
+	"objectiveBlocks" : [ 
+		{
+			"type" : "OBJECTIVE_BLOCK",
+			"x" : 2,
+			"y" : 12,
+			"winCondition" : "SortListAscending"
 		}
-		
 	],
 	
 	"linkBlocks" : [
@@ -56,7 +64,7 @@
 			"x":8,
 			"y":2,
 			"objId" : "A",
-			"value" : "3",
+			"value" : 3,
 			"childLinkBlockConnectId" : "B"
 		},
 		{
@@ -64,7 +72,7 @@
 			"x":8,
 			"y":6,
 			"objId" : "B",
-			"value" : "5",
+			"value" : 5,
 			"childLinkBlockConnectId" : "D"
 		},
 		{
@@ -72,7 +80,7 @@
 			"x":12,
 			"y":4,
 			"objId" : "C",
-			"value" : "9",
+			"value" : 9,
 			"childLinkBlockConnectId" : ""
 		},
 		{
@@ -80,7 +88,7 @@
 			"x":4,
 			"y":8,
 			"objId" : "D",
-			"value" : "4",
+			"value" : 4,
 			"childLinkBlockConnectId" : ""
 		}
 	]

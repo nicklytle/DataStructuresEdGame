@@ -15,7 +15,8 @@ namespace Assets.Scripts.WorldGeneration
         public Block helicopterRobot;
 
         public Block[] blocks; // basic blocks
-        public LinkBlock[] linkBlocks; 
+        public LinkBlock[] linkBlocks;
+        public ObjectiveBlock[] objectiveBlocks;
 
         // stuff specific to single-linked lists.
         public SingleLinkedListPlatform[] singleLinkedListPlatforms;

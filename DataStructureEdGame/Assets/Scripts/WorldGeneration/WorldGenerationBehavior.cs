@@ -17,6 +17,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform groundPreFab;
     public Transform playerPreFab;
     public Transform goalPortalPreFab;
+    public Transform objectiveBlockPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
     public Transform helicopterRobotPreFab;
@@ -44,6 +45,18 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
 
         return null;
+    }
+
+    public GameController.WinCondition GetWinConditionFromString(string str)
+    {
+        if (str.Equals("SortListAscending"))
+        {
+            return GameController.WinCondition.SortListAscending;
+        } else if (str.Equals("SortListDescending"))
+        {
+            return GameController.WinCondition.SortListDescending;
+        }
+        return GameController.WinCondition.None;
     }
 
     /**
@@ -110,6 +123,17 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelLinkBlocks.Add(lb);
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
+        }
+
+        // create the objective blocks
+        for (int i = 0; i < level.objectiveBlocks.Length; i++)
+        {
+            Transform newOBlock = Instantiate(linkBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
+            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
+            ob.gameController = gameController;
+            ob.winConditon = GetWinConditionFromString(level.objectiveBlocks[i].winCondition);
+            gameController.objectiveBlocks.Add(ob);
+            levelEntities.Add(newOBlock);
         }
 
         // create the platforms.

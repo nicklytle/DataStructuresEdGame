@@ -8,10 +8,22 @@ public class GameController : MonoBehaviour {
     public WorldGenerationBehavior worldGenerator;
     public int debugLinkControlVersion; // 0 for Link->Platform, 1 for Link=Link version.
 
+    // different win conditions for the level.
+    public enum WinCondition
+    {
+        None,
+        SortListAscending,
+        SortListDescending
+    }
+
     // References to important objects in the scene. 
     public Transform playerRef;
-    public LinkBlockBehavior startingLink; // what is this level's starting link block?
     public LinkBlockBehavior addingLink; // what Link block the player is adding a connection to, if any
+
+    public List<ObjectiveBlockBehavior> objectiveBlocks;
+
+    // Linked list properties
+    public LinkBlockBehavior startingLink; // what is this level's starting link block?
     public PlatformBehavior connectingPlatform;
 
     public Text statusTextUI;
@@ -71,6 +83,14 @@ public class GameController : MonoBehaviour {
             {
                 connectingPlatform.setDisplaySelected(true);
             }
+        }
+    }
+
+    public void updateObjectiveBlocks()
+    {
+        foreach (ObjectiveBlockBehavior obb in objectiveBlocks)
+        {
+            obb.updatedFadedState();
         }
     }
 

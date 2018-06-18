@@ -61,7 +61,11 @@ public class LinkBlockBehavior : MonoBehaviour {
             linkArrow = Instantiate(linkArrowPreFab, betweenPoint, Quaternion.identity);
             linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
             Vector3 diff = closestToPlat - closestToLink;
-            float rotationAmount = 0;
+            float rotationAmount = 0; // the number of radians to rotate it.
+            // rotationAmount = Mathf.Asin(diff.normalized.y);
+
+            // TODO: this needs to actually work and not be so complicated
+
             if (diff.y != 0)
             {
                 // TODO: Fix the rotation amount; sometimes it looks funky. 
@@ -158,6 +162,7 @@ public class LinkBlockBehavior : MonoBehaviour {
                 gameController.setAddingLink(null);
                 removeLinkConnection();
                 gameController.setStatusText("Removed link");
+                gameController.updateObjectiveBlocks(); // update any objective blocks
             }
             if (gameController.addingLink == null && !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))) // you are not deleting it
             {
@@ -174,7 +179,6 @@ public class LinkBlockBehavior : MonoBehaviour {
                     if (gameController.addingLink.isConnectedToPlatform()) { 
                         gameController.addingLink.removeLinkConnection();
                     } 
-                    Debug.Log("UPDATING LINKS");
                     gameController.addingLink.setConnectingPlatform(connectingPlatform);
                     if (gameController.addingLink.parentPlatform != null) // see if the updated link was inside of a platform.
                     {
@@ -185,6 +189,7 @@ public class LinkBlockBehavior : MonoBehaviour {
                     }
                 } 
                 gameController.setAddingLink(null);
+                gameController.updateObjectiveBlocks(); // update any objective blocks
             }
         }
     }

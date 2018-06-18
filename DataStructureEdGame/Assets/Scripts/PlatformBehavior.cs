@@ -9,7 +9,7 @@ public class PlatformBehavior : MonoBehaviour {
     public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to.
     public GameObject childLink; // reference to the child link object.
     public GameObject childValueBlock; // reference to the child link object.
-    private string value;
+    private int value;
 
     public Sprite defaultSprite; // initial sprite
     public Sprite phasedOutSprite; // sprite to display when phased out.
@@ -124,12 +124,17 @@ public class PlatformBehavior : MonoBehaviour {
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
-    public void setValue(string s)
+    public void setValue(int s)
     {
         if (childValueBlock != null) { 
             value = s;
-            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = value;
+            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + value;
         }
+    }
+
+    public int getValue()
+    {
+        return value;
     }
     
     // Use this for initialization

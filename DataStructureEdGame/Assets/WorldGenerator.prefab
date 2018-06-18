@@ -54,7 +54,7 @@ MonoBehaviour:
   gameController: {fileID: 0}
   levelFileIndex: 0
   levelDescriptionJsonFiles:
-  - {fileID: 4900000, guid: 88b303e267e27324e844258776a38996, type: 3}
+  - {fileID: 4900000, guid: b2ea2e4e0abf201419526ea7aa6f5862, type: 3}
   generateWorld: 1
   levelEntities: []
   groundPreFab: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b,
@@ -62,6 +62,8 @@ MonoBehaviour:
   playerPreFab: {fileID: 4509033331052830, guid: 4990b57ee73830049b58617bdd094e85,
     type: 2}
   goalPortalPreFab: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845,
+    type: 2}
+  objectiveBlockPreFab: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6,
     type: 2}
   linkBlockPreFab: {fileID: 4305965019959856, guid: 0a4afe0f813d7844a91776882ba27e36,
     type: 2}
