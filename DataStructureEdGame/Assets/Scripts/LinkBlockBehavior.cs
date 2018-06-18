@@ -38,55 +38,53 @@ public class LinkBlockBehavior : MonoBehaviour {
         {
             if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
             {
+                Debug.Log("Set to the null link");
                 GetComponent<SpriteRenderer>().sprite = nullLinkSprite;
             }
         }
         else
-        {
-            //if (linkArrow == null) // only make a link if there is none
-            //{
-                Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
-                if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
-                {
-                    linkBounds = parentPlatform.GetComponent<SpriteRenderer>().bounds;
-                }
-                Bounds platBounds = connectingPlatform.GetComponent<SpriteRenderer>().bounds;
+        { 
+            Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
+            if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
+            {
+                linkBounds = parentPlatform.GetComponent<SpriteRenderer>().bounds;
+            }
+            Bounds platBounds = connectingPlatform.GetComponent<SpriteRenderer>().bounds;
 
-                // find the closest points on both bounding boxes to the center point to make the arrow.
-                Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
-                    (linkBounds.center.y + platBounds.center.y) / 2, 0);
-                Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
-                Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
-                betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
+            // find the closest points on both bounding boxes to the center point to make the arrow.
+            Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
+                (linkBounds.center.y + platBounds.center.y) / 2, 0);
+            Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
+            Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
+            betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
 
-                linkArrow = Instantiate(linkArrowPreFab, betweenPoint, Quaternion.identity);
-                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
-                Vector3 diff = closestToPlat - closestToLink;
-                float rotationAmount = 0;
-                if (diff.y != 0)
-                {
-                    // TODO: Fix the rotation amount; sometimes it looks funky. 
-                    rotationAmount = Mathf.Sin(diff.y / diff.magnitude);
-                    if (diff.x < 0)
-                    {
-                        linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                        rotationAmount *= -1;
-                    }
-                }
-                else if (diff.x < 0)
+            linkArrow = Instantiate(linkArrowPreFab, betweenPoint, Quaternion.identity);
+            linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
+            Vector3 diff = closestToPlat - closestToLink;
+            float rotationAmount = 0;
+            if (diff.y != 0)
+            {
+                // TODO: Fix the rotation amount; sometimes it looks funky. 
+                rotationAmount = Mathf.Sin(diff.y / diff.magnitude);
+                if (diff.x < 0)
                 {
                     linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                        linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                    rotationAmount *= -1;
                 }
-                linkArrow.transform.Rotate(new Vector3(0, 0, Mathf.Rad2Deg * rotationAmount));
             }
+            else if (diff.x < 0)
+            {
+                linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
+                        linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+            }
+            linkArrow.transform.Rotate(new Vector3(0, 0, Mathf.Rad2Deg * rotationAmount));
             // update the links sprite
             if (GetComponent<SpriteRenderer>().sprite != defaultSprite)
             {
                 GetComponent<SpriteRenderer>().sprite = defaultSprite;
             }
-        //}
+        }
     }
 
     /**
@@ -153,22 +151,21 @@ public class LinkBlockBehavior : MonoBehaviour {
             }
         }
         else if (gameController.debugLinkControlVersion == 1) 
-        {
-            if (gameController.addingLink == null)
+        { 
+            if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
             {
-                if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
-                {
-                    gameController.setAddingLink(null);
-                    removeLinkConnection();
-                    gameController.setStatusText("Removed link");
-                }
-                else if (!(Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))) // you are not deleting it
-                {
-                    gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
-                    gameController.setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
-                }
+                Debug.Log("DELETING LINK!");
+                gameController.setAddingLink(null);
+                removeLinkConnection();
+                gameController.setStatusText("Removed link");
+            }
+            if (gameController.addingLink == null && !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))) // you are not deleting it
+            {
+                gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
+                gameController.setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
+            }
             // make sure it is OK to make addingLink's connectingPlatform equal to this connectingPlatform
-            } else if (gameController.addingLink != null && gameController.addingLink != this) // don't connect to yourself
+            if (gameController.addingLink != null && gameController.addingLink != this) // don't connect to yourself
             {
                 if (gameController.addingLink.connectingPlatform != connectingPlatform && connectingPlatform != gameController.addingLink.parentPlatform)
                 {
