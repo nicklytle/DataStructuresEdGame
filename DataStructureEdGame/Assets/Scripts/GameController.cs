@@ -139,6 +139,7 @@ public class GameController : MonoBehaviour {
      */ 
     public void updateObjectiveBlocks()
     {
+        Debug.Log("Checking win!");
         bool isWinSatisfied = isWinConditonSatisfied();
         // update the hud
         if (isWinSatisfied)

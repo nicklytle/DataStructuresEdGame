@@ -113,16 +113,16 @@ public class PlatformBehavior : MonoBehaviour {
     void OnMouseEnter()
     {
         if (gameController.debugLinkControlVersion == 0) { 
-            //Debug.Log("OnMouseEnter()");
             gameController.setConnectingPlatform(this); // when the mouse goes over a platform, create reference in game controller.
+            gameController.updateObjectiveBlocks();
         }
     }
 
     void OnMouseExit()
     {
         if (gameController.debugLinkControlVersion == 0) { 
-            //Debug.Log("OnMouseExit()");
             gameController.setConnectingPlatform(null); // when the mouse leaves a platform, remove the reference in game controller.
+            gameController.updateObjectiveBlocks();
         }
     }
 

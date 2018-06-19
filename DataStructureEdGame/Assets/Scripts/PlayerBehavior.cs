@@ -52,7 +52,7 @@ public class PlayerBehavior : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("COLLISION HAPPENED ");
+        //Debug.Log("COLLISION HAPPENED ");
         onGround = true;
     }
 

@@ -114,6 +114,8 @@ MonoBehaviour:
   linkArrow: {fileID: 0}
   linkArrowPreFab: {fileID: 4539836622892650, guid: bada108cd87af4c4f826cf95ea7d530f,
     type: 2}
+  linkArrowFadedPreFab: {fileID: 4915860612458224, guid: 588c8e17e66fb374382c33f9cd6641d7,
+    type: 2}
   nullLinkSprite: {fileID: 21300000, guid: 119c787416b02e24891806f4157046ab, type: 3}
   defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
   isStartingLink: 0

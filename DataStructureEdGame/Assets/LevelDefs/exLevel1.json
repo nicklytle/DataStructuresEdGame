@@ -1,4 +1,5 @@
 {
+	"winCondition" : "SortListAscending",
 	"player" : {
 		"type" : "PLAYER",
 		"x" : 4,
@@ -27,6 +28,9 @@
 			"x":2,
 			"y":0
 		}
+	],
+	
+	"objectiveBlocks" : [
 	],
 	
 	"linkBlocks" : [

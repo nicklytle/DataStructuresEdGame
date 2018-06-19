@@ -9,6 +9,7 @@ public class LinkBlockBehavior : MonoBehaviour {
     public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
     public Transform linkArrow; // this is the current arrow that is instantiated 
     public Transform linkArrowPreFab;
+    public Transform linkArrowFadedPreFab;
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
     
@@ -30,7 +31,7 @@ public class LinkBlockBehavior : MonoBehaviour {
         // always reset the linkArrow when updating
         if (linkArrow != null)
         {
-            Debug.Log("delete the link arrow");
+            //Debug.Log("delete the link arrow");
             Destroy(linkArrow.gameObject);
             linkArrow = null;
         }
@@ -39,7 +40,7 @@ public class LinkBlockBehavior : MonoBehaviour {
         {
             if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
             {
-                Debug.Log("Set to the null link");
+                //Debug.Log("Set to the null link");
                 GetComponent<SpriteRenderer>().sprite = nullLinkSprite;
             }
         }
@@ -59,7 +60,12 @@ public class LinkBlockBehavior : MonoBehaviour {
             Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
             betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
 
-            linkArrow = Instantiate(linkArrowPreFab, betweenPoint, Quaternion.identity);
+            Transform arrowPreFab = linkArrowPreFab;
+            if (parentPlatform != null && parentPlatform.isPhasedOut)
+            {
+                arrowPreFab = linkArrowFadedPreFab;
+            }
+            linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
             linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
             Vector3 diff = closestToPlat - closestToLink;
             float rotationAmount = 0; // the number of radians to rotate it.
@@ -154,6 +160,7 @@ public class LinkBlockBehavior : MonoBehaviour {
             { 
                 gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
             }
+            gameController.updateObjectiveBlocks(); // update any objective blocks
         }
         else if (gameController.debugLinkControlVersion == 1) 
         { 
