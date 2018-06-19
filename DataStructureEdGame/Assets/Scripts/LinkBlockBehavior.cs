@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LinkBlockBehavior : MonoBehaviour {
+public class LinkBlockBehavior : MonoBehaviour
+{
 
     public GameController gameController;
     public PlatformBehavior parentPlatform; // if this link block is in a platform, then this is the parent 
@@ -12,22 +13,27 @@ public class LinkBlockBehavior : MonoBehaviour {
     public Transform linkArrowFadedPreFab;
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
-    
+
+
     // special flags for the type of link block.
-    public bool isStartingLink; 
+    public bool isStartingLink;
     public bool isHelicopterLink;
 
-    void Start () {
-        if (parentPlatform == null) { 
+    void Start()
+    {
+        if (parentPlatform == null)
+        {
             UpdateLinkArrow();
         }
     }
-	
+
     /**
      * Update the Link Arrow to match the data of the platform. 
      */
     public void UpdateLinkArrow()
     {
+        bool vertical = false;
+        bool horiztonal = false;
         // always reset the linkArrow when updating
         if (linkArrow != null)
         {
@@ -45,7 +51,7 @@ public class LinkBlockBehavior : MonoBehaviour {
             }
         }
         else
-        { 
+        {
             Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
             if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
             {
@@ -57,7 +63,9 @@ public class LinkBlockBehavior : MonoBehaviour {
             Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
                 (linkBounds.center.y + platBounds.center.y) / 2, 0);
             Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
+            Debug.Log(closestToLink);
             Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
+            Debug.Log(closestToPlat);
             betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
 
             Transform arrowPreFab = linkArrowPreFab;
@@ -65,31 +73,80 @@ public class LinkBlockBehavior : MonoBehaviour {
             {
                 arrowPreFab = linkArrowFadedPreFab;
             }
-            linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
-            linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
-            Vector3 diff = closestToPlat - closestToLink;
-            float rotationAmount = 0; // the number of radians to rotate it.
-            // rotationAmount = Mathf.Asin(diff.normalized.y);
 
-            // TODO: this needs to actually work and not be so complicated
-
-            if (diff.y != 0)
+            if (linkBounds.center.x == platBounds.center.x)
             {
-                // TODO: Fix the rotation amount; sometimes it looks funky. 
-                rotationAmount = Mathf.Sin(diff.y / diff.magnitude);
-                if (diff.x < 0)
+                vertical = true;
+                Debug.Log("vertical arrow needed");
+                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
+                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
+                Vector3 vertDiff = closestToPlat - closestToLink;
+                if (vertDiff.y < 0)
                 {
-                    linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                        linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                    rotationAmount *= -1;
+                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
+                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                    linkArrow.transform.Rotate(new Vector3(0, 0, 270));
+                    Debug.Log("platform is lower");
+                }
+                if (vertDiff.y > 0)
+                {
+                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
+                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                    linkArrow.transform.Rotate(new Vector3(0, 0, 90));
+                    Debug.Log("platform is higher");
                 }
             }
-            else if (diff.x < 0)
+
+            if (linkBounds.center.y == platBounds.center.y)
             {
-                linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                        linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                horiztonal = true;
+                Debug.Log("horizontal arrow needed");
+                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
+                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
+                Vector3 vertDiff = closestToPlat - closestToLink;
+                if (vertDiff.x < 0)
+                {
+                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
+                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                    linkArrow.transform.Rotate(new Vector3(0, 0, 180));
+                    Debug.Log("platform is on left");
+                }
+                if (vertDiff.x > 0)
+                {
+                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
+                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                    linkArrow.transform.Rotate(new Vector3(0, 0, 0));
+                    Debug.Log("platform is on right");
+                }
             }
-            linkArrow.transform.Rotate(new Vector3(0, 0, Mathf.Rad2Deg * rotationAmount));
+            if (!horiztonal && !vertical)
+            {
+                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
+                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
+                Vector3 diff = closestToPlat - closestToLink;
+                float rotationAmount = 0; // the number of radians to rotate it.
+                                          // rotationAmount = Mathf.Asin(diff.normalized.y);
+
+                // TODO: this needs to actually work and not be so complicated
+
+                if (diff.y != 0)
+                {
+                    // TODO: Fix the rotation amount; sometimes it looks funky. 
+                    rotationAmount = Mathf.Sin(diff.y / diff.magnitude);
+                    if (diff.x < 0)
+                    {
+                        linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
+                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                        rotationAmount *= -1;
+                    }
+                }
+                else if (diff.x < 0)
+                {
+                    linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
+                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
+                }
+                linkArrow.transform.Rotate(new Vector3(0, 0, Mathf.Rad2Deg * rotationAmount));
+            }
             // update the links sprite
             if (GetComponent<SpriteRenderer>().sprite != defaultSprite)
             {
@@ -129,7 +186,7 @@ public class LinkBlockBehavior : MonoBehaviour {
 
     public void setDisplaySelected(bool b)
     {
-        transform.Find("SelectMarker").gameObject.SetActive(b); 
+        transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
 
@@ -162,18 +219,17 @@ public class LinkBlockBehavior : MonoBehaviour {
     // if the user clicks on this block.
     void OnMouseDown()
     {
-        if (gameController.debugLinkControlVersion == 0) { 
+        if (gameController.debugLinkControlVersion == 0)
+        {
             if (isConnectedToPlatform())  // there is a link block there.
             {
                 removeLinkConnection();
                 gameController.updateObjectiveBlocks(); // update any objective blocks
-            }// else // the link block is empty
-            //{ 
+            } 
             gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
-            //}
         }
-        else if (gameController.debugLinkControlVersion == 1) 
-        { 
+        else if (gameController.debugLinkControlVersion == 1)
+        {
             if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
             {
                 Debug.Log("DELETING LINK!");
@@ -195,9 +251,10 @@ public class LinkBlockBehavior : MonoBehaviour {
                 {
                     // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
-                    if (gameController.addingLink.isConnectedToPlatform()) { 
+                    if (gameController.addingLink.isConnectedToPlatform())
+                    {
                         gameController.addingLink.removeLinkConnection();
-                    } 
+                    }
                     gameController.addingLink.setConnectingPlatform(connectingPlatform);
                     /*if (gameController.addingLink.parentPlatform != null) // see if the updated link was inside of a platform.
                     {
@@ -206,7 +263,7 @@ public class LinkBlockBehavior : MonoBehaviour {
                     {
                         connectingPlatform.updatePlatformValuesAndSprite(); // update connected platform only.
                     }*/
-                } 
+                }
                 gameController.setAddingLink(null);
                 gameController.updateObjectiveBlocks(); // update any objective blocks
                 gameController.updatePlatformEntities();
