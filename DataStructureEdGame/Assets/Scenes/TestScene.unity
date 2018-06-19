@@ -141,10 +141,10 @@ RectTransform:
   m_Father: {fileID: 129705162}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -356.7, y: 445.20007}
-  m_SizeDelta: {x: 134.3, y: 34.3}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 80, y: -82}
+  m_SizeDelta: {x: 134.29999, y: 34.299988}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &46408770
 MonoBehaviour:
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.78676474, g: 0.1504109, b: 0.1504109, a: 1}
+  m_Color: {r: 0.7058823, g: 0.6446061, b: 0.103806235, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -348,6 +348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameController: {fileID: 1909570818}
   resetButton: {fileID: 462850116}
+  changeControlButton: {fileID: 46408771}
 --- !u!1001 &332821811
 Prefab:
   m_ObjectHideFlags: 0
@@ -401,12 +402,12 @@ Prefab:
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[0]
       value: 
-      objectReference: {fileID: 4900000, guid: 280ba31167484e84da83b9ceb54f59b0, type: 3}
+      objectReference: {fileID: 4900000, guid: b9270ae955019e34b800d12e05aa1ff9, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[1]
       value: 
-      objectReference: {fileID: 4900000, guid: 280ba31167484e84da83b9ceb54f59b0, type: 3}
+      objectReference: {fileID: 4900000, guid: 012a4b790ff9fb349818c862f3c8fa0c, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[2]
@@ -450,10 +451,10 @@ RectTransform:
   m_Father: {fileID: 1060193295}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -45}
-  m_SizeDelta: {x: 160, y: 70}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -65, y: 2}
+  m_SizeDelta: {x: 127, y: 72}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &455446035
 MonoBehaviour:
@@ -636,10 +637,10 @@ RectTransform:
   m_Father: {fileID: 129705162}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160, y: -55}
-  m_SizeDelta: {x: 500, y: 50}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -277, y: -55}
+  m_SizeDelta: {x: 541, y: 50}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &500683064
 MonoBehaviour:
@@ -779,11 +780,11 @@ RectTransform:
   m_Father: {fileID: 129705162}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 666.7, y: -95}
-  m_SizeDelta: {x: 181.2, y: 90}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -173, y: -93}
+  m_SizeDelta: {x: 155, y: 88}
+  m_Pivot: {x: -0.04649707, y: 0}
 --- !u!114 &1060193297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1104,7 +1105,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8
+  orthographic size: 7
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1147,7 +1148,7 @@ MonoBehaviour:
   worldGenerator: {fileID: 111316952}
   objectiveBlocks: []
   platformEntities: []
-  debugLinkControlVersion: 1
+  debugLinkControlVersion: 0
   winConditon: 0
   playerRef: {fileID: 0}
   addingLink: {fileID: 0}
@@ -1188,8 +1189,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 480, y: 30}
+  m_AnchoredPosition: {x: 10, y: -1}
+  m_SizeDelta: {x: 451, y: 31}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1950673981
 MonoBehaviour:
@@ -1299,7 +1300,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Reset Level
+  m_Text: Change Controls
 --- !u!222 &2085967046
 CanvasRenderer:
   m_ObjectHideFlags: 0

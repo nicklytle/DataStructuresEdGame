@@ -33,7 +33,17 @@
     <property name="ConnectTo" value="A"/>
    </properties>
   </object>
-  <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="704" y="704" width="64" height="64"/>
+  <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="768" y="704" width="64" height="64"/>
   <object id="8" name="Goal" type="Goal" x="512" y="320" width="64" height="64"/>
+  <object id="12" name="LinkBlock" type="LinkBlock" x="1152" y="896" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="B"/>
+   </properties>
+  </object>
+  <object id="13" name="LinkBlock" type="LinkBlock" x="1024" y="384" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="C"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

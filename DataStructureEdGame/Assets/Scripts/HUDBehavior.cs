@@ -7,6 +7,7 @@ public class HUDBehavior : MonoBehaviour {
 
     public GameController gameController;
     public Button resetButton;
+    public Button changeControlButton;
 
     private float debounce;
 
@@ -14,6 +15,7 @@ public class HUDBehavior : MonoBehaviour {
     {
         debounce = 0;
         resetButton.onClick.AddListener(OnResetButtonClick);
+        changeControlButton.onClick.AddListener(OnControlButtonClick);
     }
 
     void Update()
@@ -21,10 +23,23 @@ public class HUDBehavior : MonoBehaviour {
         debounce += Time.fixedDeltaTime;
     }
 
+    public void OnControlButtonClick()
+    {
+        if (debounce > 1.0f)
+        {
+            if (gameController.debugLinkControlVersion == 0)
+            {
+                gameController.debugLinkControlVersion = 1;
+            } else if (gameController.debugLinkControlVersion == 1)
+            {
+                gameController.debugLinkControlVersion = 0;
+            }
+            debounce = 0;
+        }
+    }
+
     public void OnResetButtonClick()
     {
-        //Debug.Log("Reset Level");
-        //Debug.Log(debounce);
         if (debounce > 1.0f) { 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 

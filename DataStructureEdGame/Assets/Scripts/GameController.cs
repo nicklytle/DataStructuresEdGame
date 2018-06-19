@@ -140,21 +140,32 @@ public class GameController : MonoBehaviour {
     public void updateObjectiveBlocks()
     {
         Debug.Log("Checking win!");
-        bool isWinSatisfied = isWinConditonSatisfied();
-        // update the hud
-        if (isWinSatisfied)
+        if (winConditon != WinCondition.None)
         {
-            objectiveHudPanelUI.color = new Color(0,1,0,(160.0f / 255.0f));
-            objectiveTextUI.text = "Sort the list in ascending order\nThe List is sorted!";
+            objectiveHudPanelUI.gameObject.SetActive(true);
+            objectiveTextUI.gameObject.SetActive(true);
+
+            bool isWinSatisfied = isWinConditonSatisfied();
+            // update the hud
+            if (isWinSatisfied)
+            {
+                objectiveHudPanelUI.color = new Color(0, 1, 0, (160.0f / 255.0f));
+                objectiveTextUI.text = "Sort the list in ascending order\nThe List is sorted!";
+            }
+            else
+            {
+                objectiveHudPanelUI.color = new Color(1f, 0.02f, 0.02f, (160.0f / 255.0f));
+                objectiveTextUI.text = "Sort the list in ascending order\nThe List is not sorted!";
+            }
+            // update the blocks
+            for (int i = 0; i < objectiveBlocks.Count; i++)
+            {
+                objectiveBlocks[i].updatedFadedState(isWinSatisfied);
+            }
         } else
-        { 
-            objectiveHudPanelUI.color = new Color(1f, 0.02f, 0.02f, (160.0f / 255.0f));
-            objectiveTextUI.text = "Sort the list in ascending order\nThe List is not sorted!";
-        }
-        // update the blocks
-        for (int i = 0; i < objectiveBlocks.Count; i++)
         {
-            objectiveBlocks[i].updatedFadedState(isWinSatisfied);
+            objectiveHudPanelUI.gameObject.SetActive(false);
+            objectiveTextUI.gameObject.SetActive(false);
         }
     }
 

@@ -135,8 +135,19 @@ public class LinkBlockBehavior : MonoBehaviour {
 
     void OnMouseEnter()
     {
-        if (gameController.addingLink == null) { 
-            gameController.setStatusText("Click to set this as the adding link. Shift + Click to delte the connection");
+        if (gameController.debugLinkControlVersion == 0)
+        {
+            if (gameController.addingLink == null)
+            {
+                gameController.setStatusText("Click to set this to remove the link and set this as the adding link");
+            }
+        }
+        else if (gameController.debugLinkControlVersion == 1)
+        {
+            if (gameController.addingLink == null)
+            {
+                gameController.setStatusText("Click to set this as the adding link. Shift + Click to delte the connection");
+            }
         }
     }
 
@@ -154,13 +165,12 @@ public class LinkBlockBehavior : MonoBehaviour {
         if (gameController.debugLinkControlVersion == 0) { 
             if (isConnectedToPlatform())  // there is a link block there.
             {
-                gameController.setAddingLink(null);
-                removeLinkConnection(); 
-            } else // the link block is empty
-            { 
-                gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
-            }
-            gameController.updateObjectiveBlocks(); // update any objective blocks
+                removeLinkConnection();
+                gameController.updateObjectiveBlocks(); // update any objective blocks
+            }// else // the link block is empty
+            //{ 
+            gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
+            //}
         }
         else if (gameController.debugLinkControlVersion == 1) 
         { 
