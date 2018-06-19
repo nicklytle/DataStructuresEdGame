@@ -76,7 +76,7 @@ public class PlatformBehavior : MonoBehaviour {
             childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.updatePlatformValuesAndSprite();
         }*/
         // update the link block arrow for the inner child
-        childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
+        // childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
 
         // set the visibility of the children objects based on hidden value 
         childLink.SetActive(!isHidden);
@@ -111,7 +111,7 @@ public class PlatformBehavior : MonoBehaviour {
     {
         if (gameController.debugLinkControlVersion == 0) { 
             gameController.setConnectingPlatform(this); // when the mouse goes over a platform, create reference in game controller.
-            gameController.updateObjectiveBlocks();
+            gameController.updateObjectiveHUDAndBlocks();
         }
     }
 
@@ -119,7 +119,7 @@ public class PlatformBehavior : MonoBehaviour {
     {
         if (gameController.debugLinkControlVersion == 0) { 
             gameController.setConnectingPlatform(null); // when the mouse leaves a platform, remove the reference in game controller.
-            gameController.updateObjectiveBlocks();
+            gameController.updateObjectiveHUDAndBlocks();
         }
     }
 

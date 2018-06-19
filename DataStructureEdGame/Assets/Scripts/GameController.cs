@@ -27,6 +27,7 @@ public class GameController : MonoBehaviour {
 
     // References to important objects in the scene. 
     public Transform playerRef;
+    public Transform helicopterRobotRef;
     public LinkBlockBehavior addingLink; // what Link block the player is adding a connection to, if any
     
     // Linked list properties
@@ -46,9 +47,10 @@ public class GameController : MonoBehaviour {
         {
             startingLink.isStartingLink = true;
         }
+        updatePlatformEntities();
+        updateObjectiveHUDAndBlocks();
     }
-
-
+    
     bool isWinConditonSatisfied()
     {
         switch (winConditon)
@@ -140,9 +142,9 @@ public class GameController : MonoBehaviour {
      * This will update the objective block states based on the win condition.
      * It will also update the HUD for saying what the objective is and its state.
      */ 
-    public void updateObjectiveBlocks()
+    public void updateObjectiveHUDAndBlocks()
     {
-        Debug.Log("Checking win!");
+        // Debug.Log("Checking win!");
         if (winConditon != WinCondition.None)
         {
             objectiveHudPanelUI.gameObject.SetActive(true);
@@ -178,6 +180,14 @@ public class GameController : MonoBehaviour {
         {
             platformEntities[i].updatePlatformValuesAndSprite();
         }
+        // update the links after updating the states of the platform
+        for (int i = 0; i < platformEntities.Count; i++)
+        {
+            bool old_state = platformEntities[i].childLink.activeSelf;
+            platformEntities[i].childLink.SetActive(true);
+            platformEntities[i].childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
+            platformEntities[i].childLink.SetActive(old_state);
+        }
     }
 
     void Update()
@@ -209,7 +219,6 @@ public class GameController : MonoBehaviour {
         }
 
         if (debugLinkControlVersion == 0) {  // Link -> Platform controls
-
             if (addingLink != null && !Input.GetMouseButton(0)) // mouse was released 
             {
                 if (connectingPlatform != null)
