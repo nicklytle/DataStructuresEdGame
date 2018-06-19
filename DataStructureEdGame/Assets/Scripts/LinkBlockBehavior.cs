@@ -11,6 +11,7 @@ public class LinkBlockBehavior : MonoBehaviour
     public Transform linkArrow; // this is the current arrow that is instantiated 
     public Transform linkArrowPreFab;
     public Transform linkArrowFadedPreFab;
+    public Transform linkArrowHelicopterPreFab;
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
 
@@ -69,9 +70,12 @@ public class LinkBlockBehavior : MonoBehaviour
             betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
 
             Transform arrowPreFab = linkArrowPreFab;
-            if (parentPlatform != null && parentPlatform.isPhasedOut)
+            if ((parentPlatform != null && parentPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
             {
                 arrowPreFab = linkArrowFadedPreFab;
+            } else if (isHelicopterLink)
+            {
+                arrowPreFab = linkArrowHelicopterPreFab;
             }
 
             if (linkBounds.center.x == platBounds.center.x)

@@ -22,12 +22,18 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
     public Transform helicopterRobotPreFab;
-    
+
     // references to Sprite
     public Sprite startLinkBlockSprite;
+    public Sprite nullStartLinkBlockSprite;
 
     // Use this for initialization
-    void Start () { 
+    void Start () {
+        // ManualStartGenerator();
+    }
+
+    public void ManualStartGenerator()
+    {
         if (generateWorld)
         {
             CreateWorldFromLevelDescription();
@@ -111,6 +117,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             startLinkBehavior.gameController = gameController;
             startLinkBehavior.isStartingLink = true;  // mark link as start.
             startLinkBehavior.defaultSprite = startLinkBlockSprite;
+            startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
@@ -207,10 +214,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // make sure there is a level file for this
         if (levelFileIndex < levelDescriptionJsonFiles.Length)
         {
+            gameController.setStatusText("");
             CreateWorldFromLevelDescription();
         } else
         {
-            Debug.Log("GAME IS WON!");
+            gameController.setStatusText("You have won!");
+            /// .Log("GAME IS WON!");
         }
     }
 
