@@ -101,6 +101,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Transform robot = Instantiate(helicopterRobotPreFab, new Vector2((int)level.helicopterRobot.x, (int)level.helicopterRobot.y), Quaternion.identity);
             HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
             robotBehavior.gameController = gameController;
+            robotBehavior.targetLocation = robot.position;
+            gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
             levelEntities.Add(robot);
         }

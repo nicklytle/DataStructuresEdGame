@@ -166,6 +166,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
   childLink: {fileID: 0}
+  targetLocation: {x: 0, y: 0, z: 0}
+  flySpeed: 35
 --- !u!212 &212472751880227560
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour {
 
     // References to important objects in the scene. 
     public Transform playerRef;
+    public Transform helicopterRobotRef;
     public LinkBlockBehavior addingLink; // what Link block the player is adding a connection to, if any
     
     // Linked list properties
@@ -44,8 +45,7 @@ public class GameController : MonoBehaviour {
             startingLink.isStartingLink = true;
         }
     }
-
-
+    
     bool isWinConditonSatisfied()
     {
         switch (winConditon)
@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour {
      */ 
     public void updateObjectiveBlocks()
     {
-        Debug.Log("Checking win!");
+        // Debug.Log("Checking win!");
         if (winConditon != WinCondition.None)
         {
             objectiveHudPanelUI.gameObject.SetActive(true);

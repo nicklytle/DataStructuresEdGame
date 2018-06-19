@@ -19,6 +19,7 @@ public class LinkBlockBehavior : MonoBehaviour
     // special flags for the type of link block.
     public bool isStartingLink;
     public bool isHelicopterLink;
+    public bool renderArrow;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class LinkBlockBehavior : MonoBehaviour
         {
             UpdateLinkArrow();
         }
+        renderArrow = true; // default
     }
 
     /**
@@ -41,6 +43,10 @@ public class LinkBlockBehavior : MonoBehaviour
             //Debug.Log("delete the link arrow");
             Destroy(linkArrow.gameObject);
             linkArrow = null;
+        }
+        if (!renderArrow)
+        {
+            return;
         }
 
         if (connectingPlatform == null) // only update the sprite if there is no connection
@@ -64,9 +70,9 @@ public class LinkBlockBehavior : MonoBehaviour
             Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
                 (linkBounds.center.y + platBounds.center.y) / 2, 0);
             Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
-            Debug.Log(closestToLink);
+            //Debug.Log(closestToLink);
             Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
-            Debug.Log(closestToPlat);
+            //Debug.Log(closestToPlat);
             betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
 
             Transform arrowPreFab = linkArrowPreFab;
@@ -78,7 +84,7 @@ public class LinkBlockBehavior : MonoBehaviour
                 arrowPreFab = linkArrowHelicopterPreFab;
             }
 
-            if (linkBounds.center.x == platBounds.center.x)
+            if (Mathf.Abs(linkBounds.center.x - platBounds.center.x) < 0.2f)
             {
                 vertical = true;
                 Debug.Log("vertical arrow needed");
@@ -101,7 +107,7 @@ public class LinkBlockBehavior : MonoBehaviour
                 }
             }
 
-            if (linkBounds.center.y == platBounds.center.y)
+            if (Mathf.Abs(linkBounds.center.y - platBounds.center.y) < 0.2f)
             {
                 horiztonal = true;
                 Debug.Log("horizontal arrow needed");
@@ -182,9 +188,13 @@ public class LinkBlockBehavior : MonoBehaviour
      */
     public void setConnectingPlatform(PlatformBehavior platform)
     {
-        Debug.Log("Setting the connected platform link connection");
+        //Debug.Log("Setting the connected platform link connection");
         connectingPlatform = platform;
         connectingPlatform.addIncomingConnectingLink(this);
+        if (isHelicopterLink) // if the link belongs to the helicopter robot...
+        {
+            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().MoveAboveLinkedPlatform();
+        }
         UpdateLinkArrow();
     }
 
@@ -273,6 +283,18 @@ public class LinkBlockBehavior : MonoBehaviour
                 gameController.updateObjectiveBlocks(); // update any objective blocks
                 gameController.updatePlatformEntities();
             }
+        }
+    }
+
+    /**
+     * Set whether to render this link's arrow yet or not. 
+     * This will only update the link arrow if the value is different.
+     */ 
+    public void setRenderArrow(bool r)
+    {
+        if (renderArrow != r) { 
+            renderArrow = r;
+            UpdateLinkArrow();
         }
     }
 
