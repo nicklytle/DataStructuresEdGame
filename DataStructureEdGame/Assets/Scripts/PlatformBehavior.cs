@@ -16,9 +16,7 @@ public class PlatformBehavior : MonoBehaviour {
 
     // game specific values
     public bool isHidden; // if not Hidden, then Revealed.
-    public bool isPhasedOut; // if not Phased Out, then Solid.
-
-    public bool aleadyUpdatedThisFrame;
+    public bool isPhasedOut; // if not Phased Out, then Solid. 
 
     /**
      * Remove an incoming link reference to this platform. 
@@ -94,9 +92,6 @@ public class PlatformBehavior : MonoBehaviour {
         PlatformBehavior temp = gameController.startingLink.connectingPlatform;
         while (temp != null)
         {
-            if (alreadySearchedPlatforms.Contains(temp)) {
-                return true;
-            }
             if (temp == this)
             {
                 return true;
@@ -104,7 +99,9 @@ public class PlatformBehavior : MonoBehaviour {
             if (temp.childLink != null)
             {
                 alreadySearchedPlatforms.Add(temp);
-                temp = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform; 
+                temp = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
+                if (alreadySearchedPlatforms.Contains(temp)) // you have reached the end of the list or there is an infinite loop
+                    return false;
             }
         }
         return false;
@@ -157,7 +154,6 @@ public class PlatformBehavior : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        aleadyUpdatedThisFrame = false; // reset this each frame.
 
     }
 }

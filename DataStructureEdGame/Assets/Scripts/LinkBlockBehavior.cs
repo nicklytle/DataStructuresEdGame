@@ -227,12 +227,13 @@ public class LinkBlockBehavior : MonoBehaviour
                 gameController.updateObjectiveBlocks(); // update any objective blocks
             } 
             gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
+            gameController.updatePlatformEntities();
         }
         else if (gameController.debugLinkControlVersion == 1)
         {
             if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
             {
-                Debug.Log("DELETING LINK!");
+                // Debug.Log("DELETING LINK!");
                 gameController.setAddingLink(null);
                 removeLinkConnection();
                 gameController.setStatusText("Removed link");

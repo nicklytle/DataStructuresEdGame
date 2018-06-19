@@ -22,6 +22,9 @@
 {"type":"OBJECTIVE_BLOCK","x":20,"y":-7}
 ],
 "linkBlocks":[
+{"type":"LINK_BLOCK","x":15,"y":-6,"objIDConnectingTo":""},
+{"type":"LINK_BLOCK","x":6,"y":-9,"objIDConnectingTo":""},
+{"type":"LINK_BLOCK","x":12,"y":-10,"objIDConnectingTo":"D"}
 ],
 "singleLinkedListPlatforms":[
 {"type":"SINGLE_LL_PLATFORM","x":6,"y":-7,"objId":"A","value":"10","childLinkBlockConnectId":"B"},

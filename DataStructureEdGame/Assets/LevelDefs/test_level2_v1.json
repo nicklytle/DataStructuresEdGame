@@ -1,7 +1,7 @@
 {
 "winCondition":"SortListAscending",
 "player":{"type":"PLAYER","x":14,"y":-2},
-"startLink":{"type":"LINK_BLOCK","x":2,"y":-5,"objIDConnectingTo":"A"},
+"startLink":{"type":"LINK_BLOCK","x":4,"y":-4,"objIDConnectingTo":"A"},
 "goalPortal":{"type":"GOAL_PORTAL","x":19,"y":-8},
 "helicopterRobot":{"type":"HELICOPTER_ROBOT","x":11,"y":-4},
 "blocks":[
@@ -11,7 +11,8 @@
 {"type":"GROUND","x":18,"y":-9},
 {"type":"GROUND","x":19,"y":-9},
 {"type":"GROUND","x":20,"y":-9},
-{"type":"GROUND","x":9,"y":-6}
+{"type":"GROUND","x":9,"y":-6},
+{"type":"GROUND","x":17,"y":-9}
 ],
 "objectiveBlocks":[
 {"type":"OBJECTIVE_BLOCK","x":18,"y":-8},

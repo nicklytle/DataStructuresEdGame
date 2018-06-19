@@ -7,7 +7,7 @@ public class HUDBehavior : MonoBehaviour {
 
     public GameController gameController;
     public Button resetButton;
-    public Button changeControlButton;
+    public Text controlSchemeView;
 
     private float debounce;
 
@@ -15,27 +15,17 @@ public class HUDBehavior : MonoBehaviour {
     {
         debounce = 0;
         resetButton.onClick.AddListener(OnResetButtonClick);
-        changeControlButton.onClick.AddListener(OnControlButtonClick);
+        string ver = "1";
+        if (gameController.debugLinkControlVersion == 1)
+        {
+            ver = "2";
+        }
+        controlSchemeView.text = "Control v" + ver;
     }
 
     void Update()
     {
         debounce += Time.fixedDeltaTime;
-    }
-
-    public void OnControlButtonClick()
-    {
-        if (debounce > 1.0f)
-        {
-            if (gameController.debugLinkControlVersion == 0)
-            {
-                gameController.debugLinkControlVersion = 1;
-            } else if (gameController.debugLinkControlVersion == 1)
-            {
-                gameController.debugLinkControlVersion = 0;
-            }
-            debounce = 0;
-        }
     }
 
     public void OnResetButtonClick()
