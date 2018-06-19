@@ -176,11 +176,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 // establish the connection
                 levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
                 levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
+                levelLinkBlocks[i].renderArrow = true;
             }
         }
 
         // update the win conditions for the objective blocks
-        gameController.updateObjectiveBlocks();
+        gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
     }
 
