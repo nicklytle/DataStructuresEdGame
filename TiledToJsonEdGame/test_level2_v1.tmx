@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="30" height="20" tilewidth="64" tileheight="64" infinite="0" nextobjectid="11">
+ <properties>
+  <property name="WinCondition" value="None"/>
+ </properties>
+ <objectgroup color="#0041c5" name="Platforms">
+  <object id="1" name="A" type="SingleLLPlatform" x="448" y="640" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="6" name="B" type="SingleLLPlatform" x="832" y="704" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value="C"/>
+    <property name="Value" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="7" name="C" type="SingleLLPlatform" x="1280" y="640" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="8"/>
+   </properties>
+  </object>
+  <object id="9" type="Ground" x="384" y="512" width="64" height="64"/>
+  <object id="10" type="Ground" x="448" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup color="#aa00ff" name="ImportantObjects">
+  <object id="3" name="Player" type="Player" x="384" y="384" width="64" height="64"/>
+  <object id="4" name="StartLinkBlock" type="StartLinkBlock" x="192" y="576" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="A"/>
+   </properties>
+  </object>
+  <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="832" y="384" width="64" height="64"/>
+  <object id="8" name="Goal" type="Goal" x="1600" y="512" width="64" height="64"/>
+ </objectgroup>
+</map>

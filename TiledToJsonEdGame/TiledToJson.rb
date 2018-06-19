@@ -80,7 +80,7 @@ if map_file and out_file
 	out_file.syswrite("],\n") # end objectiveBlocks
 	out_file.syswrite("\"linkBlocks\":[\n") # start linkBlocks
 	for lb in linkBlocks
-		out_file.syswrite("{\"type\":\"LINK_BLOCK\",\"x\":#{lb['x']},\"y\":#{lb['y']},\"objIDConnectingTo\":\"#{lb['connectTo']}\"},\n")
+		out_file.syswrite("{\"type\":\"LINK_BLOCK\",\"x\":#{lb['x']},\"y\":#{lb['y']},\"objIDConnectingTo\":\"#{lb['connectTo']}\"}")
 		if lb != linkBlocks.last
 			out_file.syswrite(",")
 		end

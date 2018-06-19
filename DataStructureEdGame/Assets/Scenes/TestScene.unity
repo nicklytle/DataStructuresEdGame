@@ -401,12 +401,12 @@ Prefab:
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[0]
       value: 
-      objectReference: {fileID: 4900000, guid: 5d70f164931985a419b9d224387ed83b, type: 3}
+      objectReference: {fileID: 4900000, guid: 280ba31167484e84da83b9ceb54f59b0, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[1]
       value: 
-      objectReference: {fileID: 4900000, guid: a98d54400526c3b4d8c0901d4624258a, type: 3}
+      objectReference: {fileID: 4900000, guid: 280ba31167484e84da83b9ceb54f59b0, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[2]
@@ -1104,7 +1104,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
