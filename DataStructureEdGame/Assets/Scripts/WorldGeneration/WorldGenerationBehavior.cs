@@ -27,6 +27,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Sprite startLinkBlockSprite;
     public Sprite nullStartLinkBlockSprite;
 
+    //reference to list of platformBehavior objects to add
+    public PlatformBehavior listOfPlatsToAdd;
+
     // Use this for initialization
     void Start () {
         // ManualStartGenerator();
@@ -108,6 +111,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         levelLinkBlocks = new List<LinkBlockBehavior>();
         gameController.objectiveBlocks = new List<ObjectiveBlockBehavior>();
         gameController.platformEntities = new List<PlatformBehavior>();
+        gameController.platformsToAdd = new List<PlatformBehavior>();
         List<string> levelLinkBlocksConnIds = new List<string>();
         // create the start link
         if (level.startLink != null)
@@ -164,6 +168,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
             levelEntities.Add(newLLPlatform);
             gameController.platformEntities.Add(newPlat);
+
+            if (level.singleLinkedListPlatforms[i].toAdd == true)
+            {
+                Debug.Log("It needs to be added");
+                newLLPlatform.gameObject.SetActive(false);
+                gameController.platformsToAdd.Add(newPlat);
+            }
         }
 
         // establishing links for the link blocks with the platforms

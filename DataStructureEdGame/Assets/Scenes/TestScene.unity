@@ -228,11 +228,13 @@ MonoBehaviour:
   gameController: {fileID: 1909570818}
   resetButton: {fileID: 462850116}
   controlSchemeView: {fileID: 2085967045}
+  addPlatformButton: {fileID: 1881759260}
+  oneToAdd: {fileID: 0}
   controlSelectPanel: {fileID: 161798872}
   controlOneButton: {fileID: 1941226871}
   controlTwoButton: {fileID: 375418274}
   controlOneLevelFiles:
-  - {fileID: 4900000, guid: ce0516735d4358a40a1383135447f42a, type: 3}
+  - {fileID: 4900000, guid: a98d54400526c3b4d8c0901d4624258a, type: 3}
   - {fileID: 4900000, guid: 012a4b790ff9fb349818c862f3c8fa0c, type: 3}
   - {fileID: 4900000, guid: b9270ae955019e34b800d12e05aa1ff9, type: 3}
   controlTwoLevelFiles:
@@ -240,6 +242,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 5074a54206065df49a1229187f9e239d, type: 3}
   - {fileID: 4900000, guid: 4a9cc9500f8d5c14599565e9baa835b6, type: 3}
   selected: 0
+  alreadyUsed: 0
 --- !u!1 &161798870
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,6 +1323,48 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1723042606}
+--- !u!1001 &1768182814
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 11.810207
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 12.389025
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 36269100b3befe640b3cf2853f06e845, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1881759258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,9 +1397,9 @@ RectTransform:
   m_Father: {fileID: 129705162}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 280, y: -150}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -146, y: 38}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1881759260
@@ -1597,6 +1642,7 @@ MonoBehaviour:
   worldGenerator: {fileID: 111316952}
   objectiveBlocks: []
   platformEntities: []
+  platformsToAdd: []
   debugLinkControlVersion: 1
   winConditon: 0
   playerRef: {fileID: 0}

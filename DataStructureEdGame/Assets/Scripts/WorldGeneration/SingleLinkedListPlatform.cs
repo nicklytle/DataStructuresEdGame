@@ -16,5 +16,6 @@ namespace Assets.Scripts.WorldGeneration
         // this platform's inner link
         public string childLinkBlockConnectId;
         public int value;
+        public bool toAdd;
     }
 }

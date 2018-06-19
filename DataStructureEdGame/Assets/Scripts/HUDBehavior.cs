@@ -7,7 +7,11 @@ public class HUDBehavior : MonoBehaviour {
 
     public GameController gameController;
     public Button resetButton;
+
     public Text controlSchemeView;
+    public Button addPlatformButton;
+    public PlatformBehavior oneToAdd;
+
 
     private float debounce;
     private int versionNumber; // local copy
@@ -29,6 +33,9 @@ public class HUDBehavior : MonoBehaviour {
 
         controlOneButton.onClick.AddListener(OnControlOptionOne);
         controlTwoButton.onClick.AddListener(OnControlOptionTwo);
+
+        addPlatformButton.onClick.AddListener(OnControlAddPlatform);
+
     }
 
     void Update()
@@ -78,6 +85,12 @@ public class HUDBehavior : MonoBehaviour {
         gameController.debugLinkControlVersion = 1;
         controlSelectPanel.gameObject.SetActive(false);
         gameController.worldGenerator.ManualStartGenerator();
+
+    }
+
+    void OnControlAddPlatform()
+    {
+        gameController.addingPlatforms = true;
 
     }
 }

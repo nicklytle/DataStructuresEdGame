@@ -9,7 +9,10 @@ public class GameController : MonoBehaviour {
     public WorldGenerationBehavior worldGenerator;
     public List<ObjectiveBlockBehavior> objectiveBlocks;
     public List<PlatformBehavior> platformEntities;
+    public List<PlatformBehavior> platformsToAdd;
     public int debugLinkControlVersion; // 0 for Link->Platform, 1 for Link=Link version.
+    public bool addingPlatforms = false;
+
 
     // different win conditions for the level.
     public enum WinCondition
@@ -183,6 +186,26 @@ public class GameController : MonoBehaviour {
         {
             // always set the camera on top of the player.
             transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
+        }
+
+        if (addingPlatforms && Input.GetMouseButtonDown(0))
+        {
+            if (platformsToAdd.Count > 0)
+            {
+                Debug.Log("Adding platform now..");
+                Debug.Log(platformsToAdd.Count);
+                PlatformBehavior toBeAdded = platformsToAdd[0];
+                if (toBeAdded != null)
+                {
+                    platformsToAdd.Remove(toBeAdded);
+                    Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    positionMcPosition.z = 0;
+                    Debug.Log(positionMcPosition);
+                    toBeAdded.transform.position = positionMcPosition;
+                    toBeAdded.gameObject.SetActive(true);
+                }
+            }
         }
 
         if (debugLinkControlVersion == 0) {  // Link -> Platform controls
