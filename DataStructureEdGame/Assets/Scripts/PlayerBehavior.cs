@@ -23,7 +23,7 @@ public class PlayerBehavior : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update () { 
+    void Update() {
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         rb2.velocity = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
@@ -42,8 +42,8 @@ public class PlayerBehavior : MonoBehaviour {
             sr.sprite = leftSideView;
             sr.flipX = true;
         }
-        
-        if (onGround && Input.GetKeyDown(KeyCode.Space))
+
+        if (onGround && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)))
         {
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 

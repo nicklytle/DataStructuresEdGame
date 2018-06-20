@@ -122,6 +122,7 @@ MonoBehaviour:
   defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
   isStartingLink: 0
   isHelicopterLink: 0
+  renderArrow: 0
 --- !u!212 &212724816987262744
 SpriteRenderer:
   m_ObjectHideFlags: 1

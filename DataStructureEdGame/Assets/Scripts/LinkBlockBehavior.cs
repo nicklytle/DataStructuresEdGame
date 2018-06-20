@@ -9,12 +9,12 @@ public class LinkBlockBehavior : MonoBehaviour
     public PlatformBehavior parentPlatform; // if this link block is in a platform, then this is the parent 
     public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
     public Transform linkArrow; // this is the current arrow that is instantiated 
+    // public Transform linePreFab;
     public Transform linkArrowPreFab;
     public Transform linkArrowFadedPreFab;
     public Transform linkArrowHelicopterPreFab;
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
-
 
     // special flags for the type of link block.
     public bool isStartingLink;
@@ -30,6 +30,78 @@ public class LinkBlockBehavior : MonoBehaviour
         renderArrow = true; // default
     }
 
+
+    /**
+     * Update the Link Arrow to match the data of the platform. 
+     */
+    /*public void UpdateLinkArrow()
+    {
+
+        if (linkArrow != null)
+        {
+            //Debug.Log("delete the link arrow");
+            Destroy(linkArrow.gameObject);
+            linkArrow = null;
+        }
+
+        if (renderArrow)
+        {
+            if (connectingPlatform == null) // only update the sprite if there is no connection
+            {
+                if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
+                {
+                    GetComponent<SpriteRenderer>().sprite = nullLinkSprite;
+                }
+            }
+            else
+            {
+                // update the links sprite
+                if (GetComponent<SpriteRenderer>().sprite != defaultSprite)
+                {
+                    GetComponent<SpriteRenderer>().sprite = defaultSprite;
+                }
+
+                Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
+                if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
+                {
+                    linkBounds = parentPlatform.GetComponent<SpriteRenderer>().bounds;
+                }
+                Bounds platBounds = connectingPlatform.GetComponent<SpriteRenderer>().bounds;
+
+                // find the closest points on both bounding boxes to the center point to make the arrow.
+                Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
+                    (linkBounds.center.y + platBounds.center.y) / 2, 0);
+                Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
+                Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
+
+                // set the arrow color
+                Color color = Color.red;
+                if ((parentPlatform != null && parentPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
+                {
+                    color = Color.gray;  // arrowPreFab = linkArrowFadedPreFab;
+                }
+                else if (isHelicopterLink)
+                {
+                    color = Color.yellow; // arrowPreFab = linkArrowHelicopterPreFab;
+                }
+                linkArrow = Instantiate(linePreFab, betweenPoint, Quaternion.identity);
+                LineRenderer lineRenderer = linkArrow.GetComponent<LineRenderer>();
+
+                lineRenderer.enabled = true;
+                lineRenderer.widthMultiplier = 0.1f; 
+                lineRenderer.startColor = color;
+                lineRenderer.endColor = color;
+                Vector3[] linePos = new Vector3[2];
+                linePos[0] = new Vector3(closestToLink.x, closestToLink.y, 0);
+                linePos[1] = new Vector3(closestToPlat.x, closestToPlat.y, 0);
+
+                lineRenderer.SetPositions(linePos);
+            }
+        } // end render arrow
+    }*/
+
+
+    /// OLD VERSION OF ARROW DRAWING
     /**
      * Update the Link Arrow to match the data of the platform. 
      */
@@ -164,6 +236,7 @@ public class LinkBlockBehavior : MonoBehaviour
             }
         } // end render arrow
     }
+
 
     /**
      *  see if this Link has a connection to a Platform.
