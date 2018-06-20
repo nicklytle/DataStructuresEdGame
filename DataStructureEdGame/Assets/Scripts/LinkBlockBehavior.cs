@@ -189,13 +189,16 @@ public class LinkBlockBehavior : MonoBehaviour
     public void setConnectingPlatform(PlatformBehavior platform)
     {
         //Debug.Log("Setting the connected platform link connection");
-        connectingPlatform = platform;
-        connectingPlatform.addIncomingConnectingLink(this);
-        if (isHelicopterLink) // if the link belongs to the helicopter robot...
+        if (platform != null)
         {
-            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().MoveAboveLinkedPlatform();
+            connectingPlatform = platform;
+            connectingPlatform.addIncomingConnectingLink(this);
+            if (isHelicopterLink) // if the link belongs to the helicopter robot...
+            {
+                gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().MoveAboveLinkedPlatform();
+            }
+            UpdateLinkArrow();
         }
-        UpdateLinkArrow();
     }
 
     public void setDisplaySelected(bool b)
