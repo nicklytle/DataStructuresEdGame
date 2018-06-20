@@ -143,6 +143,7 @@ MonoBehaviour:
   parentPlatform: {fileID: 0}
   connectingPlatform: {fileID: 0}
   linkArrow: {fileID: 0}
+  linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
   linkArrowPreFab: {fileID: 4539836622892650, guid: bada108cd87af4c4f826cf95ea7d530f,
     type: 2}
   linkArrowFadedPreFab: {fileID: 4915860612458224, guid: 588c8e17e66fb374382c33f9cd6641d7,
