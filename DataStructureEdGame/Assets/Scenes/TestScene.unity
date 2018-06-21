@@ -1249,6 +1249,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1515171687
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 5.905
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 12.404
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1659865208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1719,9 +1761,10 @@ MonoBehaviour:
   winConditon: 0
   playerRef: {fileID: 0}
   helicopterRobotRef: {fileID: 0}
-  addingLink: {fileID: 0}
+  selectedLink: {fileID: 0}
   startingLink: {fileID: 0}
-  connectingPlatform: {fileID: 0}
+  hoverPlatform: {fileID: 0}
+  hoverLink: {fileID: 0}
   statusTextUI: {fileID: 1950673981}
   objectiveHudPanelUI: {fileID: 1060193297}
   objectiveTextUI: {fileID: 455446035}
