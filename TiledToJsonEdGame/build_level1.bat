@@ -1,0 +1,2 @@
+TiledToJson test_level2_v1.tmx test_level1_v1.json
+TiledToJson test_level2_v2.tmx test_level1_v2.json
