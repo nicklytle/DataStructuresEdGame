@@ -9,6 +9,7 @@ public class LinkBlockBehavior : MonoBehaviour
     public PlatformBehavior parentPlatform; // if this link block is in a platform, then this is the parent 
     public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
     public Transform linkArrow; // this is the current arrow that is instantiated 
+    public Transform linkArrowHead;  
     public Transform linePreFab;
     public Transform linkArrowPreFab;
     public Transform linkArrowFadedPreFab;
@@ -41,6 +42,8 @@ public class LinkBlockBehavior : MonoBehaviour
             //Debug.Log("delete the link arrow");
             Destroy(linkArrow.gameObject);
             linkArrow = null;
+            Destroy(linkArrowHead.gameObject);
+            linkArrowHead = null;
         }
 
         if (connectingPlatform == null) // only update the sprite if there is no connection
@@ -69,7 +72,9 @@ public class LinkBlockBehavior : MonoBehaviour
             Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
                 (linkBounds.center.y + platBounds.center.y) / 2, 0);
             Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
+            closestToLink = new Vector3(closestToLink.x, closestToLink.y, 0);
             Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
+            closestToPlat = new Vector3(closestToPlat.x, closestToPlat.y, 0);
 
             // set the arrow color
             Color color = Color.red;
@@ -82,17 +87,32 @@ public class LinkBlockBehavior : MonoBehaviour
                 color = Color.yellow; // arrowPreFab = linkArrowHelicopterPreFab;
             }
             linkArrow = Instantiate(linePreFab, betweenPoint, Quaternion.identity);
+            linkArrowHead = Instantiate(linePreFab, betweenPoint, Quaternion.identity);
             LineRenderer lineRenderer = linkArrow.GetComponent<LineRenderer>();
+            LineRenderer lineRendererHead = linkArrowHead.GetComponent<LineRenderer>();
 
             lineRenderer.enabled = true;
             lineRenderer.widthMultiplier = 0.1f; 
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
+            lineRendererHead.enabled = true;
+            lineRendererHead.startColor = color;
+            lineRendererHead.endColor = color;
+            lineRendererHead.startWidth = 0.5f;
+            lineRendererHead.endWidth = 0f;
+
             Vector3[] linePos = new Vector3[2];
-            linePos[0] = new Vector3(closestToLink.x, closestToLink.y, 0);
-            linePos[1] = new Vector3(closestToPlat.x, closestToPlat.y, 0);
+            linePos[0] = closestToLink;
+            linePos[1] = closestToPlat;
+
+            float headLength = 0.25f;
+            Vector3 diffNorm = (closestToPlat - closestToLink).normalized;
+            Vector3[] linePosHead = new Vector3[2];
+            linePosHead[0] = closestToPlat - (diffNorm * headLength);
+            linePosHead[1] = closestToPlat;
 
             lineRenderer.SetPositions(linePos);
+            lineRendererHead.SetPositions(linePosHead);
         } // end render arrow
     }
     
