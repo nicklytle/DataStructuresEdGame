@@ -16,15 +16,15 @@
     <property name="Value" type="int" value="5"/>
    </properties>
   </object>
-  <object id="7" name="C" type="SingleLLPlatform" x="832" y="576" width="192" height="64">
+  <object id="7" name="C" type="SingleLLPlatform" x="832" y="640" width="192" height="64">
    <properties>
     <property name="ConnectTo" value=""/>
     <property name="Value" type="int" value="8"/>
    </properties>
   </object>
-  <object id="9" type="Ground" x="512" y="512" width="64" height="64"/>
-  <object id="10" type="Ground" x="576" y="512" width="64" height="64"/>
-  <object id="11" type="Ground" x="640" y="512" width="64" height="64"/>
+  <object id="9" type="Ground" x="512" y="576" width="64" height="64"/>
+  <object id="10" type="Ground" x="576" y="576" width="64" height="64"/>
+  <object id="11" type="Ground" x="640" y="576" width="64" height="64"/>
  </objectgroup>
  <objectgroup color="#aa00ff" name="ImportantObjects">
   <object id="3" name="Player" type="Player" x="896" y="768" width="64" height="64"/>
@@ -34,13 +34,13 @@
    </properties>
   </object>
   <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="768" y="704" width="64" height="64"/>
-  <object id="8" name="Goal" type="Goal" x="576" y="384" width="64" height="64"/>
+  <object id="8" name="Goal" type="Goal" x="576" y="448" width="64" height="64"/>
   <object id="12" name="LinkBlock" type="LinkBlock" x="1152" y="896" width="64" height="64">
    <properties>
     <property name="ConnectTo" value="B"/>
    </properties>
   </object>
-  <object id="13" name="LinkBlock" type="LinkBlock" x="1024" y="384" width="64" height="64">
+  <object id="13" name="LinkBlock" type="LinkBlock" x="1024" y="448" width="64" height="64">
    <properties>
     <property name="ConnectTo" value="C"/>
    </properties>
