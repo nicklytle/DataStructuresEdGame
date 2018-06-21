@@ -110,11 +110,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelEntities.Add(robot);
         }
         
+        // list of link blocks we are creating
         levelLinkBlocks = new List<LinkBlockBehavior>();
+        // corresponding list of IDs telling the link blocks what they should point to when the level is generated
+        List<string> levelLinkBlocksConnIds = new List<string>();
         gameController.objectiveBlocks = new List<ObjectiveBlockBehavior>();
         gameController.platformEntities = new List<PlatformBehavior>();
         gameController.platformsToAdd = new List<PlatformBehavior>();
-        List<string> levelLinkBlocksConnIds = new List<string>();
         // create the start link
         if (level.startLink != null)
         {
@@ -138,6 +140,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             levelLinkBlocks.Add(lb);
+            Debug.Log("Made me some level link blocks");
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
         }
@@ -206,6 +209,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             if (lb.linkArrow != null)
             {
                 Destroy(lb.linkArrow.gameObject);
+                Destroy(lb.linkArrowHead.gameObject);
                 lb.linkArrow = null;
             }
         }
@@ -218,6 +222,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 if (t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow != null)
                 {
                     Destroy(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow.gameObject);
+                    Destroy(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrowHead.gameObject);
                 }
             } 
             Destroy(t.gameObject);
