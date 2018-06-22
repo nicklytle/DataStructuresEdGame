@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="30" height="20" tilewidth="64" tileheight="64" infinite="0" nextobjectid="133">
+ <properties>
+  <property name="WinCondition" value="None"/>
+ </properties>
+ <objectgroup color="#0041c5" name="Platforms">
+  <object id="1" name="A" type="SingleLLPlatform" x="832" y="512" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value="B"/>
+    <property name="Value" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="6" name="B" type="SingleLLPlatform" x="1152" y="384" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="10" type="Ground" x="192" y="960" width="64" height="64"/>
+  <object id="12" type="Ground" x="128" y="960" width="64" height="64"/>
+  <object id="13" type="Ground" x="256" y="960" width="64" height="64"/>
+  <object id="14" type="Ground" x="1600" y="640" width="64" height="64"/>
+  <object id="15" type="Ground" x="1536" y="640" width="64" height="64"/>
+  <object id="16" type="Ground" x="1664" y="640" width="64" height="64"/>
+  <object id="19" type="Ground" x="384" y="960" width="64" height="64"/>
+  <object id="20" type="Ground" x="320" y="960" width="64" height="64"/>
+  <object id="21" type="Ground" x="448" y="960" width="64" height="64"/>
+  <object id="22" type="Ground" x="832" y="960" width="64" height="64"/>
+  <object id="23" type="Ground" x="512" y="960" width="64" height="64"/>
+  <object id="24" type="Ground" x="896" y="960" width="64" height="64"/>
+  <object id="25" type="Ground" x="1024" y="960" width="64" height="64"/>
+  <object id="26" type="Ground" x="960" y="960" width="64" height="64"/>
+  <object id="27" type="Ground" x="1088" y="960" width="64" height="64"/>
+  <object id="28" type="Ground" x="1216" y="960" width="64" height="64"/>
+  <object id="29" type="Ground" x="1152" y="960" width="64" height="64"/>
+  <object id="30" type="Ground" x="1280" y="960" width="64" height="64"/>
+  <object id="31" type="Ground" x="1408" y="960" width="64" height="64"/>
+  <object id="32" type="Ground" x="1344" y="960" width="64" height="64"/>
+  <object id="33" type="Ground" x="1472" y="960" width="64" height="64"/>
+  <object id="34" type="Ground" x="1600" y="960" width="64" height="64"/>
+  <object id="35" type="Ground" x="1536" y="960" width="64" height="64"/>
+  <object id="36" type="Ground" x="1664" y="960" width="64" height="64"/>
+  <object id="37" type="Ground" x="192" y="768" width="64" height="64"/>
+  <object id="38" type="Ground" x="128" y="768" width="64" height="64"/>
+  <object id="39" type="Ground" x="256" y="768" width="64" height="64"/>
+  <object id="40" type="Ground" x="384" y="768" width="64" height="64"/>
+  <object id="41" type="Ground" x="320" y="768" width="64" height="64"/>
+  <object id="43" type="Ground" x="448" y="768" width="64" height="64"/>
+  <object id="44" type="Ground" x="128" y="832" width="64" height="64"/>
+  <object id="45" type="Ground" x="128" y="896" width="64" height="64"/>
+  <object id="46" type="Ground" x="448" y="896" width="64" height="64"/>
+  <object id="47" type="Ground" x="448" y="832" width="64" height="64"/>
+  <object id="51" type="Ground" x="1600" y="704" width="64" height="64"/>
+  <object id="52" type="Ground" x="1536" y="704" width="64" height="64"/>
+  <object id="53" type="Ground" x="1664" y="704" width="64" height="64"/>
+  <object id="54" type="Ground" x="1600" y="768" width="64" height="64"/>
+  <object id="55" type="Ground" x="1536" y="768" width="64" height="64"/>
+  <object id="56" type="Ground" x="1664" y="768" width="64" height="64"/>
+  <object id="57" type="Ground" x="1600" y="832" width="64" height="64"/>
+  <object id="58" type="Ground" x="1536" y="832" width="64" height="64"/>
+  <object id="59" type="Ground" x="1664" y="832" width="64" height="64"/>
+  <object id="60" type="Ground" x="1600" y="896" width="64" height="64"/>
+  <object id="61" type="Ground" x="1536" y="896" width="64" height="64"/>
+  <object id="62" type="Ground" x="1664" y="896" width="64" height="64"/>
+  <object id="63" type="Ground" x="1280" y="640" width="64" height="64"/>
+  <object id="64" type="Ground" x="1344" y="640" width="64" height="64"/>
+  <object id="65" type="Ground" x="1024" y="832" width="64" height="64"/>
+  <object id="66" type="Ground" x="1088" y="832" width="64" height="64"/>
+  <object id="123" type="Ground" x="576" y="960" width="64" height="64"/>
+  <object id="124" type="Ground" x="640" y="960" width="64" height="64"/>
+  <object id="125" type="Ground" x="704" y="960" width="64" height="64"/>
+  <object id="126" type="Ground" x="768" y="960" width="64" height="64"/>
+  <object id="127" type="Ground" x="1600" y="512" width="64" height="64"/>
+  <object id="128" type="Ground" x="1536" y="512" width="64" height="64"/>
+  <object id="129" type="Ground" x="1664" y="512" width="64" height="64"/>
+  <object id="130" type="Ground" x="1600" y="576" width="64" height="64"/>
+  <object id="131" type="Ground" x="1536" y="576" width="64" height="64"/>
+  <object id="132" type="Ground" x="1664" y="576" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup color="#aa00ff" name="ImportantObjects">
+  <object id="3" name="Player" type="Player" x="192" y="640" width="64" height="64"/>
+  <object id="4" name="StartLinkBlock" type="StartLinkBlock" x="640" y="448" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="A"/>
+   </properties>
+  </object>
+  <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="896" y="320" width="64" height="64"/>
+  <object id="8" name="Goal" type="Goal" x="1600" y="384" width="64" height="64"/>
+ </objectgroup>
+</map>
