@@ -114,6 +114,7 @@ public class GameController : MonoBehaviour {
         }
         else if (debugLinkControlVersion == 1)
         {
+
             if (Input.GetMouseButtonDown(0))
             {
                 if (selectedLink == null && hoverLinkRef != null)
@@ -121,7 +122,7 @@ public class GameController : MonoBehaviour {
                     setSelectedLink(hoverLinkRef);
                 } else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
                 {
-                    //Debug.Log("DOUBLE CLICK");
+                    Debug.Log("DOUBLE CLICK");
                     setSelectedLink(null);
                     hoverLinkRef.removeLinkConnection();
                     setStatusText("Removed link");
@@ -129,7 +130,7 @@ public class GameController : MonoBehaviour {
                     updatePlatformEntities();
                 } else if (selectedLink != null && hoverLinkRef == null)
                 {
-                    //Debug.Log("Deselect");
+                    Debug.Log("Deselect");
                     setSelectedLink(null); // deselect adding link to deselect
                     setStatusText("Deselected link block");
                     updateObjectiveHUDAndBlocks(); // update any objective blocks
@@ -140,10 +141,10 @@ public class GameController : MonoBehaviour {
                 if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
                 {
                     // establish connection 
-                    //Debug.Log("release mouse with hoverLink and selectedLink not null");
+                    Debug.Log("release mouse with hoverLink and selectedLink not null");
                     if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
                     {
-                        //Debug.Log("Establishing connection");
+                        Debug.Log("Establishing connection");
                         // this means there is a valid connection!
                         // before establishing the connection for the addingLink, remove any links current there.
                         if (selectedLink.isConnectedToPlatform())
@@ -154,11 +155,12 @@ public class GameController : MonoBehaviour {
                         removeHoverArrow();
                         setStatusText("Established a connection.");
                     }
+                    setSelectedLink(null);
                     updateObjectiveHUDAndBlocks(); // update any objective blocks
                     updatePlatformEntities();
                 } else if (selectedLink != null && hoverLinkRef != selectedLink)
                 {
-                    //Debug.Log("Deselect");
+                    Debug.Log("Deselect");
                     setSelectedLink(null); // deselect adding link to deselect
                     setStatusText("Deselected link block");
                     updateObjectiveHUDAndBlocks(); // update any objective blocks
