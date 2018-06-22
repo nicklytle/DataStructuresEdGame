@@ -6,20 +6,27 @@ public class LinkBlockBehavior : MonoBehaviour
 {
 
     public GameController gameController;
+
     public PlatformBehavior parentPlatform; // if this link block is in a platform, then this is the parent 
     public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
+
+    // references to the arrow instances
     public Transform linkArrow; // this is the current arrow that is instantiated 
-    public Transform linkArrowHead;  
-    public Transform linePreFab;
-    public Transform linkArrowPreFab;
-    public Transform linkArrowFadedPreFab;
-    public Transform linkArrowHelicopterPreFab;
+    public Transform linkArrowHead; 
+
+    // Prefabs (old version of arrows)
+    //public Transform linkArrowPreFab;
+    //public Transform linkArrowFadedPreFab;
+    //public Transform linkArrowHelicopterPreFab;
+
+    // sprites for the different states of the link block
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
 
     // special flags for the type of link block.
     public bool isStartingLink;
     public bool isHelicopterLink;
+    // whether to render this arrow or not.
     public bool renderArrow;
 
     void Start()
@@ -36,15 +43,7 @@ public class LinkBlockBehavior : MonoBehaviour
      */
     public void UpdateLinkArrow()
     {
-
-        if (linkArrow != null)
-        {
-            //Debug.Log("delete the link arrow");
-            Destroy(linkArrow.gameObject);
-            linkArrow = null;
-            Destroy(linkArrowHead.gameObject);
-            linkArrowHead = null;
-        }
+        removeArrowBetween();
 
         if (connectingPlatform == null) // only update the sprite if there is no connection
         {
@@ -60,22 +59,7 @@ public class LinkBlockBehavior : MonoBehaviour
         }
 
         if (renderArrow && connectingPlatform != null)
-        {
-            Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
-            if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
-            {
-                linkBounds = parentPlatform.GetComponent<SpriteRenderer>().bounds;
-            }
-            Bounds platBounds = connectingPlatform.GetComponent<SpriteRenderer>().bounds;
-
-            // find the closest points on both bounding boxes to the center point to make the arrow.
-            Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
-                (linkBounds.center.y + platBounds.center.y) / 2, 0);
-            Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
-            closestToLink = new Vector3(closestToLink.x, closestToLink.y, 0);
-            Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
-            closestToPlat = new Vector3(closestToPlat.x, closestToPlat.y, 0);
-
+        { 
             // set the arrow color
             Color color = Color.red;
             if ((parentPlatform != null && parentPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
@@ -86,171 +70,28 @@ public class LinkBlockBehavior : MonoBehaviour
             {
                 color = Color.yellow; // arrowPreFab = linkArrowHelicopterPreFab;
             }
-            linkArrow = Instantiate(linePreFab, betweenPoint, Quaternion.identity);
-            linkArrowHead = Instantiate(linePreFab, betweenPoint, Quaternion.identity);
-            LineRenderer lineRenderer = linkArrow.GetComponent<LineRenderer>();
-            LineRenderer lineRendererHead = linkArrowHead.GetComponent<LineRenderer>();
-
-            lineRenderer.enabled = true;
-            lineRenderer.widthMultiplier = 0.1f; 
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
-            lineRendererHead.enabled = true;
-            lineRendererHead.startColor = color;
-            lineRendererHead.endColor = color;
-            lineRendererHead.startWidth = 0.5f;
-            lineRendererHead.endWidth = 0f;
-
-            Vector3[] linePos = new Vector3[2];
-            linePos[0] = closestToLink;
-            linePos[1] = closestToPlat;
-
-            float headLength = 0.25f;
-            Vector3 diffNorm = (closestToPlat - closestToLink).normalized;
-            Vector3[] linePosHead = new Vector3[2];
-            linePosHead[0] = closestToPlat - (diffNorm * headLength);
-            linePosHead[1] = closestToPlat;
-
-            lineRenderer.SetPositions(linePos);
-            lineRendererHead.SetPositions(linePosHead);
+            // create the arrow and save references to the new instances.
+            Transform[] linkArrowParts = gameController.createArrowInstanceBetweenLinkPlatform(this, connectingPlatform, color);
+            linkArrow = linkArrowParts[0];
+            linkArrowHead = linkArrowParts[1];
         } // end render arrow
     }
-    
-    /// OLD VERSION OF ARROW DRAWING
+
     /**
-     * Update the Link Arrow to match the data of the platform. 
+     * Remove the arrow coming from this link block, if there is one.
      */
-    /*public void UpdateLinkArrow()
-    {
-        bool vertical = false;
-        bool horiztonal = false;
-        // always reset the linkArrow when updating
+    public void removeArrowBetween()
+    { 
         if (linkArrow != null)
         {
             //Debug.Log("delete the link arrow");
             Destroy(linkArrow.gameObject);
             linkArrow = null;
+            Destroy(linkArrowHead.gameObject);
+            linkArrowHead = null;
         }
-
-        if (connectingPlatform == null) // only update the sprite if there is no connection
-        {
-            if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
-            {
-                //Debug.Log("Set to the null link");
-                GetComponent<SpriteRenderer>().sprite = nullLinkSprite;
-            }
-        } else // if there is a connection, then draw the default sprite.
-        { 
-            if (GetComponent<SpriteRenderer>().sprite != defaultSprite)
-            {
-                GetComponent<SpriteRenderer>().sprite = defaultSprite;
-            } 
-        }
-
-        if (renderArrow && connectingPlatform != null)
-        { 
-            Bounds linkBounds = GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
-            if (parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
-            {
-                linkBounds = parentPlatform.GetComponent<SpriteRenderer>().bounds;
-            }
-            Bounds platBounds = connectingPlatform.GetComponent<SpriteRenderer>().bounds;
-
-            // find the closest points on both bounding boxes to the center point to make the arrow.
-            Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
-                (linkBounds.center.y + platBounds.center.y) / 2, 0);
-            Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
-            //Debug.Log(closestToLink);
-            Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
-            //Debug.Log(closestToPlat);
-            betweenPoint = (closestToLink + closestToPlat) / 2; // update the between point 
-
-            Transform arrowPreFab = linkArrowPreFab;
-            if ((parentPlatform != null && parentPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
-            {
-                arrowPreFab = linkArrowFadedPreFab;
-            }
-            else if (isHelicopterLink)
-            {
-                arrowPreFab = linkArrowHelicopterPreFab;
-            }
-
-            if (Mathf.Abs(linkBounds.center.x - platBounds.center.x) < 0.2f)
-            {
-                vertical = true;
-                Debug.Log("vertical arrow needed");
-                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
-                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
-                Vector3 vertDiff = closestToPlat - closestToLink;
-                if (vertDiff.y < 0)
-                {
-                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
-                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                    linkArrow.transform.Rotate(new Vector3(0, 0, 270));
-                    Debug.Log("platform is lower");
-                }
-                if (vertDiff.y > 0)
-                {
-                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
-                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                    linkArrow.transform.Rotate(new Vector3(0, 0, 90));
-                    Debug.Log("platform is higher");
-                }
-            }
-
-            if (Mathf.Abs(linkBounds.center.y - platBounds.center.y) < 0.2f)
-            {
-                horiztonal = true;
-                Debug.Log("horizontal arrow needed");
-                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
-                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
-                Vector3 vertDiff = closestToPlat - closestToLink;
-                if (vertDiff.x < 0)
-                {
-                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
-                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                    linkArrow.transform.Rotate(new Vector3(0, 0, 180));
-                    Debug.Log("platform is on left");
-                }
-                if (vertDiff.x > 0)
-                {
-                    linkArrow.transform.localScale = new Vector3(linkArrow.transform.localScale.x,
-                    linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                    linkArrow.transform.Rotate(new Vector3(0, 0, 0));
-                    Debug.Log("platform is on right");
-                }
-            }
-            if (!horiztonal && !vertical)
-            {
-                linkArrow = Instantiate(arrowPreFab, betweenPoint, Quaternion.identity);
-                linkArrow.transform.localScale = new Vector3(Vector3.Distance(closestToLink, closestToPlat), 1, 1);
-                Vector3 diff = closestToPlat - closestToLink;
-                float rotationAmount = 0; // the number of radians to rotate it.
-                                            // rotationAmount = Mathf.Asin(diff.normalized.y);
-
-                // TODO: this needs to actually work and not be so complicated
-
-                if (diff.y != 0)
-                {
-                    // TODO: Fix the rotation amount; sometimes it looks funky. 
-                    rotationAmount = Mathf.Sin(diff.y / diff.magnitude);
-                    if (diff.x < 0)
-                    {
-                        linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                        rotationAmount *= -1;
-                    }
-                }
-                else if (diff.x < 0)
-                {
-                    linkArrow.transform.localScale = new Vector3(-linkArrow.transform.localScale.x,
-                            linkArrow.transform.localScale.y, linkArrow.transform.localScale.z);
-                }
-                linkArrow.transform.Rotate(new Vector3(0, 0, Mathf.Rad2Deg * rotationAmount));
-            }
-        } // end render arrow
-    }*/
-
+    }
+    
 
     /**
      *  see if this Link has a connection to a Platform.
@@ -297,7 +138,7 @@ public class LinkBlockBehavior : MonoBehaviour
     void OnMouseEnter()
     {
         Cursor.SetCursor(gameController.pointerCursorTexture, Vector2.zero, gameController.cursorMode);
-        gameController.hoverLink = this;
+        gameController.setHoverLink(this);
         if (gameController.debugLinkControlVersion == 0)
         {
             if (gameController.selectedLink == null)
@@ -316,7 +157,7 @@ public class LinkBlockBehavior : MonoBehaviour
 
     void OnMouseExit()
     {
-        gameController.hoverLink = null;
+        gameController.setHoverLink(null);
         Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
         if (gameController.selectedLink == null)
         {

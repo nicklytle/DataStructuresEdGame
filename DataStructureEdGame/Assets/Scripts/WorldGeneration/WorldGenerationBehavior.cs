@@ -114,8 +114,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         levelLinkBlocks = new List<LinkBlockBehavior>();
         // corresponding list of IDs telling the link blocks what they should point to when the level is generated
         List<string> levelLinkBlocksConnIds = new List<string>();
-        gameController.objectiveBlocks = new List<ObjectiveBlockBehavior>();
-        gameController.platformEntities = new List<PlatformBehavior>();
+        List<ObjectiveBlockBehavior> levelObjectiveBlocks = new List<ObjectiveBlockBehavior>();
+        List<PlatformBehavior> levelPlatformEntities = new List<PlatformBehavior>();
         gameController.platformsToAdd = new List<PlatformBehavior>();
         // create the start link
         if (level.startLink != null)
@@ -150,8 +150,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
             Transform newOBlock = Instantiate(objectiveBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
-            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>(); 
-            gameController.objectiveBlocks.Add(ob);
+            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
+            levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
 
@@ -172,7 +172,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
             levelEntities.Add(newLLPlatform);
-            gameController.platformEntities.Add(newPlat);
+            levelPlatformEntities.Add(newPlat);
 
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
@@ -195,6 +195,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
 
         // update the win conditions for the objective blocks
+        gameController.setLevelObjectiveBlocksList(levelObjectiveBlocks);
+        gameController.setLevelPlatformEntitiesList(levelPlatformEntities);
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
     }
@@ -206,12 +208,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     {
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
-            if (lb.linkArrow != null)
-            {
-                Destroy(lb.linkArrow.gameObject);
-                Destroy(lb.linkArrowHead.gameObject);
-                lb.linkArrow = null;
-            }
+            lb.removeArrowBetween();
         }
 
         foreach (Transform t in levelEntities)
@@ -219,11 +216,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             // delete any arrows associated with link blocks.
             if (t.GetComponent<HelicopterRobotBehavior>() != null && t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>() != null)
             {
-                if (t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow != null)
-                {
-                    Destroy(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrow.gameObject);
-                    Destroy(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().linkArrowHead.gameObject);
-                }
+                t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().removeArrowBetween();
             } 
             Destroy(t.gameObject);
         }

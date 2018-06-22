@@ -6,13 +6,27 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+    public int debugLinkControlVersion;
+
     public WorldGenerationBehavior worldGenerator;
-    public List<ObjectiveBlockBehavior> objectiveBlocks;
-    public List<PlatformBehavior> platformEntities;
+    // a referernce to all objective entities in the level
+    private List<ObjectiveBlockBehavior> objectiveBlocks;
+    // a reference to all platform entities in the level.
+    private List<PlatformBehavior> platformEntities;
+
+    // a queue of platforms that may be added in this level
     public List<PlatformBehavior> platformsToAdd;
-    public int debugLinkControlVersion; // 0 for Link->Platform, 1 for Link=Link version.
+    // whether the player is currently in an the Add Platform mode.
     public bool addingPlatforms = false;
+
+    // to help track for double clicking
     public DateTime lastTimeClickedMillis;
+
+    // the Prefab for line renderer stuff.
+    public Transform linePreFab;
+    // References to the hover arrow parts showing a preview of the arrow.
+    public Transform hoverArrowLine;
+    public Transform hoverArrowHead;
 
     public Texture2D pointerCursorTexture;
     public CursorMode cursorMode = CursorMode.Auto;
@@ -25,7 +39,7 @@ public class GameController : MonoBehaviour {
         SortListDescending
     }
 
-    // what win condition we need to make this block faded.
+    // The win condition of this level.
     public GameController.WinCondition winConditon;
 
     // References to important objects in the scene. 
@@ -35,9 +49,10 @@ public class GameController : MonoBehaviour {
     
     // Linked list properties
     public LinkBlockBehavior startingLink; // what is this level's starting link block?
-    public PlatformBehavior hoverPlatform; // the platform the mouse is hovering over for version 1.
-    public LinkBlockBehavior hoverLink; // the link block the mouse is hovering over. 
+    public PlatformBehavior hoverPlatformRef; // the platform the mouse is hovering over for version 1.
+    public LinkBlockBehavior hoverLinkRef; // the link block the mouse is hovering over. 
 
+    // references to important UI elements.
     public Text statusTextUI;
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
@@ -51,16 +66,139 @@ public class GameController : MonoBehaviour {
         {
             startingLink.isStartingLink = true;
         }
-        updatePlatformEntities();
-        updateObjectiveHUDAndBlocks();
+        platformEntities = new List<PlatformBehavior>();
+        objectiveBlocks = new List<ObjectiveBlockBehavior>();
     }
-    
+
+    void Update()
+    {
+        if (playerRef != null)
+        {
+            // always set the camera on top of the player.
+            transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
+        }
+
+        if (addingPlatforms && Input.GetMouseButtonDown(0))
+        {
+            if (platformsToAdd.Count > 0)
+            {
+                Debug.Log("Adding platform now..");
+                Debug.Log(platformsToAdd.Count);
+                PlatformBehavior toBeAdded = platformsToAdd[0];
+                if (toBeAdded != null)
+                {
+                    platformsToAdd.Remove(toBeAdded);
+                    Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    positionMcPosition.z = 0;
+                    Debug.Log(positionMcPosition);
+                    toBeAdded.transform.position = positionMcPosition;
+                    toBeAdded.gameObject.SetActive(true);
+                }
+            }
+        }
+
+        if (debugLinkControlVersion == 0)
+        {  // Link -> Platform controls
+            if (selectedLink != null && !Input.GetMouseButton(0)) // mouse was released 
+            {
+                if (hoverPlatformRef != null)
+                {
+                    selectedLink.setConnectingPlatform(hoverPlatformRef);
+                }
+                // deselect when you release the mouse button.
+                setHoverPlatformReference(null);
+                setSelectedLink(null);
+            }
+        }
+        else if (debugLinkControlVersion == 1)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // check for double clicking here
+                bool doubleClick = selectedLink == hoverLinkRef && lastTimeClickedMillis != null && (System.DateTime.Now - lastTimeClickedMillis).Milliseconds < 200;
+
+                if (doubleClick)
+                {
+                    if (hoverLinkRef != null && hoverLinkRef.isConnectedToPlatform())
+                    {
+                        Debug.Log("DOUBLE CLICKED ON A LINK");
+                        // remove the link
+                        setSelectedLink(null);
+                        hoverLinkRef.removeLinkConnection();
+                        setStatusText("Removed link");
+                        updateObjectiveHUDAndBlocks(); // update any objective blocks
+                        updatePlatformEntities();
+                    }
+                }
+                else
+                {
+                    if (hoverLinkRef != null)
+                    {
+                        if (selectedLink == null) // you are not deleting it
+                        {
+                            setSelectedLink(hoverLinkRef); // set that this is the link being dragged from the player. 
+                            setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
+                        }
+                        else if (selectedLink != null && selectedLink != hoverLinkRef) // don't connect to yourself
+                        {
+                            Debug.Log("Single click with hoverLink and selectedLink not null");
+                            if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
+                            {
+                                Debug.Log("Establishing connection");
+                                // this means there is a valid connection!
+                                // before establishing the connection for the addingLink, remove any links current there.
+                                if (selectedLink.isConnectedToPlatform())
+                                {
+                                    selectedLink.removeLinkConnection();
+                                }
+                                selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
+                                removeHoverArrow();
+                            }
+                            setSelectedLink(null);
+                            updateObjectiveHUDAndBlocks(); // update any objective blocks
+                            updatePlatformEntities();
+                        }
+                    } // end hoverLink != null block
+                    else // you are clicking once but not on a link.
+                    {
+                        // deselect
+                        setSelectedLink(null); // deselect adding link to deselect
+                        setStatusText("Deselected link block");
+                    }
+                }
+            } else  // end MouseButtonDown(0) check.
+            {
+                // make preview?
+                if (debugLinkControlVersion == 0) // link-platform version
+                {
+                    
+                } else if (debugLinkControlVersion == 1) // link-link version
+                {
+
+                }
+            }
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            lastTimeClickedMillis = System.DateTime.Now;
+        }
+    }
+
+
     bool isWinConditonSatisfied()
     {
+        if (winConditon == WinCondition.None)
+        {
+            return true; // always beat it when there is no condition.
+        }
+
         switch (winConditon)
         {
-            case GameController.WinCondition.SortListAscending:
-            case GameController.WinCondition.SortListDescending:
+            case WinCondition.SortListAscending:
+            case WinCondition.SortListDescending:
                 if (startingLink == null)
                     return false;
 
@@ -82,8 +220,8 @@ public class GameController : MonoBehaviour {
                     }
                     else
                     {
-                        if ((winConditon == GameController.WinCondition.SortListAscending && next.getValue() < temp.getValue()) ||
-                            (winConditon == GameController.WinCondition.SortListDescending && next.getValue() > temp.getValue()))
+                        if ((winConditon == WinCondition.SortListAscending && next.getValue() < temp.getValue()) ||
+                            (winConditon == WinCondition.SortListDescending && next.getValue() > temp.getValue()))
                         {
                             return false;
                         } // otherwise just keep on iterating.
@@ -112,6 +250,41 @@ public class GameController : MonoBehaviour {
         }
     }
 
+
+    public void setHoverLink(LinkBlockBehavior lb)
+    {
+        if (hoverLinkRef != null)
+        {
+            if (debugLinkControlVersion == 1)
+            {
+                removeHoverArrow();
+                if (hoverLinkRef != selectedLink) { // don't remove the marker on the selected link
+                    hoverLinkRef.setDisplaySelected(false);
+                }
+            }
+        }
+        hoverLinkRef = lb;
+        if (hoverLinkRef != null)
+        { 
+            if (debugLinkControlVersion == 1) // hover it to say that you can interact with it. 
+            {
+                hoverLinkRef.setDisplaySelected(true); 
+                // faded arrow to show the outcome
+                removeHoverArrow();
+                if (selectedLink != null && hoverLinkRef != null && selectedLink != hoverLinkRef &&
+                    hoverLinkRef.connectingPlatform != null)
+                {
+                    hoverLinkRef.setDisplaySelected(true);
+                    Color c = Color.gray;
+                    c.a = 0.3f;
+                    Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
+                    hoverArrowLine = hoverArrowParts[0];
+                    hoverArrowHead = hoverArrowParts[1];
+                }
+            }
+        } 
+    }
+
     /**
      * Set the game's status text
      */
@@ -123,21 +296,33 @@ public class GameController : MonoBehaviour {
     /**
      * Set what Platform is being connected to by the player. 'addingLink' must not be null.
      */ 
-    public void setConnectingPlatform(PlatformBehavior platform)
+    public void setHoverPlatformReference(PlatformBehavior platform)
     {
         if (selectedLink != null) // you can only connect to a platform when there is a Link.
         {
             if (selectedLink.parentPlatform != null && selectedLink.parentPlatform == platform)
                 return; // don't change anything if the platform is the parent of the adding link.
             
-            if (hoverPlatform != null)
+            if (hoverPlatformRef != null)
             {
-                hoverPlatform.setDisplaySelected(false);
+                if (debugLinkControlVersion == 0) { 
+                    removeHoverArrow();
+                }
+                hoverPlatformRef.setDisplaySelected(false);
             }
-            hoverPlatform = platform;
-            if (selectedLink != null && hoverPlatform != null) // only display it for this platform if you're also selecting a Link.
+            hoverPlatformRef = platform;
+            if (selectedLink != null && hoverPlatformRef != null) // only display it for this platform if you're also selecting a Link.
             {
-                hoverPlatform.setDisplaySelected(true);
+                if (debugLinkControlVersion == 0)
+                {
+                    removeHoverArrow();
+                    Color c = Color.gray;
+                    c.a = 0.3f;
+                    Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverPlatformRef, c);
+                    hoverArrowLine = hoverArrowParts[0];
+                    hoverArrowHead = hoverArrowParts[1];
+                } 
+                hoverPlatformRef.setDisplaySelected(true);
             }
         }
     }
@@ -194,112 +379,94 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    void Update()
-    { 
-        if (playerRef != null)
+    /**
+     * Remove the hover arrow if it is there
+     */
+    public void removeHoverArrow()
+    {
+        if (hoverArrowLine != null)
         {
-            // always set the camera on top of the player.
-            transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
+            Destroy(hoverArrowLine.gameObject);
+            Destroy(hoverArrowHead.gameObject);
+            hoverArrowLine = null;
+            hoverArrowHead = null;
         }
-
-        if (addingPlatforms && Input.GetMouseButtonDown(0))
-        {
-            if (platformsToAdd.Count > 0)
-            {
-                Debug.Log("Adding platform now..");
-                Debug.Log(platformsToAdd.Count);
-                PlatformBehavior toBeAdded = platformsToAdd[0];
-                if (toBeAdded != null)
-                {
-                    platformsToAdd.Remove(toBeAdded);
-                    Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    positionMcPosition.z = 0;
-                    Debug.Log(positionMcPosition);
-                    toBeAdded.transform.position = positionMcPosition;
-                    toBeAdded.gameObject.SetActive(true);
-                }
-            }
-        }
-
-        if (debugLinkControlVersion == 0) {  // Link -> Platform controls
-            if (selectedLink != null && !Input.GetMouseButton(0)) // mouse was released 
-            {
-                if (hoverPlatform != null)
-                {
-                    selectedLink.setConnectingPlatform(hoverPlatform);
-                }
-                // deselect when you release the mouse button.
-                setConnectingPlatform(null);
-                setSelectedLink(null); 
-            }
-        } 
-        else if (debugLinkControlVersion == 1)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                // check for double clicking here
-                bool doubleClick = selectedLink == hoverLink && lastTimeClickedMillis != null && (System.DateTime.Now - lastTimeClickedMillis).Milliseconds < 200;
-                
-                if (doubleClick)
-                {
-                    if (hoverLink != null && hoverLink.isConnectedToPlatform()) { 
-                        Debug.Log("DOUBLE CLICKED ON A LINK");
-                        // remove the link
-                        setSelectedLink(null);
-                        hoverLink.removeLinkConnection();
-                        setStatusText("Removed link");
-                        updateObjectiveHUDAndBlocks(); // update any objective blocks
-                        updatePlatformEntities();
-                    }
-                }
-                else
-                {
-                    if (hoverLink != null)
-                    {
-                        if (selectedLink == null) // you are not deleting it
-                        {
-                            setSelectedLink(hoverLink); // set that this is the link being dragged from the player. 
-                            setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
-                        } else if (selectedLink != null && selectedLink != hoverLink) // don't connect to yourself
-                        {
-                            Debug.Log("Single click with hoverLink and selectedLink not null");
-                            if (hoverLink.parentPlatform == null || selectedLink.parentPlatform != hoverLink.parentPlatform)
-                            {
-                                Debug.Log("Establishing connection");
-                                // this means there is a valid connection!
-                                // before establishing the connection for the addingLink, remove any links current there.
-                                if (selectedLink.isConnectedToPlatform())
-                                {
-                                    selectedLink.removeLinkConnection();
-                                }
-                                selectedLink.setConnectingPlatform(hoverLink.connectingPlatform);
-                            }
-                            setSelectedLink(null);
-                            updateObjectiveHUDAndBlocks(); // update any objective blocks
-                            updatePlatformEntities();
-                        }
-                    } // end hoverLink != null block
-                    else // you are clicking once but not on a link.
-                    {
-                        // deselect
-                        setSelectedLink(null); // deselect adding link to deselect
-                        setStatusText("Deselected link block");
-                    }
-                }
-            } // end MouseButtonDown(0) check.
-        }
+    }
 
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            lastTimeClickedMillis = System.DateTime.Now;
-        }
+    public void setLevelPlatformEntitiesList(List<PlatformBehavior> plist)
+    {
+        platformEntities.AddRange(plist);
+    }
+
+    public void setLevelObjectiveBlocksList(List<ObjectiveBlockBehavior> oblist)
+    {
+        objectiveBlocks.AddRange(oblist);
     }
 
     public void clearReferenceLists()
     {
         objectiveBlocks.Clear();
         platformEntities.Clear();
+    }
+
+    /**
+     * Instantiate an arrow that goes from the given link block to the given platform using the given color.
+     */
+    public Transform[] createArrowInstanceBetweenLinkPlatform(LinkBlockBehavior lb, PlatformBehavior pb, Color color)
+    {
+        // determine the start and end points of the arrow.
+        Bounds linkBounds = lb.GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
+        if (lb.parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
+        {
+            linkBounds = lb.parentPlatform.GetComponent<SpriteRenderer>().bounds;
+        }
+        Bounds platBounds = pb.GetComponent<SpriteRenderer>().bounds;
+
+        // find the closest points on both bounding boxes to the center point to make the arrow.
+        Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
+            (linkBounds.center.y + platBounds.center.y) / 2, 0);
+        Vector3 closestToLink = linkBounds.ClosestPoint(betweenPoint);
+        closestToLink = new Vector3(closestToLink.x, closestToLink.y, 0);
+        Vector3 closestToPlat = platBounds.ClosestPoint(betweenPoint);
+        closestToPlat = new Vector3(closestToPlat.x, closestToPlat.y, 0); 
+        return createArrowInstanceBetweenPoints(closestToLink, closestToPlat, color);
+    }
+
+    /**
+     * Instantiate an arrow that goes from the first point to the second using the given color.
+     */
+    public Transform[] createArrowInstanceBetweenPoints(Vector3 pFrom, Vector3 pTo, Color color)
+    {
+        // index 0 is the line; index 1 is the head.
+        Transform[] arrowParts = new Transform[2];
+        arrowParts[0] = Instantiate(linePreFab, pFrom, Quaternion.identity);
+        arrowParts[1] = Instantiate(linePreFab, pFrom, Quaternion.identity);
+        LineRenderer lineRenderer = arrowParts[0].GetComponent<LineRenderer>();
+        LineRenderer lineRendererHead = arrowParts[1].GetComponent<LineRenderer>();
+
+        lineRenderer.enabled = true;
+        lineRenderer.widthMultiplier = 0.1f;
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+        lineRendererHead.enabled = true;
+        lineRendererHead.startColor = color;
+        lineRendererHead.endColor = color;
+        lineRendererHead.startWidth = 0.5f;
+        lineRendererHead.endWidth = 0f;
+
+        Vector3[] linePos = new Vector3[2];
+        linePos[0] = pFrom;
+        linePos[1] = pTo;
+
+        float headLength = 0.25f;
+        Vector3 diffNorm = (pTo - pFrom).normalized;
+        Vector3[] linePosHead = new Vector3[2];
+        linePosHead[0] = pTo - (diffNorm * headLength);
+        linePosHead[1] = pTo;
+
+        lineRenderer.SetPositions(linePos);
+        lineRendererHead.SetPositions(linePosHead);
+        return arrowParts;
     }
 }
