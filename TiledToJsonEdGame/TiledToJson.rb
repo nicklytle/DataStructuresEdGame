@@ -18,6 +18,7 @@ if map_file and out_file
 	mh = (map.height / 64).to_int
 	# objects inside of the map
 	Block = Struct.new(:x,:y)
+	SizedBlock = Struct.new(:x,:y,:width,:height)
 	LinkBlock = Struct.new(:x,:y,:connectTo)
 	SingleLLPlatform = Struct.new(:x,:y,:name,:connectTo,:value)
 
@@ -35,8 +36,8 @@ if map_file and out_file
 		for obj in group.objects 
 			if obj.type == "Player"
 				player = Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int)
-			elsif obj.type == "Ground"
-				blocks.push(Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int))
+			elsif obj.type == "Ground" 
+				blocks.push(SizedBlock.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, (obj.width / 64).to_int, (obj.height / 64).to_int))
 			elsif obj.type == "StartLinkBlock"
 				startLink = LinkBlock.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.properties["ConnectTo"])
 			elsif obj.type == "LinkBlock"
@@ -61,8 +62,8 @@ if map_file and out_file
 	out_file.syswrite("\"goalPortal\":{\"type\":\"GOAL_PORTAL\",\"x\":#{goalPortal['x']},\"y\":#{goalPortal['y']}},\n")
 	out_file.syswrite("\"helicopterRobot\":{\"type\":\"HELICOPTER_ROBOT\",\"x\":#{helicopterRobot['x']},\"y\":#{helicopterRobot['y']}},\n")
 	out_file.syswrite("\"blocks\":[\n") # start blocks
-	for b in blocks
-		out_file.syswrite("{\"type\":\"GROUND\",\"x\":#{b['x']},\"y\":#{b['y']}}")
+	for b in blocks 
+		out_file.syswrite("{\"type\":\"GROUND\",\"x\":#{b['x']},\"y\":#{b['y']},\"width\":#{b['width']},\"height\":#{b['height']}}")
 		if b != blocks.last
 			out_file.syswrite(",")
 		end

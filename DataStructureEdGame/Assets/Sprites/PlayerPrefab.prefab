@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  speed: 360
+  speed: 340
   jumpSpeed: 8
   onGround: 0
   frontView: {fileID: 21300000, guid: 0a9cb81ed5faa8947a25153ab0ff0b58, type: 3}

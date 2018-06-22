@@ -53,6 +53,7 @@ public class PlayerBehavior : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         // TODO: Only have this true when you are colliding on the ground below you.    
+        
         onGround = true;
     }
 

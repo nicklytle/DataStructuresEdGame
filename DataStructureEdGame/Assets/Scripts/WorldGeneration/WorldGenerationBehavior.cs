@@ -75,33 +75,40 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public void CreateWorldFromLevelDescription()
     {
         LevelEntities level = JsonUtility.FromJson<LevelEntities>(levelDescriptionJsonFiles[levelFileIndex].text);
-        gameController.winConditon = GetWinConditionFromString(level.winCondition);
+        gameController.winConditon = GetWinConditionFromString(level.winCondition); 
         // while generating the level, add things to levelEntities list so it can be destroyed for the next level generated.
         for (int i = 0; i < level.blocks.Length; i++)
         {
-            Vector2 blockPos = new Vector2((int)level.blocks[i].x, (int)level.blocks[i].y);
+            Vector2 blockPos = new Vector2((float)(level.blocks[i].x + (level.blocks[i].width / 2f)),
+                                        (float)(level.blocks[i].y - (level.blocks[i].height / 2f)));
             Transform objToInstances = GetAssocInstanceFromType(level.blocks[i].type);
             if (objToInstances != null)
             {
                 Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
+                Vector3 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height, 1);
+                Debug.Log(sizeOfBlock);
+                obj.localScale = sizeOfBlock;
                 levelEntities.Add(obj);
             }
         }
         // create the player
         if (level.player != null)
         {
-            gameController.playerRef = Instantiate(playerPreFab, new Vector2((int)level.player.x, (int)level.player.y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.player.x + (1 / 2f)), (float)(level.player.y - (1 / 2f)));
+            gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
             levelEntities.Add(gameController.playerRef);
         }
         if (level.goalPortal != null)
         {
-            Transform goal = Instantiate(goalPortalPreFab, new Vector2((int)level.goalPortal.x, (int)level.goalPortal.y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.goalPortal.x + (1 / 2f)), (float)(level.goalPortal.y - (1 / 2f)));
+            Transform goal = Instantiate(goalPortalPreFab, loc, Quaternion.identity);
             levelEntities.Add(goal);
         }
         if (level.helicopterRobot != null)
         {
-            Transform robot = Instantiate(helicopterRobotPreFab, new Vector2((int)level.helicopterRobot.x, (int)level.helicopterRobot.y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.helicopterRobot.x + (1 / 2f)), (float)(level.helicopterRobot.y - (1 / 2f)));
+            Transform robot = Instantiate(helicopterRobotPreFab, loc, Quaternion.identity);
             HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
             robotBehavior.gameController = gameController;
             robotBehavior.targetLocation = robot.position;
@@ -120,7 +127,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // create the start link
         if (level.startLink != null)
         {
-            Transform startLinkTran = Instantiate(linkBlockPreFab, new Vector2((int)level.startLink.x, (int)level.startLink.y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.startLink.x + (1 / 2f)), (float)(level.startLink.y - (1 / 2f)));
+            Transform startLinkTran = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
             LinkBlockBehavior startLinkBehavior = startLinkTran.GetComponent<LinkBlockBehavior>();
             startLinkBehavior.gameController = gameController;
             startLinkBehavior.isStartingLink = true;  // mark link as start.
@@ -136,7 +144,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // create the link blocks
         for (int i = 0; i < level.linkBlocks.Length; i++)
         {
-            Transform newLink = Instantiate(linkBlockPreFab, new Vector2((int)level.linkBlocks[i].x, (int)level.linkBlocks[i].y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.linkBlocks[i].x + (1 / 2f)), (float)(level.linkBlocks[i].y - (1 / 2f)));
+            Transform newLink = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             levelLinkBlocks.Add(lb);
@@ -149,7 +158,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         Debug.Log(level.objectiveBlocks);
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
-            Transform newOBlock = Instantiate(objectiveBlockPreFab, new Vector2((int)level.objectiveBlocks[i].x, (int)level.objectiveBlocks[i].y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.objectiveBlocks[i].x + (1 / 2f)), (float)(level.objectiveBlocks[i].y - (1 / 2f)));
+            Transform newOBlock = Instantiate(objectiveBlockPreFab, loc, Quaternion.identity);
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
@@ -159,7 +169,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         Dictionary<string, PlatformBehavior> listPlatformMap = new Dictionary<string, PlatformBehavior>();
         for (int i = 0; i < level.singleLinkedListPlatforms.Length; i++)
         {
-            Transform newLLPlatform = Instantiate(singleLinkedListPreFab, new Vector2((int)level.singleLinkedListPlatforms[i].x, (int)level.singleLinkedListPlatforms[i].y), Quaternion.identity);
+            Vector2 loc = new Vector2((float)(level.singleLinkedListPlatforms[i].x + (3 / 2f)), (float)(level.singleLinkedListPlatforms[i].y - (1 / 2f)));
+            Transform newLLPlatform = Instantiate(singleLinkedListPreFab, loc, Quaternion.identity);
             PlatformBehavior newPlat = newLLPlatform.GetComponent<PlatformBehavior>();
             LinkBlockBehavior innerLink = newLLPlatform.Find("LinkBlock").GetComponent<LinkBlockBehavior>();
             innerLink.gameController = gameController;
@@ -172,13 +183,16 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
             levelEntities.Add(newLLPlatform);
-            levelPlatformEntities.Add(newPlat);
-
+            levelPlatformEntities.Add(newPlat); 
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
                 Debug.Log("It needs to be added");
                 newLLPlatform.gameObject.SetActive(false);
+                newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
+            } else
+            {
+                newPlat.isInLevel = true;
             }
         }
 

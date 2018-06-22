@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1368220855910416}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.16, y: 5.72, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,8 +78,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa58fa41b2c41274c930908884bce0ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 0}
-  winConditon: 0
   solidSprite: {fileID: 21300000, guid: 5d34d5490bed7c3458b850a523b10554, type: 3}
   fadedSprite: {fileID: 21300000, guid: 5b4c10b630ca44740ae6276108dfda9a, type: 3}
   canMoveThrough: 0

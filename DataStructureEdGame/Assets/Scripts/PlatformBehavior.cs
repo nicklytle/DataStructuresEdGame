@@ -17,6 +17,7 @@ public class PlatformBehavior : MonoBehaviour {
     // game specific values
     public bool isHidden; // if not Hidden, then Revealed.
     public bool isPhasedOut; // if not Phased Out, then Solid. 
+    public bool isInLevel;
 
     /**
      * Remove an incoming link reference to this platform. 

@@ -167,17 +167,7 @@ public class GameController : MonoBehaviour {
                         setStatusText("Deselected link block");
                     }
                 }
-            } else  // end MouseButtonDown(0) check.
-            {
-                // make preview?
-                if (debugLinkControlVersion == 0) // link-platform version
-                {
-                    
-                } else if (debugLinkControlVersion == 1) // link-link version
-                {
-
-                }
-            }
+            }  // end MouseButtonDown(0) check. 
         }
 
 
@@ -199,36 +189,52 @@ public class GameController : MonoBehaviour {
         {
             case WinCondition.SortListAscending:
             case WinCondition.SortListDescending:
+                int sizeOfList = 0;
                 if (startingLink == null)
                     return false;
 
+                // count how many platforms are in the level.
+                int numberOfTotalPlatformsInLevel = 0;
+                foreach (PlatformBehavior pb in platformEntities)
+                {
+                    if (pb.isInLevel)
+                    {
+                        numberOfTotalPlatformsInLevel++;
+                    }
+                }
+                //Debug.Log("Number of platforms: " + numberOfTotalPlatformsInLevel);
+
                 if (startingLink.connectingPlatform == null)
                 {
-                    return true;
-                }
-                if (startingLink.connectingPlatform.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform == null)
+                    return (numberOfTotalPlatformsInLevel == 0); // if there are no platforms in the level
+                } else if (startingLink.connectingPlatform.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform == null)
                 {
-                    return true;
+                    return (numberOfTotalPlatformsInLevel == 1); // if there is only one platform in the level
                 }
+                sizeOfList = 1;
                 PlatformBehavior temp = startingLink.connectingPlatform.GetComponent<PlatformBehavior>();
                 while (temp != null)
                 {
                     PlatformBehavior next = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
                     if (next == null)
                     {
-                        return true;
+                        break;
+                        //return true;
                     }
                     else
                     {
                         if ((winConditon == WinCondition.SortListAscending && next.getValue() < temp.getValue()) ||
                             (winConditon == WinCondition.SortListDescending && next.getValue() > temp.getValue()))
                         {
-                            return false;
+                            //Debug.Log("Not sorted");
+                            return false; // not sorted.
                         } // otherwise just keep on iterating.
                     }
                     temp = next;
+                    sizeOfList++;
                 }
-                break;
+                //Debug.Log("Size of the list: " + sizeOfList);
+                return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
         }
         return false;
     }
@@ -263,7 +269,26 @@ public class GameController : MonoBehaviour {
                 }
             }
         }
-        hoverLinkRef = lb;
+
+       /* if (debugLinkControlVersion == 1)
+        {
+            if (hoverLinkRef.connectingPlatform == null)
+            {
+
+            } else
+            {
+                if (!hoverLinkRef.connectingPlatform.isPhasedOut)
+                {
+                    // only properly set the hover link if it would make a valid link.
+                    hoverLinkRef = lb;
+                }
+            }
+        } else
+        {*/
+            hoverLinkRef = lb;
+        //}
+
+
         if (hoverLinkRef != null)
         { 
             if (debugLinkControlVersion == 1) // hover it to say that you can interact with it. 
@@ -298,7 +323,7 @@ public class GameController : MonoBehaviour {
      */ 
     public void setHoverPlatformReference(PlatformBehavior platform)
     {
-        if (selectedLink != null) // you can only connect to a platform when there is a Link.
+        if (selectedLink != null /*&& platform != null && !platform.isPhasedOut*/ ) // you can only connect to a platform when there is a Link you have selected.
         {
             if (selectedLink.parentPlatform != null && selectedLink.parentPlatform == platform)
                 return; // don't change anything if the platform is the parent of the adding link.
@@ -417,10 +442,11 @@ public class GameController : MonoBehaviour {
     {
         // determine the start and end points of the arrow.
         Bounds linkBounds = lb.GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
-        if (lb.parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
+        /*if (lb.parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
         {
             linkBounds = lb.parentPlatform.GetComponent<SpriteRenderer>().bounds;
         }
+        */
         Bounds platBounds = pb.GetComponent<SpriteRenderer>().bounds;
 
         // find the closest points on both bounding boxes to the center point to make the arrow.
@@ -455,15 +481,16 @@ public class GameController : MonoBehaviour {
         lineRendererHead.startWidth = 0.5f;
         lineRendererHead.endWidth = 0f;
 
+        Vector3 zOffset = new Vector3(0, 0, -10);
         Vector3[] linePos = new Vector3[2];
-        linePos[0] = pFrom;
-        linePos[1] = pTo;
+        linePos[0] = pFrom + zOffset;
+        linePos[1] = pTo + zOffset;
 
         float headLength = 0.25f;
         Vector3 diffNorm = (pTo - pFrom).normalized;
         Vector3[] linePosHead = new Vector3[2];
-        linePosHead[0] = pTo - (diffNorm * headLength);
-        linePosHead[1] = pTo;
+        linePosHead[0] = pTo - (diffNorm * headLength) + zOffset;
+        linePosHead[1] = pTo + zOffset;
 
         lineRenderer.SetPositions(linePos);
         lineRendererHead.SetPositions(linePosHead);

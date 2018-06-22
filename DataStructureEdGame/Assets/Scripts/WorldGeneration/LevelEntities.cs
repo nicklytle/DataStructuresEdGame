@@ -15,7 +15,7 @@ namespace Assets.Scripts.WorldGeneration
         public Block goalPortal;
         public Block helicopterRobot;
 
-        public Block[] blocks; // basic blocks
+        public SizedBlock[] blocks; // basic blocks
         public LinkBlock[] linkBlocks;
         public Block[] objectiveBlocks;
 

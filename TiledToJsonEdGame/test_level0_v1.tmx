@@ -22,18 +22,14 @@
     <property name="Value" type="int" value="8"/>
    </properties>
   </object>
-  <object id="10" type="Ground" x="128" y="640" width="64" height="64"/>
   <object id="11" name="D" type="SingleLLPlatform" x="1408" y="384" width="192" height="64">
    <properties>
     <property name="ConnectTo" value=""/>
     <property name="Value" type="int" value="10"/>
    </properties>
   </object>
-  <object id="12" type="Ground" x="64" y="640" width="64" height="64"/>
-  <object id="13" type="Ground" x="192" y="640" width="64" height="64"/>
-  <object id="14" type="Ground" x="1728" y="320" width="64" height="64"/>
-  <object id="15" type="Ground" x="1664" y="320" width="64" height="64"/>
-  <object id="16" type="Ground" x="1792" y="320" width="64" height="64"/>
+  <object id="13" type="Ground" x="64" y="640" width="192" height="64"/>
+  <object id="15" type="Ground" x="1664" y="320" width="192" height="64"/>
  </objectgroup>
  <objectgroup color="#aa00ff" name="ImportantObjects">
   <object id="3" name="Player" type="Player" x="128" y="512" width="64" height="64"/>
