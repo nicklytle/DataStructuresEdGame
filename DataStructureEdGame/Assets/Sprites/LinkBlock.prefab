@@ -112,15 +112,13 @@ MonoBehaviour:
   parentPlatform: {fileID: 0}
   connectingPlatform: {fileID: 0}
   linkArrow: {fileID: 0}
-  linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
-  linkArrowPreFab: {fileID: 4539836622892650, guid: bada108cd87af4c4f826cf95ea7d530f,
-    type: 2}
-  linkArrowFadedPreFab: {fileID: 4915860612458224, guid: 588c8e17e66fb374382c33f9cd6641d7,
-    type: 2}
-  linkArrowHelicopterPreFab: {fileID: 4050292373907820, guid: b4c5fad114bc758459c5e57e045a7388,
-    type: 2}
+  linkArrowHead: {fileID: 0}
   nullLinkSprite: {fileID: 21300000, guid: 8db31c4a2132b2441ad20a9e85e88020, type: 3}
   defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
+  defaultSelectMarkerSprite: {fileID: 21300000, guid: 9979ff910651efc418518a669e06b1e3,
+    type: 3}
+  highlightSelectMarkerSprite: {fileID: 21300000, guid: 9716eb3df792a7e4daf73d06c4227d55,
+    type: 3}
   isStartingLink: 0
   isHelicopterLink: 0
   renderArrow: 0

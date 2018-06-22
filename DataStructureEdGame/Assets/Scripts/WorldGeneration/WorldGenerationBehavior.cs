@@ -86,7 +86,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             {
                 Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
                 Vector3 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height, 1);
-                Debug.Log(sizeOfBlock);
                 obj.localScale = sizeOfBlock;
                 levelEntities.Add(obj);
             }

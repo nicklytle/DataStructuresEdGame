@@ -22,6 +22,8 @@ public class LinkBlockBehavior : MonoBehaviour
     // sprites for the different states of the link block
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
+    public Sprite defaultSelectMarkerSprite;  // what the sprite of the selected marker is by default
+    public Sprite highlightSelectMarkerSprite; // the sprite of the selected marker when it is highlighted.
 
     // special flags for the type of link block.
     public bool isStartingLink;
@@ -131,9 +133,20 @@ public class LinkBlockBehavior : MonoBehaviour
 
     public void setDisplaySelected(bool b)
     {
-        transform.Find("SelectMarker").gameObject.SetActive(b);
+        setDisplaySelected(b, false); //  transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
+    public void setDisplaySelected(bool b, bool highlighted)
+    {
+        if (!highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != defaultSelectMarkerSprite)
+        {
+            transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = defaultSelectMarkerSprite;
+        } else if (highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != highlightSelectMarkerSprite)
+        {
+            transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = highlightSelectMarkerSprite;
+        }
+        transform.Find("SelectMarker").gameObject.SetActive(b);
+    }
 
     void OnMouseEnter()
     {
@@ -150,7 +163,7 @@ public class LinkBlockBehavior : MonoBehaviour
         {
             if (gameController.selectedLink == null)
             {
-                gameController.setStatusText("Click to set this as the adding link. Shift + Click to delte the connection");
+                gameController.setStatusText("Click and hold to select this link.");
             }
         }
     }
@@ -177,42 +190,6 @@ public class LinkBlockBehavior : MonoBehaviour
             } 
             gameController.setSelectedLink(this); // set that this is the link being dragged from the player. 
             gameController.updatePlatformEntities();
-        }
-        else if (gameController.debugLinkControlVersion == 1)
-        {
-
-            // moved to inside of GameController's Update() 
-            /*if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && isConnectedToPlatform())  // there is a link block there.
-            {
-                // Debug.Log("DELETING LINK!");
-                gameController.setAddingLink(null);
-                removeLinkConnection();
-                gameController.setStatusText("Removed link");
-                gameController.updateObjectiveHUDAndBlocks(); // update any objective blocks
-                gameController.updatePlatformEntities();
-            }
-            if (gameController.addingLink == null && !(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))) // you are not deleting it
-            {
-                gameController.setAddingLink(this); // set that this is the link being dragged from the player. 
-                gameController.setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
-            }
-            // make sure it is OK to make addingLink's connectingPlatform equal to this connectingPlatform
-            if (gameController.addingLink != null && gameController.addingLink != this) // don't connect to yourself
-            {
-                if (gameController.addingLink.connectingPlatform != connectingPlatform && connectingPlatform != gameController.addingLink.parentPlatform)
-                {
-                    // this means there is a valid connection!
-                    // before establishing the connection for the addingLink, remove any links current there.
-                    if (gameController.addingLink.isConnectedToPlatform())
-                    {
-                        gameController.addingLink.removeLinkConnection();
-                    }
-                    gameController.addingLink.setConnectingPlatform(connectingPlatform);
-                }
-                gameController.setAddingLink(null);
-                gameController.updateObjectiveHUDAndBlocks(); // update any objective blocks
-                gameController.updatePlatformEntities();
-            }*/
         }
     }
 

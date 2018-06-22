@@ -68,7 +68,6 @@ public class HUDBehavior : MonoBehaviour {
         if (selected)
             return;
         selected = true;
-        Debug.Log("Controls version 1");
         gameController.worldGenerator.levelDescriptionJsonFiles = controlOneLevelFiles;
         gameController.debugLinkControlVersion = 0;
         controlSelectPanel.gameObject.SetActive(false);
@@ -80,7 +79,6 @@ public class HUDBehavior : MonoBehaviour {
         if (selected)
             return;
         selected = true;
-        Debug.Log("Controls version 2");
         gameController.worldGenerator.levelDescriptionJsonFiles = controlTwoLevelFiles;
         gameController.debugLinkControlVersion = 1;
         controlSelectPanel.gameObject.SetActive(false);

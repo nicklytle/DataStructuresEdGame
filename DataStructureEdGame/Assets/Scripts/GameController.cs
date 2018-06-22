@@ -78,6 +78,7 @@ public class GameController : MonoBehaviour {
             transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
         }
 
+        // add platform system
         if (addingPlatforms && Input.GetMouseButtonDown(0))
         {
             if (platformsToAdd.Count > 0)
@@ -115,59 +116,55 @@ public class GameController : MonoBehaviour {
         {
             if (Input.GetMouseButtonDown(0))
             {
-                // check for double clicking here
-                bool doubleClick = selectedLink == hoverLinkRef && lastTimeClickedMillis != null && (System.DateTime.Now - lastTimeClickedMillis).Milliseconds < 200;
-
-                if (doubleClick)
+                if (selectedLink == null && hoverLinkRef != null)
                 {
-                    if (hoverLinkRef != null && hoverLinkRef.isConnectedToPlatform())
-                    {
-                        Debug.Log("DOUBLE CLICKED ON A LINK");
-                        // remove the link
-                        setSelectedLink(null);
-                        hoverLinkRef.removeLinkConnection();
-                        setStatusText("Removed link");
-                        updateObjectiveHUDAndBlocks(); // update any objective blocks
-                        updatePlatformEntities();
-                    }
-                }
-                else
+                    setSelectedLink(hoverLinkRef);
+                } else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
                 {
-                    if (hoverLinkRef != null)
-                    {
-                        if (selectedLink == null) // you are not deleting it
-                        {
-                            setSelectedLink(hoverLinkRef); // set that this is the link being dragged from the player. 
-                            setStatusText("Click on another Link to set this one equal to it or press Shift to deselect.");
-                        }
-                        else if (selectedLink != null && selectedLink != hoverLinkRef) // don't connect to yourself
-                        {
-                            Debug.Log("Single click with hoverLink and selectedLink not null");
-                            if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
-                            {
-                                Debug.Log("Establishing connection");
-                                // this means there is a valid connection!
-                                // before establishing the connection for the addingLink, remove any links current there.
-                                if (selectedLink.isConnectedToPlatform())
-                                {
-                                    selectedLink.removeLinkConnection();
-                                }
-                                selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
-                                removeHoverArrow();
-                            }
-                            setSelectedLink(null);
-                            updateObjectiveHUDAndBlocks(); // update any objective blocks
-                            updatePlatformEntities();
-                        }
-                    } // end hoverLink != null block
-                    else // you are clicking once but not on a link.
-                    {
-                        // deselect
-                        setSelectedLink(null); // deselect adding link to deselect
-                        setStatusText("Deselected link block");
-                    }
+                    //Debug.Log("DOUBLE CLICK");
+                    setSelectedLink(null);
+                    hoverLinkRef.removeLinkConnection();
+                    setStatusText("Removed link");
+                    updateObjectiveHUDAndBlocks(); // update any objective blocks
+                    updatePlatformEntities();
+                } else if (selectedLink != null && hoverLinkRef == null)
+                {
+                    //Debug.Log("Deselect");
+                    setSelectedLink(null); // deselect adding link to deselect
+                    setStatusText("Deselected link block");
+                    updateObjectiveHUDAndBlocks(); // update any objective blocks
+                    updatePlatformEntities();
                 }
-            }  // end MouseButtonDown(0) check. 
+            } else if (!Input.GetMouseButton(0))
+            {
+                if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
+                {
+                    // establish connection 
+                    //Debug.Log("release mouse with hoverLink and selectedLink not null");
+                    if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
+                    {
+                        //Debug.Log("Establishing connection");
+                        // this means there is a valid connection!
+                        // before establishing the connection for the addingLink, remove any links current there.
+                        if (selectedLink.isConnectedToPlatform())
+                        {
+                            selectedLink.removeLinkConnection();
+                        }
+                        selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
+                        removeHoverArrow();
+                        setStatusText("Established a connection.");
+                    }
+                    updateObjectiveHUDAndBlocks(); // update any objective blocks
+                    updatePlatformEntities();
+                } else if (selectedLink != null && hoverLinkRef != selectedLink)
+                {
+                    //Debug.Log("Deselect");
+                    setSelectedLink(null); // deselect adding link to deselect
+                    setStatusText("Deselected link block");
+                    updateObjectiveHUDAndBlocks(); // update any objective blocks
+                    updatePlatformEntities();
+                }
+            }
         }
 
 
@@ -246,13 +243,13 @@ public class GameController : MonoBehaviour {
     {
         if (selectedLink != null)
         {
-            selectedLink.setDisplaySelected(false);
+            selectedLink.setDisplaySelected(false, true);
         }
         selectedLink = aLink; // do other data processing?
 
         if (selectedLink != null)
         { 
-            selectedLink.setDisplaySelected(true);
+            selectedLink.setDisplaySelected(true, true);
         }
     }
 
@@ -289,7 +286,7 @@ public class GameController : MonoBehaviour {
         //}
 
 
-        if (hoverLinkRef != null)
+        if (hoverLinkRef != null && hoverLinkRef != selectedLink) // can't set the hover link to the selected link
         { 
             if (debugLinkControlVersion == 1) // hover it to say that you can interact with it. 
             {
@@ -305,6 +302,8 @@ public class GameController : MonoBehaviour {
                     Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
                     hoverArrowLine = hoverArrowParts[0];
                     hoverArrowHead = hoverArrowParts[1];
+
+                    setStatusText("Release to set the first link equal to this one.");
                 }
             }
         } 
