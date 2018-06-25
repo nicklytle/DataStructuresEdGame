@@ -124,8 +124,10 @@ public class GameController : MonoBehaviour {
                 {
                     Debug.Log("DOUBLE CLICK");
                     setSelectedLink(null);
-                    hoverLinkRef.removeLinkConnection();
-                    setStatusText("Removed link");
+                    if (hoverLinkRef.connectingPlatform != null) { 
+                        hoverLinkRef.removeLinkConnection();
+                        setStatusText("Removed link");
+                    }
                     updateObjectiveHUDAndBlocks(); // update any objective blocks
                     updatePlatformEntities();
                 } else if (selectedLink != null && hoverLinkRef == null)

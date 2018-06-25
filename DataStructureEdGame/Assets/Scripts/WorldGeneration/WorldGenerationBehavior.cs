@@ -117,7 +117,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
             robotBehavior.gameController = gameController;
             robotBehavior.targetLocation = robot.position;
-            Debug.Log("Robot id: " + level.helicopterRobot.logId);
             robotBehavior.logId = level.helicopterRobot.logId;
             gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
@@ -164,8 +163,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelEntities.Add(newLink);
         }
 
-        // create the objective blocks
-        Debug.Log(level.objectiveBlocks);
+        // create the objective blocks 
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
             Vector2 loc = new Vector2((float)(level.objectiveBlocks[i].x + (1 / 2f)), (float)(level.objectiveBlocks[i].y - (1 / 2f)));
