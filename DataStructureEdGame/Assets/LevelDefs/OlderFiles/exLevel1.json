@@ -66,6 +66,15 @@
 			"objId" : "C",
 			"value" : "9",
 			"childLinkBlockConnectId" : ""
+		},
+		{
+			"type":"SINGLE_LL_PLATFORM",
+			"x":9,
+			"y":1,
+			"objId" : "D",
+			"value" : "111",
+			"toAdd" : true,
+			"childLinkBlockConnectId" : ""
 		}
 	]
 }
