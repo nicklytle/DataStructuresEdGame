@@ -17,6 +17,8 @@ public class PlayerBehavior : MonoBehaviour {
     public Sprite frontView;
     public Sprite leftSideView; // facing left
 
+    public Vector2 shoveVector;
+
 	// Use this for initialization
 	void Start () {
         rb2 = gameObject.GetComponent<Rigidbody2D>();
@@ -28,8 +30,18 @@ public class PlayerBehavior : MonoBehaviour {
     void Update() {
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
-        rb2.velocity = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
-        if(rb2.velocity.y != 0)
+        Vector2 newMoveVect = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
+
+        // reduce the shove amount as time goes on.
+        shoveVector = shoveVector * 0.9f; // to offset the effects of deltaTime
+        if (shoveVector.magnitude > 1 || shoveVector.magnitude < -1)
+        {
+            Debug.Log("Shove vector magnitude: " + shoveVector.magnitude);
+            newMoveVect = newMoveVect + (Time.deltaTime * shoveVector); // add the shove amount to the total movement.
+        } 
+        rb2.velocity = newMoveVect;
+
+        if (rb2.velocity.y != 0)
         {
             onGround = false;
         }
@@ -78,6 +90,13 @@ public class PlayerBehavior : MonoBehaviour {
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
+    }
+
+    // shove the player in the given direction
+    public void setShoveForce(Vector2 sa)
+    {
+        Debug.Log("PLayer being shoved!:  " + sa.x + ", " + sa.y);
+        shoveVector = sa;
     }
 
     public string getLogID()

@@ -15,9 +15,9 @@
 {"logId":"l1","type":"LINK_BLOCK","x":19,"y":-3,"objIDConnectingTo":"D"}
 ],
 "singleLinkedListPlatforms":[
-{"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":7,"y":-10,"objId":"A","value":"3","childLinkBlockConnectId":"B"},
-{"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":13,"y":-9,"objId":"B","value":"5","childLinkBlockConnectId":""},
-{"logId":"sllp2","type":"SINGLE_LL_PLATFORM","x":18,"y":-7,"objId":"C","value":"8","childLinkBlockConnectId":""},
-{"logId":"sllp3","type":"SINGLE_LL_PLATFORM","x":23,"y":-6,"objId":"D","value":"10","childLinkBlockConnectId":""}
+{"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":6,"y":-10,"objId":"A","value":"3","childLinkBlockConnectId":"B"},
+{"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":12,"y":-9,"objId":"B","value":"5","childLinkBlockConnectId":""},
+{"logId":"sllp2","type":"SINGLE_LL_PLATFORM","x":17,"y":-7,"objId":"C","value":"8","childLinkBlockConnectId":""},
+{"logId":"sllp3","type":"SINGLE_LL_PLATFORM","x":22,"y":-6,"objId":"D","value":"10","childLinkBlockConnectId":""}
 ]
 }

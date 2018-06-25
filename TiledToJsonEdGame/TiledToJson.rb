@@ -47,7 +47,7 @@ if map_file and out_file
 			elsif obj.type == "Goal"
 				goalPortal = Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int)
 			elsif obj.type == "SingleLLPlatform"
-				singleLinkedListPlatforms.push(SingleLLPlatform.new((obj.x / 64).to_int + 1, mh - (obj.y / 64).to_int, obj.name, obj.properties["ConnectTo"], obj.properties["Value"]))
+				singleLinkedListPlatforms.push(SingleLLPlatform.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.name, obj.properties["ConnectTo"], obj.properties["Value"]))
 			elsif obj.type == "ObjectiveBlock"
 				objectiveBlocks.push(Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int))
 			end

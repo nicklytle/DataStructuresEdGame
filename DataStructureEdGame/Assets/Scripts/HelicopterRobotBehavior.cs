@@ -40,9 +40,8 @@ public class HelicopterRobotBehavior : MonoBehaviour {
     {
         if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null)
         {
-            // move above the platform
-            //transform.position = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 4, 0));
-            targetLocation = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 4, 0));
+            // move above the platform 
+            targetLocation = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 3, 0));
         }
     }
 
