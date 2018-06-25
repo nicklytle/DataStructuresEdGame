@@ -271,24 +271,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
-       /* if (debugLinkControlVersion == 1)
-        {
-            if (hoverLinkRef.connectingPlatform == null)
-            {
-
-            } else
-            {
-                if (!hoverLinkRef.connectingPlatform.isPhasedOut)
-                {
-                    // only properly set the hover link if it would make a valid link.
-                    hoverLinkRef = lb;
-                }
-            }
-        } else
-        {*/
-            hoverLinkRef = lb;
-        //}
-
+         hoverLinkRef = lb;
 
         if (hoverLinkRef != null && hoverLinkRef != selectedLink) // can't set the hover link to the selected link
         { 

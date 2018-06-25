@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4853196251448216}
   - component: {fileID: 212089259810658022}
   - component: {fileID: 61774469577709552}
+  - component: {fileID: 114190884271662844}
   m_Layer: 0
   m_Name: GoalPortal
   m_TagString: GoalPortal
@@ -66,6 +67,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.64}
   m_EdgeRadius: 0
+--- !u!114 &114190884271662844
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1808712480562014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e3e3efe8777da4788b75a2ea59a757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logId: 
 --- !u!212 &212089259810658022
 SpriteRenderer:
   m_ObjectHideFlags: 1

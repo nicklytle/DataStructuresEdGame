@@ -151,46 +151,56 @@ public class LinkBlockBehavior : MonoBehaviour
 
     void OnMouseEnter()
     {
-        Cursor.SetCursor(gameController.pointerCursorTexture, Vector2.zero, gameController.cursorMode);
-        gameController.setHoverLink(this);
-        if (gameController.debugLinkControlVersion == 0)
+        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isHidden))  // can only interact with it when it is not hidden
         {
-            if (gameController.selectedLink == null)
+            // TODO: change cursor when you can click on it
+            Cursor.SetCursor(gameController.pointerCursorTexture, Vector2.zero, gameController.cursorMode);
+            gameController.setHoverLink(this);
+            if (gameController.debugLinkControlVersion == 0)
             {
-                gameController.setStatusText("Click to set this to remove the link and set this as the adding link");
+                if (gameController.selectedLink == null)
+                {
+                    gameController.setStatusText("Click to set this to remove the link and set this as the adding link");
+                }
             }
-        }
-        else if (gameController.debugLinkControlVersion == 1)
-        {
-            if (gameController.selectedLink == null)
+            else if (gameController.debugLinkControlVersion == 1)
             {
-                gameController.setStatusText("Click and hold to select this link.");
+                if (gameController.selectedLink == null)
+                {
+                    gameController.setStatusText("Click and hold to select this link.");
+                }
             }
         }
     }
 
     void OnMouseExit()
     {
-        gameController.setHoverLink(null);
-        Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
-        if (gameController.selectedLink == null)
-        {
-            gameController.setStatusText("");
+        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isHidden)) // can only interact with it when it is not hidden
+        {  
+            gameController.setHoverLink(null);
+            Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
+            if (gameController.selectedLink == null)
+            {
+                gameController.setStatusText("");
+            }
         }
     }
 
     // if the user clicks on this block.
     void OnMouseDown()
     {
-        if (gameController.debugLinkControlVersion == 0)
+        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isHidden)) // can only interact with it when it is not hidden
         {
-            if (isConnectedToPlatform())  // there is a link block there.
+            if (gameController.debugLinkControlVersion == 0)
             {
-                removeLinkConnection();
-                gameController.updateObjectiveHUDAndBlocks(); // update any objective blocks
-            } 
-            gameController.setSelectedLink(this); // set that this is the link being dragged from the player. 
-            gameController.updatePlatformEntities();
+                if (isConnectedToPlatform())  // there is a link block there.
+                {
+                    removeLinkConnection();
+                    gameController.updateObjectiveHUDAndBlocks(); // update any objective blocks
+                }
+                gameController.setSelectedLink(this); // set that this is the link being dragged from the player. 
+                gameController.updatePlatformEntities();
+            }
         }
     }
 

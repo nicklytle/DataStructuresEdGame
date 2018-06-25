@@ -13,6 +13,8 @@ public class PlatformBehavior : MonoBehaviour {
     public GameObject childValueBlock; // reference to the child link object.
     private int value;
 
+    public Material defaultChildMaterial; // the material for when the children objects are revealed.
+    public Material fadedChildMaterial; // The material for when the children objected are hidden
     public Sprite defaultSprite; // initial sprite
     public Sprite phasedOutSprite; // sprite to display when phased out.
 
@@ -74,16 +76,20 @@ public class PlatformBehavior : MonoBehaviour {
             }
         }
 
-        /*if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null) // update all blocks in the future chain 
-        {
-            childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.updatePlatformValuesAndSprite();
-        }*/
-        // update the link block arrow for the inner child
-        // childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
 
-        // set the visibility of the children objects based on hidden value 
-        childLink.SetActive(!isHidden);
-        childValueBlock.SetActive(!isHidden);
+        // set the material of the children based on if its hidden or not.
+        if (isHidden && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
+        {
+            childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
+            childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
+            setValueBlockText("?"); // can't see the value
+        } else if (!isHidden && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
+        {
+            childLink.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
+            childValueBlock.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
+            setValueBlockText("" + value); // can see the value
+        }
+        
     }
 
     /**
@@ -135,7 +141,15 @@ public class PlatformBehavior : MonoBehaviour {
     {
         if (childValueBlock != null) { 
             value = s;
-            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "" + value;
+            setValueBlockText("" + value);
+        }
+    }
+    
+    public void setValueBlockText(string s)
+    {
+        if (childValueBlock != null)
+        {
+            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = s;
         }
     }
 

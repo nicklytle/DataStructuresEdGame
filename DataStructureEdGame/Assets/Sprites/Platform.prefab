@@ -234,7 +234,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d104d974ccdadb7499977a0e3d0d8b76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logId: 
   gameController: {fileID: 0}
   parentPlatform: {fileID: 0}
   connectingPlatform: {fileID: 0}
@@ -286,10 +287,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b56ffe56318b2d8469f3e0c7b6f30106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logId: 
   gameController: {fileID: 0}
   incomingConnectionLinkBlocks: []
   childLink: {fileID: 0}
   childValueBlock: {fileID: 0}
+  defaultChildMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  fadedChildMaterial: {fileID: 2100000, guid: 69c0e08f02dc4b64b8ba571925b4823f, type: 2}
   defaultSprite: {fileID: 21300000, guid: 753c61c662d006c4585014584c1e3a85, type: 3}
   phasedOutSprite: {fileID: 21300000, guid: bd57a9e945429814493fccac3ee007b0, type: 3}
   isHidden: 0
