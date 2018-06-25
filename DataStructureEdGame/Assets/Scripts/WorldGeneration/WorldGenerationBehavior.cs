@@ -158,7 +158,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
             levelLinkBlocks.Add(lb);
-            Debug.Log("Made me some level link blocks");
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
         }
@@ -197,7 +196,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelPlatformEntities.Add(newPlat); 
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
-                Debug.Log("It needs to be added");
+                //Debug.Log("Platform needs to be added");
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);

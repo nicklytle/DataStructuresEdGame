@@ -22,7 +22,6 @@ public class HelicopterRobotBehavior : MonoBehaviour {
         float distAway = Vector3.Distance(transform.position, targetLocation);
         if (distAway > 0.1f)
         {
-            Debug.Log("Moving");
             Vector3 moveDir = (targetLocation - transform.position).normalized;
             // move, lerping based on the distance away
             transform.Translate(Vector3.Lerp(new Vector3(), (moveDir * flySpeed * Time.deltaTime), distAway / 12f));
