@@ -83,11 +83,13 @@ public class PlatformBehavior : MonoBehaviour {
             childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
             childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
             setValueBlockText("?"); // can't see the value
+            childLink.GetComponent<BoxCollider2D>().enabled = false;
         } else if (!isHidden && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
         {
             childLink.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
             childValueBlock.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
             setValueBlockText("" + value); // can see the value
+            childLink.GetComponent<BoxCollider2D>().enabled = true;
         }
         
     }
