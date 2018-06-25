@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HelicopterRobotBehavior : MonoBehaviour {
 
+    public string logId;
+
     public GameController gameController;
     public GameObject childLink;
     public Vector3 targetLocation;
@@ -43,5 +45,10 @@ public class HelicopterRobotBehavior : MonoBehaviour {
             //transform.position = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 4, 0));
             targetLocation = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 4, 0));
         }
+    }
+
+    public string getLogID()
+    {
+        return logId;
     }
 }

@@ -87,6 +87,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
                 Vector3 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height, 1);
                 obj.localScale = sizeOfBlock;
+                if (objToInstances == groundPreFab)
+                {
+                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId;
+                }
                 levelEntities.Add(obj);
             }
         }
@@ -96,12 +100,14 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.player.x + (1 / 2f)), (float)(level.player.y - (1 / 2f)));
             gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
+            gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
             levelEntities.Add(gameController.playerRef);
         }
         if (level.goalPortal != null)
         {
             Vector2 loc = new Vector2((float)(level.goalPortal.x + (1 / 2f)), (float)(level.goalPortal.y - (1 / 2f)));
             Transform goal = Instantiate(goalPortalPreFab, loc, Quaternion.identity);
+            goal.GetComponent<GoalBehavior>().logId = level.goalPortal.logId;
             levelEntities.Add(goal);
         }
         if (level.helicopterRobot != null)
@@ -111,8 +117,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
             HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
             robotBehavior.gameController = gameController;
             robotBehavior.targetLocation = robot.position;
+            Debug.Log("Robot id: " + level.helicopterRobot.logId);
+            robotBehavior.logId = level.helicopterRobot.logId;
             gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
+            robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
             levelEntities.Add(robot);
         }
         
@@ -133,6 +142,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             startLinkBehavior.isStartingLink = true;  // mark link as start.
             startLinkBehavior.defaultSprite = startLinkBlockSprite;
             startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
+            startLinkBehavior.logId = level.startLink.logId;
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
@@ -147,6 +157,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Transform newLink = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
+            lb.logId = level.linkBlocks[i].logId;
             levelLinkBlocks.Add(lb);
             Debug.Log("Made me some level link blocks");
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
@@ -160,6 +171,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.objectiveBlocks[i].x + (1 / 2f)), (float)(level.objectiveBlocks[i].y - (1 / 2f)));
             Transform newOBlock = Instantiate(objectiveBlockPreFab, loc, Quaternion.identity);
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
+            ob.logId = level.objectiveBlocks[i].logId;
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
@@ -178,6 +190,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             newPlat.childLink = innerLink.gameObject;
             newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
             newPlat.setValue(level.singleLinkedListPlatforms[i].value);
+            newPlat.logId = level.singleLinkedListPlatforms[i].logId;
+            innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);

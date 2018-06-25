@@ -57,44 +57,52 @@ if map_file and out_file
 	# write to the output file
 	out_file.syswrite("{\n")
 	out_file.syswrite("\"winCondition\":\"#{winCondition}\",\n")
-	out_file.syswrite("\"player\":{\"type\":\"PLAYER\",\"x\":#{player['x']},\"y\":#{player['y']}},\n")
-	out_file.syswrite("\"startLink\":{\"type\":\"LINK_BLOCK\",\"x\":#{startLink['x']},\"y\":#{startLink['y']},\"objIDConnectingTo\":\"#{startLink['connectTo']}\"},\n")
-	out_file.syswrite("\"goalPortal\":{\"type\":\"GOAL_PORTAL\",\"x\":#{goalPortal['x']},\"y\":#{goalPortal['y']}},\n")
-	out_file.syswrite("\"helicopterRobot\":{\"type\":\"HELICOPTER_ROBOT\",\"x\":#{helicopterRobot['x']},\"y\":#{helicopterRobot['y']}},\n")
+	out_file.syswrite("\"player\":{\"logId\":\"player\",\"type\":\"PLAYER\",\"x\":#{player['x']},\"y\":#{player['y']}},\n")
+	out_file.syswrite("\"startLink\":{\"logId\":\"headLink\",\"type\":\"LINK_BLOCK\",\"x\":#{startLink['x']},\"y\":#{startLink['y']},\"objIDConnectingTo\":\"#{startLink['connectTo']}\"},\n")
+	out_file.syswrite("\"goalPortal\":{\"logId\":\"goal\",\"type\":\"GOAL_PORTAL\",\"x\":#{goalPortal['x']},\"y\":#{goalPortal['y']}},\n")
+	out_file.syswrite("\"helicopterRobot\":{\"logId\":\"helicopterRobot\",\"type\":\"HELICOPTER_ROBOT\",\"x\":#{helicopterRobot['x']},\"y\":#{helicopterRobot['y']}},\n")
 	out_file.syswrite("\"blocks\":[\n") # start blocks
+	gId = 0
 	for b in blocks 
-		out_file.syswrite("{\"type\":\"GROUND\",\"x\":#{b['x']},\"y\":#{b['y']},\"width\":#{b['width']},\"height\":#{b['height']}}")
+		out_file.syswrite("{\"logId\":\"g#{gId}\",\"type\":\"GROUND\",\"x\":#{b['x']},\"y\":#{b['y']},\"width\":#{b['width']},\"height\":#{b['height']}}")
 		if b != blocks.last
 			out_file.syswrite(",")
 		end
+		gId = gId + 1
 		out_file.syswrite("\n")
 	end
 	out_file.syswrite("],\n") # end blocks
 	out_file.syswrite("\"objectiveBlocks\":[\n") # start objectiveBlocks
+	oId = 0
 	for ob in objectiveBlocks
-		out_file.syswrite("{\"type\":\"OBJECTIVE_BLOCK\",\"x\":#{ob['x']},\"y\":#{ob['y']}}")
+		out_file.syswrite("{\"logId\":\"ob#{oId}\",\"type\":\"OBJECTIVE_BLOCK\",\"x\":#{ob['x']},\"y\":#{ob['y']}}")
 		if ob != objectiveBlocks.last
 			out_file.syswrite(",")
 		end
+		oId = oId + 1
 		out_file.syswrite("\n")
 	end
 	out_file.syswrite("],\n") # end objectiveBlocks
 	out_file.syswrite("\"linkBlocks\":[\n") # start linkBlocks
+	lId = 0
 	for lb in linkBlocks
-		out_file.syswrite("{\"type\":\"LINK_BLOCK\",\"x\":#{lb['x']},\"y\":#{lb['y']},\"objIDConnectingTo\":\"#{lb['connectTo']}\"}")
+		out_file.syswrite("{\"logId\":\"l#{lId}\",\"type\":\"LINK_BLOCK\",\"x\":#{lb['x']},\"y\":#{lb['y']},\"objIDConnectingTo\":\"#{lb['connectTo']}\"}")
 		if lb != linkBlocks.last
 			out_file.syswrite(",")
 		end
+		lId = lId + 1
 		out_file.syswrite("\n")
 	end
 	out_file.syswrite("],\n") # end linkBlocks
 	out_file.syswrite("\"singleLinkedListPlatforms\":[\n") # start singleLinkedListPlatforms
+	sllpId = 0
 	for p in singleLinkedListPlatforms
-		out_file.syswrite("{\"type\":\"SINGLE_LL_PLATFORM\",\"x\":#{p['x']},\"y\":#{p['y']},\"objId\":\"#{p['name']}\",")
+		out_file.syswrite("{\"logId\":\"sllp#{sllpId}\",\"type\":\"SINGLE_LL_PLATFORM\",\"x\":#{p['x']},\"y\":#{p['y']},\"objId\":\"#{p['name']}\",")
 		out_file.syswrite("\"value\":\"#{p['value']}\",\"childLinkBlockConnectId\":\"#{p['connectTo']}\"}")
 		if p != singleLinkedListPlatforms.last
 			out_file.syswrite(",")
 		end
+		sllpId = sllpId + 1
 		out_file.syswrite("\n")
 	end
 	out_file.syswrite("]\n") # end singleLinkedListPlatforms

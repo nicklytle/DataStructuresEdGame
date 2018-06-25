@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ObjectiveBlockBehavior : MonoBehaviour {
 
+    public string logId;
+
     public Sprite solidSprite;
     public Sprite fadedSprite;
 
@@ -38,7 +40,12 @@ public class ObjectiveBlockBehavior : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () { 
+	void Update () {
 
-	}
+    }
+
+    public string getLogID()
+    {
+        return logId;
+    }
 }

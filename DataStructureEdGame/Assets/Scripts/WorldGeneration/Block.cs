@@ -12,6 +12,7 @@ namespace Assets.Scripts.WorldGeneration
     class Block
     {
         public string type;
+        public string logId; // the ID of the object when it is logged.
         public double x;
         public double y; 
     }

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlatformBehavior : MonoBehaviour {
 
+    public string logId; // the ID of this object when it is logged
+
     public GameController gameController; // reference to the very important game controller.
     public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to.
     public GameObject childLink; // reference to the child link object.
@@ -156,5 +158,10 @@ public class PlatformBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+    }
+
+    public string getLogID()
+    {
+        return logId;
     }
 }

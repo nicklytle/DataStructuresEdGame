@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LinkBlockBehavior : MonoBehaviour
 {
+    public string logId; // the ID of this object when it is logged
 
     public GameController gameController;
 
@@ -209,5 +210,10 @@ public class LinkBlockBehavior : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public string getLogID()
+    {
+        return logId;
     }
 }

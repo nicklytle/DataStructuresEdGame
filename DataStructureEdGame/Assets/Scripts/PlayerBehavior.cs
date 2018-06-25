@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour {
 
+    public string logId;
+
     public GameController gameController;
 
     private Rigidbody2D rb2;
@@ -68,5 +70,10 @@ public class PlayerBehavior : MonoBehaviour {
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
+    }
+
+    public string getLogID()
+    {
+        return logId;
     }
 }
