@@ -42,7 +42,7 @@ public class HUDBehavior : MonoBehaviour {
     {
         debounce += Time.fixedDeltaTime;
         // update the GUI when it needs to be updated.
-        if (versionNumber != gameController.debugLinkControlVersion) {
+        if ((versionNumber != gameController.debugLinkControlVersion) && (selected)) {
             versionNumber = gameController.debugLinkControlVersion;
             string ver = "1";
             if (versionNumber == 1)
@@ -55,7 +55,7 @@ public class HUDBehavior : MonoBehaviour {
 
     public void OnResetButtonClick()
     {
-        if (debounce > 1.0f) { 
+        if ((debounce > 1.0f) && (selected)) { 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
         }
