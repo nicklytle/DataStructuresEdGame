@@ -469,6 +469,11 @@ Prefab:
       propertyPath: gameController
       value: 
       objectReference: {fileID: 1909570818}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 663304323}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
@@ -989,6 +994,7 @@ GameObject:
   m_Component:
   - component: {fileID: 663304322}
   - component: {fileID: 663304321}
+  - component: {fileID: 663304323}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -1028,13 +1034,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1000
-  m_Sprite: {fileID: 21300000, guid: 61c17042150badf48a25c32d81204211, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b686f326f35b17f4aa26be9cec64ad37, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 30.000002, y: 14.910001}
-  m_AdaptiveModeThreshold: 0.5
+  m_DrawMode: 2
+  m_Size: {x: 80, y: 60}
+  m_AdaptiveModeThreshold: 0.233
   m_SpriteTileMode: 0
 --- !u!4 &663304322
 Transform:
@@ -1044,11 +1050,23 @@ Transform:
   m_GameObject: {fileID: 663304320}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 8.19, y: 7.93, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 28.33}
+  m_LocalScale: {x: 2.4, y: 1.9200001, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &663304323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 663304320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13481a30d2ab406479706e1da76e3ad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &812432451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1738,7 +1756,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 9
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

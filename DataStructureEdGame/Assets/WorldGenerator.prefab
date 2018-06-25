@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1371151059048822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.3742075, y: 5.9120245, z: -50}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,6 +62,8 @@ MonoBehaviour:
   levelLinkBlocks: []
   groundPreFab: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b,
     type: 2}
+  groundTopPreFab: {fileID: 4829979505292052, guid: 26a26d8687254544ea0ab35a9b358f20,
+    type: 2}
   playerPreFab: {fileID: 4509033331052830, guid: 4990b57ee73830049b58617bdd094e85,
     type: 2}
   goalPortalPreFab: {fileID: 4853196251448216, guid: 36269100b3befe640b3cf2853f06e845,
@@ -78,3 +80,4 @@ MonoBehaviour:
     type: 3}
   nullStartLinkBlockSprite: {fileID: 21300000, guid: aafdf6e86cda78f44b13f697dfabe43b,
     type: 3}
+  listOfPlatsToAdd: {fileID: 0}

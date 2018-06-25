@@ -16,6 +16,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     // references to PreFabs
     public Transform groundPreFab;
+    public Transform groundTopPreFab;
     public Transform playerPreFab;
     public Transform goalPortalPreFab;
     public Transform objectiveBlockPreFab;
@@ -27,8 +28,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Sprite startLinkBlockSprite;
     public Sprite nullStartLinkBlockSprite;
 
-    //reference to list of platformBehavior objects to add
-    public PlatformBehavior listOfPlatsToAdd;
+    // level backdrop
+    public BackgroundBehavior background;
 
     // Use this for initialization
     void Start () {
@@ -84,12 +85,17 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Transform objToInstances = GetAssocInstanceFromType(level.blocks[i].type);
             if (objToInstances != null)
             {
-                Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
-                Vector3 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height, 1);
-                obj.localScale = sizeOfBlock;
-                if (objToInstances == groundPreFab)
+                if (objToInstances == groundPreFab && level.blocks[i].height == 1)
                 {
-                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId;
+                    objToInstances = groundTopPreFab; // render it with details on top of the block.
+                }
+                Transform obj = Instantiate(objToInstances, blockPos, Quaternion.identity);
+                Vector2 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height); 
+                obj.GetComponent<SpriteRenderer>().size = sizeOfBlock;
+                obj.GetComponent<BoxCollider2D>().size = sizeOfBlock;
+                if (objToInstances == groundPreFab || objToInstances == groundTopPreFab)
+                {
+                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block
                 }
                 levelEntities.Add(obj);
             }
@@ -102,6 +108,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
             gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
             levelEntities.Add(gameController.playerRef);
+            // move the backdrop right behind the player initially.
+            background.initialPosition = gameController.playerRef.position + new Vector3(0, 0, -10);
+            background.transform.position = background.initialPosition;
         }
         if (level.goalPortal != null)
         {
