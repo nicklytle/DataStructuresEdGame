@@ -29,6 +29,14 @@ public class PlayerBehavior : MonoBehaviour {
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
         rb2.velocity = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
+        if(rb2.velocity.y != 0)
+        {
+            onGround = false;
+        }
+        if(rb2.velocity.y == 0)
+        {
+            onGround = true;
+        }
 
         if (horz == 0 && sr.sprite != frontView)
         {
