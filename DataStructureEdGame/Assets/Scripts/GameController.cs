@@ -79,6 +79,12 @@ public class GameController : MonoBehaviour {
         }
 
         // add platform system
+        /**
+        if(addingPlatforms && !Input.GetMouseButtonDown(0))
+        {
+            
+        }
+        */
         if (addingPlatforms && Input.GetMouseButtonDown(0))
         {
             if (platformsToAdd.Count > 0)
@@ -96,6 +102,7 @@ public class GameController : MonoBehaviour {
                     toBeAdded.gameObject.SetActive(true);
                 }
             }
+            addingPlatforms = false;
         }
 
         if (debugLinkControlVersion == 0)
