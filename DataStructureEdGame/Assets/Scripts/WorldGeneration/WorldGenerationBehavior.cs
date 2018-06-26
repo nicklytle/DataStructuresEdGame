@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Globalization;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.WorldGeneration;
 using UnityEngine;
@@ -96,8 +98,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 if (objToInstances == groundPreFab || objToInstances == groundTopPreFab)
                 {
                     obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block
-                    //Debug.Log("Ground logID");
-                    //Debug.Log(obj.GetComponent<GroundBehavior>().logId);
+
+                    //DateTime date1 = DateTime.Now;
+                    string timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    Debug.Log("Ground logID: " + obj.GetComponent<GroundBehavior>().logId + " " + timestamp1);
                 }
                 levelEntities.Add(obj);
             }
@@ -109,8 +113,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
             gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
-            //Debug.Log("Player logID");
-            //Debug.Log(gameController.playerRef.GetComponent<PlayerBehavior>().logId);
+            Debug.Log("Player logID " + gameController.playerRef.GetComponent<PlayerBehavior>().logId);
             levelEntities.Add(gameController.playerRef);
             // move the backdrop right behind the player initially.
             background.initialPosition = gameController.playerRef.position + new Vector3(0, 0, -10);
@@ -121,8 +124,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.goalPortal.x + (1 / 2f)), (float)(level.goalPortal.y - (1 / 2f)));
             Transform goal = Instantiate(goalPortalPreFab, loc, Quaternion.identity);
             goal.GetComponent<GoalBehavior>().logId = level.goalPortal.logId;
-            //Debug.Log("Goal logID");
-            //Debug.Log(goal.GetComponent<GoalBehavior>().logId);
+
+            //DateTime date2 = DateTime.Now;
+            string timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Goal logID " + goal.GetComponent<GoalBehavior>().logId + " " + timestamp2);
 
             levelEntities.Add(goal);
         }
@@ -135,16 +140,18 @@ public class WorldGenerationBehavior : MonoBehaviour {
             robotBehavior.targetLocation = robot.position;
             robotBehavior.logId = level.helicopterRobot.logId;
 
-            //Debug.Log("Robot itself");
-            //Debug.Log(robotBehavior.logId);
+            //DateTime date3 = DateTime.Now;
+            string timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Robot itself: " + robotBehavior.logId + " " + timestamp3);
 
 
             gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
             robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
-            //Debug.Log("Helicopter robo LINK logID");
-            //Debug.Log(robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId);
 
+            //DateTime date4 = DateTime.Now;
+            string timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Helicopter robo LINK logID " + robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId + " " + timestamp4);
             levelEntities.Add(robot);
         }
         
@@ -168,15 +175,17 @@ public class WorldGenerationBehavior : MonoBehaviour {
             startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
             startLinkBehavior.logId = level.startLink.logId;
 
-            //Debug.Log("Head link LogID");
-            //Debug.Log(startLinkBehavior.logId);
+            //DateTime date5 = DateTime.Now;
+            string timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Head link LogID " + startLinkBehavior.logId + " " + timestamp5);
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
             levelLinkBlocksConnIds.Add(level.startLink.objIDConnectingTo);
 
-            //Debug.Log("Head link connection");
-            //Debug.Log(level.startLink.objIDConnectingTo);
+            //DateTime date6 = DateTime.Now;
+            string timestamp6 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Head link connection " + level.startLink.objIDConnectingTo + " " + timestamp6);
             levelEntities.Add(startLinkTran);
         }
 
@@ -189,8 +198,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
-            //Debug.Log("each link " + i + " block");
-            //Debug.Log(lb.logId);
+
+            //DateTime date7 = DateTime.Now;
+            string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
             levelLinkBlocks.Add(lb);
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
@@ -203,8 +214,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Transform newOBlock = Instantiate(objectiveBlockPreFab, loc, Quaternion.identity);
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
             ob.logId = level.objectiveBlocks[i].logId;
-            //Debug.Log("fire blocks");
-            //Debug.Log(ob.logId);
+
+            //DateTime date8 = DateTime.Now;
+            string timestamp8 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("fire blocks " + ob.logId + timestamp8);
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
@@ -224,30 +237,35 @@ public class WorldGenerationBehavior : MonoBehaviour {
             newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
             newPlat.setValue(level.singleLinkedListPlatforms[i].value);
             newPlat.logId = level.singleLinkedListPlatforms[i].logId;
-            //Debug.Log("platform logID");
-            //Debug.Log(newPlat.logId);
+
+            //DateTime date9 = DateTime.Now;
+            string timestamp9 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("platform logID " + newPlat.logId + timestamp9);
 
             innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
-            //Debug.Log("link inside the platform logID");
-            //Debug.Log(innerLink.logId);
+            //DateTime date10 = DateTime.Now;
+            string timestamp10 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("link inside the platform logID " + innerLink.logId + " "  + timestamp10);
 
 
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
-            //Debug.Log("platform object ID");
-            //Debug.Log(level.singleLinkedListPlatforms[i].objId);
+            //DateTime date11 = DateTime.Now;
+            string timestamp11 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("platform object ID " + level.singleLinkedListPlatforms[i].objId + " " + timestamp11);
 
 
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
 
-            //Debug.Log("Connecting block..");
-            //Debug.Log(level.singleLinkedListPlatforms[i].childLinkBlockConnectId + "  " + level.singleLinkedListPlatforms.Length);
-            //Debug.Log("Cake");
+            //DateTime date12 = DateTime.Now;
+            string timestamp12 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Connecting block " + level.singleLinkedListPlatforms[i].childLinkBlockConnectId + "  " + level.singleLinkedListPlatforms.Length + ": " + timestamp12);
+
             levelEntities.Add(newLLPlatform);
             levelPlatformEntities.Add(newPlat);
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
-                Debug.Log("Platform needs to be added");
+                //Debug.Log("Platform needs to be added");
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
