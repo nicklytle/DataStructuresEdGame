@@ -261,7 +261,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             if (levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
             {
                 string platformId = levelLinkBlocksConnIds[i]; 
-                if (levelLinkBlocks[i].connectingPlatform.isInLevel == true)
+                if (listPlatformMap[platformId].isInLevel == true)
                 {
                     // establish the connection
                     levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
