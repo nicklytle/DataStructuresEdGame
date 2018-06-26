@@ -65,7 +65,7 @@ public class PlayerBehavior : MonoBehaviour {
             sr.flipX = true;
         }
 
-        if (onGround && (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)))
+        if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 

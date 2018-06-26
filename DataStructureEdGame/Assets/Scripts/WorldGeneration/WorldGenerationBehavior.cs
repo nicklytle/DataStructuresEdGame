@@ -33,7 +33,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // ManualStartGenerator();
+
     }
 
     public void ManualStartGenerator()
@@ -260,12 +260,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
         for (int i = 0; i < levelLinkBlocksConnIds.Count; i++) {
             if (levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
             {
-                string platformId = levelLinkBlocksConnIds[i];
-                // establish the connection
-
-                levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
-                if (levelLinkBlocks[i].connectingPlatform.isInLevel == true)
+                string platformId = levelLinkBlocksConnIds[i]; 
+                if (listPlatformMap[platformId].isInLevel == true)
                 {
+                    // establish the connection
+                    levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
                     levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
                     levelLinkBlocks[i].renderArrow = true;
                 }
@@ -284,6 +283,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
+        Debug.Log("RESET LEVEL");
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
             lb.removeArrowBetween();

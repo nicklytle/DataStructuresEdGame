@@ -8,31 +8,18 @@ public class HUDBehavior : MonoBehaviour {
     public GameController gameController;
     public Button resetButton;
 
-    public Text controlSchemeView;
+    // public Text controlSchemeView;
     public Button addPlatformButton;
     public PlatformBehavior oneToAdd;
-
-
-    private float debounce;
-    private int versionNumber; // local copy
-
-    // DEBUG/TEST OPTION STUFF
-    public Image controlSelectPanel;
-    public Button controlOneButton;
-    public Button controlTwoButton;
-    public TextAsset[] controlOneLevelFiles;
-    public TextAsset[] controlTwoLevelFiles;
+     
+    private float debounce; 
     public bool selected;
 
     void Start()
     {
         selected = false;
         debounce = 0;
-        resetButton.onClick.AddListener(OnResetButtonClick);
-        versionNumber = -1;
-
-        controlOneButton.onClick.AddListener(OnControlOptionOne);
-        controlTwoButton.onClick.AddListener(OnControlOptionTwo);
+        resetButton.onClick.AddListener(OnResetButtonClick);  
 
         addPlatformButton.onClick.AddListener(OnControlAddPlatform);
 
@@ -40,52 +27,17 @@ public class HUDBehavior : MonoBehaviour {
 
     void Update()
     {
-        debounce += Time.fixedDeltaTime;
-        // update the GUI when it needs to be updated.
-        if ((versionNumber != gameController.debugLinkControlVersion) && (selected)) {
-            versionNumber = gameController.debugLinkControlVersion;
-            string ver = "1";
-            if (versionNumber == 1)
-            {
-                ver = "2";
-            }
-            controlSchemeView.text = "Control v" + ver;
-        }
+        debounce += Time.fixedDeltaTime; 
     }
 
     public void OnResetButtonClick()
-    {
-        if ((debounce > 1.0f) && (selected)) { 
+    { 
+        if (debounce > 1.0f) { 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
         }
     }
     
-
-    // DEBUG/TESTING STUFF ONLY!
-    void OnControlOptionOne()
-    {
-        if (selected)
-            return;
-        selected = true;
-        gameController.worldGenerator.levelDescriptionJsonFiles = controlOneLevelFiles;
-        gameController.debugLinkControlVersion = 0;
-        controlSelectPanel.gameObject.SetActive(false);
-        gameController.worldGenerator.ManualStartGenerator();
-    }
-
-    void OnControlOptionTwo()
-    {
-        if (selected)
-            return;
-        selected = true;
-        gameController.worldGenerator.levelDescriptionJsonFiles = controlTwoLevelFiles;
-        gameController.debugLinkControlVersion = 1;
-        controlSelectPanel.gameObject.SetActive(false);
-        gameController.worldGenerator.ManualStartGenerator();
-
-    }
-
     void OnControlAddPlatform()
     {
         gameController.addingPlatforms = true;
