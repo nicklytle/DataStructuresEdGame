@@ -33,7 +33,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        // ManualStartGenerator();
+
     }
 
     public void ManualStartGenerator()

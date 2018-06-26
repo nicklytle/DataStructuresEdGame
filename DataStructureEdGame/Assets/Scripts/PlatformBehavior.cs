@@ -120,18 +120,12 @@ public class PlatformBehavior : MonoBehaviour {
 
     void OnMouseEnter()
     {
-        if (gameController.debugLinkControlVersion == 0) { 
-            gameController.setHoverPlatformReference(this); // when the mouse goes over a platform, create reference in game controller.
-            gameController.updateObjectiveHUDAndBlocks();
-        }
+
     }
 
     void OnMouseExit()
     {
-        if (gameController.debugLinkControlVersion == 0) { 
-            gameController.setHoverPlatformReference(null); // when the mouse leaves a platform, remove the reference in game controller.
-            gameController.updateObjectiveHUDAndBlocks();
-        }
+
     }
 
     public void setDisplaySelected(bool b)
