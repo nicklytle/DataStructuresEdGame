@@ -81,49 +81,79 @@ public class GameController : MonoBehaviour {
         }
 
         // add platform system
-        
-        if(addingPlatforms && !Input.GetMouseButton(0))
+
+        if (addingPlatforms)
         {
-
-            if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
-            {
-
-                PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
-                platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
-
-                platToDisplayAndAdd.childLink.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
-                platToDisplayAndAdd.childValueBlock.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
-
-                int val = platformsToAdd[0].getValue();
-                platToDisplayAndAdd.setValueBlockText("" + val + ""); // can't see the value
-
-                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                pos.z = 0;
-                platToDisplayAndAdd.transform.position = pos;
-                pos.z = 0;
-                platToDisplayAndAdd.gameObject.SetActive(true);
-            }
-        }
-        
-        if (addingPlatforms && Input.GetMouseButtonDown(0))
-        {
-            if (platformsToAdd.Count > 0)
-            {
-                // Debug.Log("Adding platform now..");
-                // Debug.Log(platformsToAdd.Count);
-                PlatformBehavior toBeAdded = platformsToAdd[0];
-                if (toBeAdded != null)
+            // you are not clicking or holding down the mouse and there is no select link.  OR you have a select link and you are holding down the mouse button
+            if ((!Input.GetMouseButton(0) && selectedLink == null) || (selectedLink != null && Input.GetMouseButton(0))) 
+            { 
+                if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
-                    platformsToAdd.Remove(toBeAdded);
-                    Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    positionMcPosition.z = 0;
-                    toBeAdded.transform.position = positionMcPosition;
-                    toBeAdded.gameObject.SetActive(true);
+                    // show a faded preview of the platform
+                    PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
+                    platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
+
+                    platToDisplayAndAdd.childLink.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
+                    platToDisplayAndAdd.childValueBlock.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
+
+                    int val = platformsToAdd[0].getValue();
+                    platToDisplayAndAdd.setValueBlockText("" + val + ""); // can't see the value
+
+                    Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    pos.z = 0;
+                    platToDisplayAndAdd.transform.position = pos;
+                    pos.z = 0;
+                    platToDisplayAndAdd.gameObject.SetActive(true);
+
+                    // you have a select link and you are holding down the mouse button... make a faded arrow
+                    if (selectedLink != null && Input.GetMouseButton(0)) { 
+                        // make a faded hover arrow going to this guy
+                        if (hoverArrowHead != null)
+                        {
+                            removeHoverArrow();
+                        }
+                        // make a faded hover arrow from the selected link to the proposed platform location
+                        Color c = Color.gray;
+                        c.a = 0.3f;
+                        Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, platToDisplayAndAdd, c);
+                        hoverArrowLine = hoverArrowParts[0];
+                        hoverArrowHead = hoverArrowParts[1];
+                    }
+                }
+            } 
+            // you have a select link and you have released the mouse button
+            else if (selectedLink != null && Input.GetMouseButtonUp(0))
+            {
+                if (platformsToAdd.Count > 0)
+                { 
+                    PlatformBehavior toBeAdded = platformsToAdd[0];
+                    if (toBeAdded != null)
+                    {
+                        platformsToAdd.Remove(toBeAdded);
+                        Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        positionMcPosition.z = 0;
+                        toBeAdded.transform.position = positionMcPosition;
+                        toBeAdded.gameObject.SetActive(true);
+
+                        selectedLink.setConnectingPlatform(toBeAdded);
+                    }
+                }
+                if (hoverArrowHead != null)
+                {
+                    removeHoverArrow();
+                }
+                addingPlatforms = false;
+            } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
+            {
+                if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
+                {
+                    platformsToAdd[0].gameObject.SetActive(false); // cancel placing the platform
+                    addingPlatforms = false;
                 }
             }
-            addingPlatforms = false;
-        }
+        } // end addingPlatforms block
+
         
         // handle just clicking the mouse button
         if (Input.GetMouseButtonDown(0))
