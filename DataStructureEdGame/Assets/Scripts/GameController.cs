@@ -79,12 +79,30 @@ public class GameController : MonoBehaviour {
         }
 
         // add platform system
-        /**
-        if(addingPlatforms && !Input.GetMouseButtonDown(0))
+        
+        if(addingPlatforms && !Input.GetMouseButton(0))
         {
-            
+
+            if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
+            {
+
+                PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
+                platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
+
+                platToDisplayAndAdd.childLink.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
+                platToDisplayAndAdd.childValueBlock.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
+
+                int val = platformsToAdd[0].getValue();
+                platToDisplayAndAdd.setValueBlockText("" + val + ""); // can't see the value
+
+                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                pos.z = 0;
+                platToDisplayAndAdd.transform.position = pos;
+                pos.z = 0;
+                platToDisplayAndAdd.gameObject.SetActive(true);
+            }
         }
-        */
+        
         if (addingPlatforms && Input.GetMouseButtonDown(0))
         {
             if (platformsToAdd.Count > 0)
