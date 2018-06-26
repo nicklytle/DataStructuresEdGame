@@ -235,7 +235,7 @@ MonoBehaviour:
   controlOneButton: {fileID: 1941226871}
   controlTwoButton: {fileID: 375418274}
   controlOneLevelFiles:
-  - {fileID: 4900000, guid: ff6c6b5f1971f5542b894f83c1fdfd5d, type: 3}
+  - {fileID: 4900000, guid: bc947414e6f65574cabbbb341a788ddf, type: 3}
   - {fileID: 4900000, guid: ce0516735d4358a40a1383135447f42a, type: 3}
   - {fileID: 4900000, guid: 012a4b790ff9fb349818c862f3c8fa0c, type: 3}
   - {fileID: 4900000, guid: b9270ae955019e34b800d12e05aa1ff9, type: 3}
@@ -479,6 +479,11 @@ Prefab:
       propertyPath: generateWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: bc947414e6f65574cabbbb341a788ddf, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
@@ -1544,7 +1549,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1881759259
 RectTransform:
   m_ObjectHideFlags: 0

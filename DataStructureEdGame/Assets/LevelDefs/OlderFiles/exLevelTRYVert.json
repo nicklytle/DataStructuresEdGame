@@ -1,63 +1,23 @@
 {
-	"winCondition" : "SortListAscending",
-	"player" : {
-		"type" : "PLAYER",
-		"x" : 2,
-		"y" : 2
-	},
-	"startLink" : {
-		"type" : "LINK_BLOCK",
-		"x" : 2,
-		"y" : 2,
-		"objIDConnectingTo" : "A"
-	},
-	"goalPortal" : {
-		"type":"GOAL_PORAL",
-		"x":7,
-		"y":4
-	},
-	"helicopterRobot" : {
-		"type":"HELICOPTER_ROBOT",
-		"x":3,
-		"y":5
-	},
-	
-	"blocks" : [
-		{
-			"type":"GROUND",
-			"x":2,
-			"y":0
-		}
-	],
-	
-	"objectiveBlocks" : [
-	],
-	
-	"linkBlocks" : [
-		{
-			"type" : "LINK_BLOCK",
-			"x" : 0,
-			"y" : 3,
-			"objIDConnectingTo" : ""
-		}
-	],
-	
-	"singleLinkedListPlatforms" : [
-		{
-			"type":"SINGLE_LL_PLATFORM",
-			"x":6,
-			"y":5,
-			"objId" : "A",
-			"value" : "24",
-			"childLinkBlockConnectId" : "B"
-		},
-		{
-			"type":"SINGLE_LL_PLATFORM",
-			"x":2,
-			"y":5,
-			"objId" : "B",
-			"value" : "24",
-			"childLinkBlockConnectId" : ""
-		}
-	]
+"winCondition":"None",
+"player":{"logId":"player","type":"PLAYER","x":3,"y":-8},
+"startLink":{"logId":"headLink","type":"LINK_BLOCK","x":4,"y":-13,"objIDConnectingTo":"A"},
+"goalPortal":{"logId":"goal","type":"GOAL_PORTAL","x":26,"y":-3},
+"helicopterRobot":{"logId":"helicopterRobot","type":"HELICOPTER_ROBOT","x":13,"y":-6},
+"blocks":[
+{"logId":"g0","type":"GROUND","x":2,"y":-10,"width":3,"height":1},
+{"logId":"g1","type":"GROUND","x":26,"y":-5,"width":3,"height":1}
+],
+"objectiveBlocks":[
+],
+"linkBlocks":[
+{"logId":"l0","type":"LINK_BLOCK","x":15,"y":-4,"objIDConnectingTo":"C"},
+{"logId":"l1","type":"LINK_BLOCK","x":19,"y":-3,"objIDConnectingTo":"D"}
+],
+"singleLinkedListPlatforms":[
+{"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":6,"y":-10,"objId":"A","value":"3","childLinkBlockConnectId":"B"},
+{"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":12,"y":-9,"objId":"B","value":"5","childLinkBlockConnectId":""},
+{"logId":"sllp2","type":"SINGLE_LL_PLATFORM","x":17,"y":-7,"objId":"C","value":"8","childLinkBlockConnectId":""},
+{"logId":"sllp3","type":"SINGLE_LL_PLATFORM","x":22,"y":-6,"objId":"D","value":"10","childLinkBlockConnectId":"", "toAdd":true}
+]
 }
