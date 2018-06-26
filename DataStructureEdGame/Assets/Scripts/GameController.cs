@@ -146,6 +146,7 @@ public class GameController : MonoBehaviour {
                 addingPlatforms = false;
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
+                Debug.Log("Clicked without clicking on a hover link and a select link");
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
                     platformsToAdd[0].gameObject.SetActive(false); // cancel placing the platform

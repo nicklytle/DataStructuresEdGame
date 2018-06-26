@@ -161,6 +161,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.startLink.x + (1 / 2f)), (float)(level.startLink.y - (1 / 2f)));
             Transform startLinkTran = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
             LinkBlockBehavior startLinkBehavior = startLinkTran.GetComponent<LinkBlockBehavior>();
+            startLinkTran.position = startLinkTran.position + (new Vector3(0, 0, -5));
             startLinkBehavior.gameController = gameController;
             startLinkBehavior.isStartingLink = true;  // mark link as start.
             startLinkBehavior.defaultSprite = startLinkBlockSprite;
@@ -184,6 +185,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             Vector2 loc = new Vector2((float)(level.linkBlocks[i].x + (1 / 2f)), (float)(level.linkBlocks[i].y - (1 / 2f)));
             Transform newLink = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
+            newLink.position = newLink.position + (new Vector3(0,0,-5));
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
