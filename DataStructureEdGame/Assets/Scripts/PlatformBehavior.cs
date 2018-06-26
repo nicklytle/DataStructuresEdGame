@@ -50,7 +50,6 @@ public class PlatformBehavior : MonoBehaviour {
         isPhasedOut = !isPlatformConnectingToStart();
         if (isPhasedOut)
         {
-            isHidden = true; // phased out blocks are always hidden.
             if (GetComponent<SpriteRenderer>().sprite != phasedOutSprite)
             {
                 GetComponent<SpriteRenderer>().sprite = phasedOutSprite;
@@ -62,21 +61,21 @@ public class PlatformBehavior : MonoBehaviour {
             {
                 GetComponent<SpriteRenderer>().sprite = defaultSprite;
             }
-            GetComponent<BoxCollider2D>().isTrigger = false;
-
-            // see if you are connected to a helicopter link. If so then make block Revealed
-            isHidden = true;
-            foreach (LinkBlockBehavior lnk in incomingConnectionLinkBlocks)
+            GetComponent<BoxCollider2D>().isTrigger = false; 
+        }
+        
+        // see if you are connected to a helicopter link. If so then make block Revealed
+        isHidden = true;
+        foreach (LinkBlockBehavior lnk in incomingConnectionLinkBlocks)
+        {
+            // if the link going to it is the helicopter or an external link then it is revealed.
+            if (lnk.isHelicopterLink || lnk.parentPlatform == null) 
             {
-                if (lnk.isHelicopterLink)
-                {
-                    isHidden = false; // Reveal block.
-                    break;
-                }
+                isHidden = false; // Reveal block.
+                break;
             }
         }
-
-
+        
         // set the material of the children based on if its hidden or not.
         if (isHidden && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
         {

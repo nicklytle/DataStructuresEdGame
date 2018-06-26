@@ -31,8 +31,8 @@ public class HUDBehavior : MonoBehaviour {
     }
 
     public void OnResetButtonClick()
-    {
-        if ((debounce > 1.0f) && (selected)) { 
+    { 
+        if (debounce > 1.0f) { 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
         }

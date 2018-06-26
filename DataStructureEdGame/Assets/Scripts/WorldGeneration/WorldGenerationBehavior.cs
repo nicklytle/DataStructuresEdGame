@@ -284,6 +284,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
+        Debug.Log("RESET LEVEL");
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
             lb.removeArrowBetween();
