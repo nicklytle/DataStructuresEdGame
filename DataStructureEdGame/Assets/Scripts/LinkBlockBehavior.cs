@@ -175,15 +175,12 @@ public class LinkBlockBehavior : MonoBehaviour
 
     void OnMouseExit()
     {
-        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isHidden)) // can only interact with it when it is not hidden
-        {  
-            gameController.setHoverLink(null);
-            Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
-            if (gameController.selectedLink == null)
-            {
-                gameController.setStatusText("");
-            }
-        }
+        gameController.setHoverLink(null);
+        Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
+        if (gameController.selectedLink == null)
+        {
+            gameController.setStatusText("");
+        } 
     }
 
     // if the user clicks on this block.

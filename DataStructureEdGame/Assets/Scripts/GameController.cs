@@ -120,8 +120,7 @@ public class GameController : MonoBehaviour {
                 {
                     setSelectedLink(hoverLinkRef);
                 } else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
-                {
-                    // Debug.Log("DOUBLE CLICK");
+                { 
                     setSelectedLink(null);
                     if (hoverLinkRef.connectingPlatform != null) { 
                         hoverLinkRef.removeLinkConnection();
