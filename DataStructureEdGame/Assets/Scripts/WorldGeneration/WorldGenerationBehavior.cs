@@ -260,12 +260,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
         for (int i = 0; i < levelLinkBlocksConnIds.Count; i++) {
             if (levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
             {
-                string platformId = levelLinkBlocksConnIds[i];
-                // establish the connection
-
-                levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
+                string platformId = levelLinkBlocksConnIds[i]; 
                 if (levelLinkBlocks[i].connectingPlatform.isInLevel == true)
                 {
+                    // establish the connection
+                    levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
                     levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
                     levelLinkBlocks[i].renderArrow = true;
                 }
