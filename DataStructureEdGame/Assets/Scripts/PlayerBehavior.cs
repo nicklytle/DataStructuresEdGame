@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ public class PlayerBehavior : MonoBehaviour {
 
     public Vector2 shoveVector;
 
+    public bool startOfMove = false;
+
 	// Use this for initialization
 	void Start () {
         rb2 = gameObject.GetComponent<Rigidbody2D>();
@@ -30,7 +33,23 @@ public class PlayerBehavior : MonoBehaviour {
     void Update() {
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
-        Vector2 newMoveVect = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
+
+        float newX = horz * Time.deltaTime * speed;
+        float newY = rb2.velocity.y;
+        //Vector2 newMoveVect = new Vector2(horz * Time.deltaTime * speed, rb2.velocity.y);
+        Vector2 newMoveVect = new Vector2(newX, newY);
+        
+        if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
+        {
+            string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player: " + logId + " was moved to: (" + newX + ", " + newY + ") at time: " + timestampMove);
+            startOfMove = true;
+        }
+        if(vert == 0 && horz == 0 && startOfMove)
+        {
+            startOfMove = false;
+        }
+
 
         // reduce the shove amount as time goes on.
         shoveVector = shoveVector * 0.9f; // to offset the effects of deltaTime
@@ -67,6 +86,8 @@ public class PlayerBehavior : MonoBehaviour {
 
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
+            string timestampJump = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player: " + logId + " jumped at time: " + timestampJump);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
         }
@@ -95,6 +116,7 @@ public class PlayerBehavior : MonoBehaviour {
     // shove the player in the given direction
     public void setShoveForce(Vector2 sa)
     {
+
         Debug.Log("PLayer being shoved!:  " + sa.x + ", " + sa.y);
         shoveVector = sa;
     }
