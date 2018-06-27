@@ -99,9 +99,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 {
                     obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block
 
-                    //DateTime date1 = DateTime.Now;
-                    string timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                    Debug.Log("Ground logID: " + obj.GetComponent<GroundBehavior>().logId + " " + timestamp1);
+                    //string timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    //Debug.Log("Ground logID: " + obj.GetComponent<GroundBehavior>().logId + " " + timestamp1);
                 }
                 levelEntities.Add(obj);
             }
@@ -113,7 +112,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
             gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
-            Debug.Log("Player logID " + gameController.playerRef.GetComponent<PlayerBehavior>().logId);
+
+            //string timestamp14 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Player logID " + gameController.playerRef.GetComponent<PlayerBehavior>().logId + " " + timestamp14);
             levelEntities.Add(gameController.playerRef);
             // move the backdrop right behind the player initially.
             background.initialPosition = gameController.playerRef.position + new Vector3(0, 0, -10);
@@ -126,8 +127,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             goal.GetComponent<GoalBehavior>().logId = level.goalPortal.logId;
 
             //DateTime date2 = DateTime.Now;
-            string timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Goal logID " + goal.GetComponent<GoalBehavior>().logId + " " + timestamp2);
+            //string timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Goal logID " + goal.GetComponent<GoalBehavior>().logId + " " + timestamp2);
 
             levelEntities.Add(goal);
         }
@@ -140,18 +141,16 @@ public class WorldGenerationBehavior : MonoBehaviour {
             robotBehavior.targetLocation = robot.position;
             robotBehavior.logId = level.helicopterRobot.logId;
 
-            //DateTime date3 = DateTime.Now;
-            string timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Robot itself: " + robotBehavior.logId + " " + timestamp3);
+            //string timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Robot itself: " + robotBehavior.logId + " " + timestamp3);
 
 
             gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
             robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
 
-            //DateTime date4 = DateTime.Now;
-            string timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Helicopter robo LINK logID " + robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId + " " + timestamp4);
+            //string timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Helicopter robo LINK logID " + robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId + " " + timestamp4);
             levelEntities.Add(robot);
         }
         
@@ -175,17 +174,15 @@ public class WorldGenerationBehavior : MonoBehaviour {
             startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
             startLinkBehavior.logId = level.startLink.logId;
 
-            //DateTime date5 = DateTime.Now;
-            string timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Head link LogID " + startLinkBehavior.logId + " " + timestamp5);
+            //string timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Head link LogID " + startLinkBehavior.logId + " " + timestamp5);
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
             levelLinkBlocksConnIds.Add(level.startLink.objIDConnectingTo);
 
-            //DateTime date6 = DateTime.Now;
-            string timestamp6 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Head link connection " + level.startLink.objIDConnectingTo + " " + timestamp6);
+            //string timestamp6 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Head link connection " + level.startLink.objIDConnectingTo + " " + timestamp6);
             levelEntities.Add(startLinkTran);
         }
 
@@ -199,9 +196,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
 
-            //DateTime date7 = DateTime.Now;
-            string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
+            //string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
             levelLinkBlocks.Add(lb);
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
@@ -215,9 +211,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
             ob.logId = level.objectiveBlocks[i].logId;
 
-            //DateTime date8 = DateTime.Now;
-            string timestamp8 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("fire blocks " + ob.logId + timestamp8);
+            //string timestamp8 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("fire blocks " + ob.logId + timestamp8);
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
@@ -238,28 +233,24 @@ public class WorldGenerationBehavior : MonoBehaviour {
             newPlat.setValue(level.singleLinkedListPlatforms[i].value);
             newPlat.logId = level.singleLinkedListPlatforms[i].logId;
 
-            //DateTime date9 = DateTime.Now;
-            string timestamp9 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("platform logID " + newPlat.logId + timestamp9);
+            //string timestamp9 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("platform logID " + newPlat.logId + timestamp9);
 
             innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
-            //DateTime date10 = DateTime.Now;
-            string timestamp10 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("link inside the platform logID " + innerLink.logId + " "  + timestamp10);
+            //string timestamp10 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("link inside the platform logID " + innerLink.logId + " "  + timestamp10);
 
 
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
-            //DateTime date11 = DateTime.Now;
-            string timestamp11 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("platform object ID " + level.singleLinkedListPlatforms[i].objId + " " + timestamp11);
+            //string timestamp11 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("platform object ID " + level.singleLinkedListPlatforms[i].objId + " " + timestamp11);
 
 
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
 
-            //DateTime date12 = DateTime.Now;
-            string timestamp12 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Connecting block " + level.singleLinkedListPlatforms[i].childLinkBlockConnectId + "  " + level.singleLinkedListPlatforms.Length + ": " + timestamp12);
+            //string timestamp12 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("Connecting block " + level.singleLinkedListPlatforms[i].childLinkBlockConnectId + "  " + level.singleLinkedListPlatforms.Length + ": " + timestamp12);
 
             levelEntities.Add(newLLPlatform);
             levelPlatformEntities.Add(newPlat);
@@ -273,7 +264,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
             {
                 newPlat.isInLevel = true;
             }
-            Debug.Log("size of addable platform list: " + gameController.platformsToAdd.Count);
+            //string timestamp15 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            //Debug.Log("size of addable platform list: " + gameController.platformsToAdd.Count + " " + timestamp15);
         }
 
         // establishing links for the link blocks with the platforms
@@ -303,7 +295,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
-        Debug.Log("RESET LEVEL");
+        //Debug.Log("RESET LEVEL");
+        string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        Debug.Log("Level was RESET: " + timestampRST);
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
             lb.removeArrowBetween();
@@ -326,9 +320,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             gameController.setStatusText("");
             CreateWorldFromLevelDescription();
+            string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampCRTNextLevel);
         } else
         {
             gameController.setStatusText("You have won!");
+            string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampEnd);
             /// .Log("GAME IS WON!");
         }
     }
