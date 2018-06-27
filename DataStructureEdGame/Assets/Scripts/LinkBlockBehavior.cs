@@ -77,6 +77,11 @@ public class LinkBlockBehavior : MonoBehaviour
             Transform[] linkArrowParts = gameController.createArrowInstanceBetweenLinkPlatform(this, connectingPlatform, color);
             linkArrow = linkArrowParts[0];
             linkArrowHead = linkArrowParts[1];
+
+            // reveal the next link in addition to this one
+            
+            // TODO: make a "bridge" from this link to the next link for traversing next->next->next-> ...
+
         } // end render arrow
     }
 

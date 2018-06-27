@@ -19,7 +19,7 @@ public class PlatformBehavior : MonoBehaviour {
     public Sprite phasedOutSprite; // sprite to display when phased out.
 
     // game specific values
-    public bool isHidden; // if not Hidden, then Revealed.
+    public bool isHidden; // if not Hidden, then Revealed. 
     public bool isPhasedOut; // if not Phased Out, then Solid. 
     public bool isInLevel;
 
@@ -69,7 +69,9 @@ public class PlatformBehavior : MonoBehaviour {
         foreach (LinkBlockBehavior lnk in incomingConnectionLinkBlocks)
         {
             // if the link going to it is the helicopter or an external link then it is revealed.
-            if (lnk.isHelicopterLink || lnk.parentPlatform == null) 
+            // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
+            if (lnk.isHelicopterLink || lnk.parentPlatform == null || 
+                (lnk == gameController.hoverLinkRef && gameController.selectedLink != null))
             {
                 isHidden = false; // Reveal block.
                 break;

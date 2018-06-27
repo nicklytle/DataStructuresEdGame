@@ -198,9 +198,12 @@ public class GameController : MonoBehaviour {
                     {
                         selectedLink.removeLinkConnection();
                     }
-                    selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
+                    if (hoverLinkRef.connectingPlatform != null && hoverLinkRef.connectingPlatform != selectedLink.parentPlatform)
+                    {
+                        selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
+                        setStatusText("Established a connection.");
+                    }
                     removeHoverArrow();
-                    setStatusText("Established a connection.");
                 }
                 setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
@@ -304,16 +307,27 @@ public class GameController : MonoBehaviour {
 
     public void setHoverLink(LinkBlockBehavior lb)
     {
-        if (hoverLinkRef != null)
+        LinkBlockBehavior oldHoverLink = hoverLinkRef;
+        hoverLinkRef = lb;
+        // update the old hover link that is no longer hovered over.
+        if (oldHoverLink != null)
         {
             removeHoverArrow();
-            if (hoverLinkRef != selectedLink) { // don't remove the marker on the selected link
-                hoverLinkRef.setDisplaySelected(false);
+            if (oldHoverLink != selectedLink) { // don't remove the marker on the selected link
+                oldHoverLink.setDisplaySelected(false);
+            }
+            // update the next connecting platform for when there was a bridge from this to the next link.
+            if (oldHoverLink.connectingPlatform != null)
+            {
+                //Debug.Log("Remove the bridge");
+                oldHoverLink.GetComponent<PolygonCollider2D>().points = new Vector2[0];  // remove the "bridge" collider
+                oldHoverLink.GetComponent<LineRenderer>().SetPositions(new Vector3[0]);
+                oldHoverLink.GetComponent<LineRenderer>().positionCount = 0;
+                oldHoverLink.connectingPlatform.updatePlatformValuesAndSprite();
             }
         }
-
-         hoverLinkRef = lb;
-
+         
+        // update the new hover link if there is one.
         if (hoverLinkRef != null && hoverLinkRef != selectedLink) // can't set the hover link to the selected link
         {
             hoverLinkRef.setDisplaySelected(true); 
@@ -327,9 +341,56 @@ public class GameController : MonoBehaviour {
                 c.a = 0.3f;
                 Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
                 hoverArrowLine = hoverArrowParts[0];
-                hoverArrowHead = hoverArrowParts[1];
-
+                hoverArrowHead = hoverArrowParts[1]; 
                 setStatusText("Release to set the first link equal to this one.");
+
+                // This is when the mouse is hovering over a link for establishing a link.
+                // update and create a "bridge" from this link to the next for next->next->.. option.
+                if (hoverLinkRef.connectingPlatform != null)
+                {
+                    Debug.Log("Create the 'next' bridge");
+                    // the line goes from the hover block to the other block.
+                    // http://mathworld.wolfram.com/PerpendicularVector.html
+                    Bounds otherBounds = hoverLinkRef.connectingPlatform.childLink.GetComponent<SpriteRenderer>().bounds; 
+                    Bounds hoverBounds = hoverLinkRef.GetComponent<SpriteRenderer>().bounds;
+
+                    // find the closest points on both bounding boxes to the center point to make the arrow.
+                    Vector3 betweenPoint = transform.InverseTransformPoint(
+                        new Vector3((otherBounds.center.x + hoverBounds.center.x) / 2, 
+                                (otherBounds.center.y + hoverBounds.center.y) / 2, 0));
+                    Vector3 p0 = otherBounds.center - hoverBounds.center; // (otherBounds.ClosestPoint(betweenPoint) - hoverBounds.center);  // convert from world to local points
+                    Vector3 p1 = new Vector3(); // (hoverBounds.ClosestPoint(betweenPoint) - hoverBounds.center);
+                    Vector3 diff = p0 - p1;
+                    float scalePerpScale = 0.5f;
+                    Vector3 perpDiff = (new Vector2(-diff.y, diff.x)).normalized;
+                    Vector2[] bridgePoints = new Vector2[4];
+                    bridgePoints[0] = p0 + (scalePerpScale * perpDiff);
+                    bridgePoints[1] = p0 - (scalePerpScale * perpDiff);
+                    bridgePoints[2] = p1 - (scalePerpScale * perpDiff);
+                    bridgePoints[3] = p1 + (scalePerpScale * perpDiff);
+                    // verify where the lines are located
+                    Vector3 md = new Vector3(0, 0, 40);
+                    Debug.DrawLine(transform.TransformPoint(p0) + md, transform.TransformPoint(p1) + md, Color.green, 3, false);
+
+                    Vector3[] linePositions = new Vector3[2];
+                    linePositions[0] = p0 + md;
+                    linePositions[1] = p1 + md;
+                    // make sure line is being drawn in the right spot 
+                    Debug.Log(linePositions);
+                    Debug.Log(linePositions[0]);
+                    Debug.Log(linePositions[1]);
+
+                    // TODO: Transform the collider to go from world space to local space;
+                    hoverLinkRef.GetComponent<PolygonCollider2D>().points = bridgePoints;
+                    hoverLinkRef.GetComponent<LineRenderer>().startColor = Color.cyan;
+                    hoverLinkRef.GetComponent<LineRenderer>().endColor = Color.cyan;
+                    hoverLinkRef.GetComponent<LineRenderer>().positionCount = linePositions.Length;
+                    hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
+                    hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale;
+                    hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale;
+                    Debug.Log(hoverLinkRef.GetComponent<LineRenderer>().positionCount);
+                    hoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
+                }
             } 
         } 
     }
