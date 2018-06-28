@@ -72,7 +72,7 @@ public class PlatformBehavior : MonoBehaviour {
             // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
             if (lnk.isHelicopterLink || lnk.parentPlatform == null ||
                   (lnk == gameController.hoverLinkRef && gameController.selectedLink != null) ||
-                  (gameController.hoverLinkRef == childLink))
+                  (gameController.hoverLinkRef == childLink) )
             {
                 isHidden = false; // Reveal block.
                 if ((gameController.hoverLinkRef == childLink))

@@ -234,6 +234,7 @@ public class GameController : MonoBehaviour {
         else if (hoverLinkRef != null) // only set null if needed
         {
             removeHoverLink();
+            previousNotNullHoverLinkRef = null; // does this fall apart?
         }
 
         // handle just clicking the mouse button
@@ -289,22 +290,18 @@ public class GameController : MonoBehaviour {
                         setStatusText("Established a connection.");
                     }
                     removeHoverArrow();
-<<<<<<< HEAD
-                    removeHoverLink();
-                    previousNotNullHoverLinkRef = null; // this value is no longer needed for chaining/bridges.
-=======
+                    removeHoverLink(); 
                     setStatusText("Established a connection.");
-
-                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + hoverLinkRef.logId + " at time: " + timestamp5);
->>>>>>> 9ce98d9386e91f59e516187b2c10c7eccb872c18
+                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"); 
+                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
                 }
-
+                previousNotNullHoverLinkRef = null; // no longer needed to track
                 setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
             } else if (selectedLink != null && hoverLinkRef != selectedLink)
-            { 
+            {
+                previousNotNullHoverLinkRef = null; // no longer needed to track
                 setSelectedLink(null); // deselect adding link to deselect
                 setStatusText("Deselected link block");
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
@@ -413,8 +410,20 @@ public class GameController : MonoBehaviour {
                 hoverLinkRef.GetComponent<LineRenderer>().positionCount = 0;
             }
             // update the old hover link...
-            previousNotNullHoverLinkRef = hoverLinkRef;
+            previousNotNullHoverLinkRef = hoverLinkRef; 
             hoverLinkRef = null; // no more hover link.
+
+            // update the sprite of the connecting platform that we used to be revealing by the bridge
+            /// but only if you are no longer mousing over any other links
+            if (mouseOverLinkRefs.Count == 0) {
+                if (previousNotNullHoverLinkRef.parentPlatform != null)
+                {
+                    previousNotNullHoverLinkRef.parentPlatform.updatePlatformValuesAndSprite(); 
+                }
+                if (previousNotNullHoverLinkRef.connectingPlatform != null) { 
+                    previousNotNullHoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
+                }
+            }
         }
     }
 
