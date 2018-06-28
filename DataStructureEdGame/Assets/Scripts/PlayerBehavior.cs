@@ -42,12 +42,16 @@ public class PlayerBehavior : MonoBehaviour {
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
             string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Player: " + logId + " was moved to: (" + newX + ", " + newY + ") at time: " + timestampMove);
+            Debug.Log("Player started moving at time: " + timestampMove);
             startOfMove = true;
+            //Debug.Log("move has started");
         }
         if(vert == 0 && horz == 0 && startOfMove)
         {
             startOfMove = false;
+            string timestampEndMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player stopped moving at time: " + timestampEndMove);
+            //Debug.Log("move has ended");
         }
 
 
@@ -96,7 +100,7 @@ public class PlayerBehavior : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         // TODO: Only have this true when you are colliding on the ground below you.    
-        
+        Debug.Log(collision.GetHashCode());
         onGround = true;
     }
 
