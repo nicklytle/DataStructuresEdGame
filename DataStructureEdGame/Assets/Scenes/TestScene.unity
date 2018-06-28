@@ -328,7 +328,12 @@ Prefab:
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[0]
       value: 
-      objectReference: {fileID: 4900000, guid: bc947414e6f65574cabbbb341a788ddf, type: 3}
+      objectReference: {fileID: 4900000, guid: fc556d3b2bf301f46a52c285d67592e9, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: 3751148c74fd9b44c9a53b0a872e5091, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
@@ -1393,6 +1398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugLinkControlVersion: 1
+  debugFrameCount: 0
   worldGenerator: {fileID: 111316952}
   platformsToAdd: []
   addingPlatforms: 0
@@ -1408,6 +1414,8 @@ MonoBehaviour:
   startingLink: {fileID: 0}
   hoverPlatformRef: {fileID: 0}
   hoverLinkRef: {fileID: 0}
+  previousNotNullHoverLinkRef: {fileID: 0}
+  mouseOverLinkRefs: []
   statusTextUI: {fileID: 1950673981}
   objectiveHudPanelUI: {fileID: 1060193297}
   objectiveTextUI: {fileID: 455446035}
