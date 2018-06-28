@@ -269,16 +269,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
 
         // establishing links for the link blocks with the platforms
-        for (int i = 0; i < levelLinkBlocksConnIds.Count; i++) {
-            if (levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
+        if (levelLinkBlocksConnIds != null && levelLinkBlocksConnIds.Count > 0)
+        {
+            for (int i = 0; i < levelLinkBlocksConnIds.Count; i++)
             {
-                string platformId = levelLinkBlocksConnIds[i]; 
-                if (listPlatformMap[platformId].isInLevel == true)
+                if (levelLinkBlocksConnIds[i] != null && levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
                 {
-                    // establish the connection
-                    levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
-                    levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
-                    levelLinkBlocks[i].renderArrow = true;
+                    string platformId = levelLinkBlocksConnIds[i];
+                    if (listPlatformMap[platformId].isInLevel == true)
+                    {
+                        // establish the connection
+                        levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
+                        levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
+                        levelLinkBlocks[i].renderArrow = true;
+                    }
                 }
             }
         }

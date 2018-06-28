@@ -58,9 +58,17 @@ if map_file and out_file
 	out_file.syswrite("{\n")
 	out_file.syswrite("\"winCondition\":\"#{winCondition}\",\n")
 	out_file.syswrite("\"player\":{\"logId\":\"player\",\"type\":\"PLAYER\",\"x\":#{player['x']},\"y\":#{player['y']}},\n")
-	out_file.syswrite("\"startLink\":{\"logId\":\"headLink\",\"type\":\"LINK_BLOCK\",\"x\":#{startLink['x']},\"y\":#{startLink['y']},\"objIDConnectingTo\":\"#{startLink['connectTo']}\"},\n")
+	if startLink != nil
+		out_file.syswrite("\"startLink\":{\"logId\":\"headLink\",\"type\":\"LINK_BLOCK\",\"x\":#{startLink['x']},\"y\":#{startLink['y']},\"objIDConnectingTo\":\"#{startLink['connectTo']}\"},\n")
+	else
+		out_file.syswrite("\"startLink\":null,\n");
+	end
 	out_file.syswrite("\"goalPortal\":{\"logId\":\"goal\",\"type\":\"GOAL_PORTAL\",\"x\":#{goalPortal['x']},\"y\":#{goalPortal['y']}},\n")
-	out_file.syswrite("\"helicopterRobot\":{\"logId\":\"helicopterRobot\",\"type\":\"HELICOPTER_ROBOT\",\"x\":#{helicopterRobot['x']},\"y\":#{helicopterRobot['y']}},\n")
+	if startLink != nil
+		out_file.syswrite("\"helicopterRobot\":{\"logId\":\"helicopterRobot\",\"type\":\"HELICOPTER_ROBOT\",\"x\":#{helicopterRobot['x']},\"y\":#{helicopterRobot['y']}},\n")
+	else
+		out_file.syswrite("\"helicopterRobot\":null,\n");
+	end
 	out_file.syswrite("\"blocks\":[\n") # start blocks
 	gId = 0
 	for b in blocks 
