@@ -42,7 +42,7 @@ public class PlayerBehavior : MonoBehaviour {
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
             string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player: " + logId + " was moved to: (" + newX + ", " + newY + ") at time: " + timestampMove);
+            //Debug.Log("Player: " + logId + " was moved to: (" + newX + ", " + newY + ") at time: " + timestampMove);
             startOfMove = true;
         }
         if(vert == 0 && horz == 0 && startOfMove)
@@ -87,7 +87,7 @@ public class PlayerBehavior : MonoBehaviour {
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             string timestampJump = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player: " + logId + " jumped at time: " + timestampJump);
+            //Debug.Log("Player: " + logId + " jumped at time: " + timestampJump);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
         }
@@ -103,11 +103,16 @@ public class PlayerBehavior : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D c2d)
     {
         if (c2d.tag == "BottomOfWorld")
-        { 
+        {
+            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player fell off and died at time: " + timestamp1);
             gameController.worldGenerator.resetLevel();
+
         }
         else if (c2d.tag == "GoalPortal")
         {
+            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time: " + timestamp1);
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
