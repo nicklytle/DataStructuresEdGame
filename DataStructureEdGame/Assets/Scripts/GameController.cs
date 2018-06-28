@@ -168,6 +168,8 @@ public class GameController : MonoBehaviour {
             if (selectedLink == null && hoverLinkRef != null)
             {
                 setSelectedLink(hoverLinkRef);
+                String timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log(selectedLink.logId + " was clicked at time: " + timestamp2);
 
             }  // if you're selecting a link and also hovering over the select link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
