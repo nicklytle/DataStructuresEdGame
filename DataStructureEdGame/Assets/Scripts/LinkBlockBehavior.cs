@@ -92,11 +92,12 @@ public class LinkBlockBehavior : MonoBehaviour
     { 
         if (linkArrow != null)
         {
-            //Debug.Log("delete the link arrow");
+
             Destroy(linkArrow.gameObject);
             linkArrow = null;
             Destroy(linkArrowHead.gameObject);
             linkArrowHead = null;
+            //Debug.Log("delete the link arrow");
         }
     }
     
@@ -147,9 +148,11 @@ public class LinkBlockBehavior : MonoBehaviour
         if (!highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != defaultSelectMarkerSprite)
         {
             transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = defaultSelectMarkerSprite;
+            //Debug.Log("I'm set to blue");
         } else if (highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != highlightSelectMarkerSprite)
         {
             transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = highlightSelectMarkerSprite;
+            //Debug.Log("Or I'm set to some orange");
         }
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }

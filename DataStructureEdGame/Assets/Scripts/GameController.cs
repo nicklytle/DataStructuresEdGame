@@ -93,9 +93,11 @@ public class GameController : MonoBehaviour {
         {
             // you are not clicking or holding down the mouse and there is no select link.  OR you have a select link and you are holding down the mouse button
             if ((!Input.GetMouseButton(0) && selectedLink == null) || (selectedLink != null && Input.GetMouseButton(0))) 
-            { 
+            {
+                Debug.Log("cond a");
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
+                    Debug.Log("cond b");
                     // show a faded preview of the platform
                     PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
                     platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
@@ -142,17 +144,21 @@ public class GameController : MonoBehaviour {
                         positionMcPosition.z = 0;
                         toBeAdded.transform.position = positionMcPosition;
                         toBeAdded.gameObject.SetActive(true);
-
                         selectedLink.setConnectingPlatform(toBeAdded);
+                        addingPlatforms = false;
+                        String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                        Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                     }
                 }
+                //to remove that gray 'prediction' arrow now that you've added the platform
                 if (hoverArrowHead != null)
                 {
                     removeHoverArrow();
                 }
-                addingPlatforms = false;
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
-            { 
+            {
+                String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log("Clicked without clicking on a hover link and a select link at time: " + timestamp);
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
                     platformsToAdd[0].gameObject.SetActive(false); // cancel placing the platform
@@ -240,17 +246,23 @@ public class GameController : MonoBehaviour {
 
             }  // if you're selecting a link and also hovering over the select link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
-            { 
+            {
+                String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
+
                 setSelectedLink(null);
                 if (hoverLinkRef.connectingPlatform != null) { 
                     hoverLinkRef.removeLinkConnection();
                     setStatusText("Removed link");
+
                 }
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
-            { 
+            {
+                String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log("the link block " + selectedLink.logId + " was deselected at time: " + timestamp4);
                 setSelectedLink(null); // deselect adding link to deselect
                 setStatusText("Deselected link block");
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
@@ -277,9 +289,17 @@ public class GameController : MonoBehaviour {
                         setStatusText("Established a connection.");
                     }
                     removeHoverArrow();
+<<<<<<< HEAD
                     removeHoverLink();
                     previousNotNullHoverLinkRef = null; // this value is no longer needed for chaining/bridges.
+=======
+                    setStatusText("Established a connection.");
+
+                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + hoverLinkRef.logId + " at time: " + timestamp5);
+>>>>>>> 9ce98d9386e91f59e516187b2c10c7eccb872c18
                 }
+
                 setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
