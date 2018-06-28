@@ -138,12 +138,12 @@ public class LinkBlockBehavior : MonoBehaviour
         }
     }
 
-    public void setDisplaySelected(bool b)
+    public void setDisplayMarker(bool b)
     {
-        setDisplaySelected(b, false); //  transform.Find("SelectMarker").gameObject.SetActive(b);
+        setDisplayMarker(b, false); //  transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
-    public void setDisplaySelected(bool b, bool highlighted)
+    public void setDisplayMarker(bool b, bool highlighted)
     {
         if (!highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != defaultSelectMarkerSprite)
         {
@@ -157,35 +157,45 @@ public class LinkBlockBehavior : MonoBehaviour
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
-    void OnMouseEnter()
+    void OnMouseOver()
     {
-        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isHidden))  // can only interact with it when it is not hidden
+        //if (!gameController.mouseOverLinkRefs.Contains(this))
+        //{
+        //    gameController.mouseOverLinkRefs.Add(this);
+        //}
+        //gameController.mouseOverLinkRef = this;
+        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isPlatHidden()))  // can only interact with it when it is not hidden
         {
             // TODO: change cursor when you can click on it
             Cursor.SetCursor(gameController.pointerCursorTexture, Vector2.zero, gameController.cursorMode);
-            gameController.setHoverLink(this); 
+            //gameController.setHoverLink(this);   // gameController.mouseOverLinkRef = this; 
             if (gameController.selectedLink == null)
             {
                 gameController.setStatusText("Click and hold to select this link.");
             }
+        } else
+        {
+            Debug.Log("Could not make this the hover link!");
+            Debug.Log(parentPlatform);
+            if (parentPlatform != null) 
+                Debug.Log(parentPlatform.isHidden);
         }
     }
 
     void OnMouseExit()
     {
-        gameController.setHoverLink(null);
+        //if (gameController.mouseOverLinkRefs.Contains(this))
+        //{
+        //    gameController.mouseOverLinkRefs.Remove(this);
+        //}
+        //gameController.mouseOverLinkRef = null;
         Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
         if (gameController.selectedLink == null)
         {
             gameController.setStatusText("");
         } 
     }
-
-    // if the user clicks on this block.
-    void OnMouseDown()
-    {
-
-    }
+    
 
     /**
      * Set whether to render this link's arrow yet or not. 
@@ -199,11 +209,6 @@ public class LinkBlockBehavior : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public string getLogID()
     {

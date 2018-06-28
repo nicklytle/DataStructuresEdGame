@@ -19,7 +19,7 @@ public class PlatformBehavior : MonoBehaviour {
     public Sprite phasedOutSprite; // sprite to display when phased out.
 
     // game specific values
-    public bool isHidden; // if not Hidden, then Revealed. 
+    public bool isHidden; // if not Hidden, then Revealed.
     public bool isPhasedOut; // if not Phased Out, then Solid. 
     public bool isInLevel;
 
@@ -70,22 +70,25 @@ public class PlatformBehavior : MonoBehaviour {
         {
             // if the link going to it is the helicopter or an external link then it is revealed.
             // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
-            if (lnk.isHelicopterLink || lnk.parentPlatform == null || 
-                (lnk == gameController.hoverLinkRef && gameController.selectedLink != null))
+            if (lnk.isHelicopterLink || lnk.parentPlatform == null ||
+                  (lnk == gameController.hoverLinkRef && gameController.selectedLink != null) ||
+                  (gameController.hoverLinkRef == childLink) )
             {
                 isHidden = false; // Reveal block.
+                if ((gameController.hoverLinkRef == childLink))
+                    Debug.Log("Revealed for being a hover block");
                 break;
             }
         }
         
         // set the material of the children based on if its hidden or not.
-        if (isHidden && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
+        if (isPlatHidden() && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
         {
             childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
             childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
             setValueBlockText("?"); // can't see the value
             childLink.GetComponent<BoxCollider2D>().enabled = false;
-        } else if (!isHidden && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
+        } else if (!isPlatHidden() && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
         {
             childLink.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
             childValueBlock.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
@@ -148,6 +151,12 @@ public class PlatformBehavior : MonoBehaviour {
         {
             childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = s;
         }
+    }
+
+    // evaluate if the platform is hidden or not. 
+    public bool isPlatHidden()
+    {
+        return isHidden;
     }
 
     public int getValue()

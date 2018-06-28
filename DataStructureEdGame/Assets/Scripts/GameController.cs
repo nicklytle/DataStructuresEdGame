@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
     public int debugLinkControlVersion;
+    public long debugFrameCount;
 
     public WorldGenerationBehavior worldGenerator;
     // a referernce to all objective entities in the level
@@ -51,6 +52,9 @@ public class GameController : MonoBehaviour {
     public LinkBlockBehavior startingLink; // what is this level's starting link block?
     public PlatformBehavior hoverPlatformRef; // the platform the mouse is hovering over for version 1.
     public LinkBlockBehavior hoverLinkRef; // the link block the mouse is hovering over. 
+    public LinkBlockBehavior previousNotNullHoverLinkRef;
+    //public LinkBlockBehavior mouseOverLinkRef; // the link block the mouse is hovering over. 
+    public List<LinkBlockBehavior> mouseOverLinkRefs; // the link block the mouse is hovering over. 
 
     // references to important UI elements.
     public Text statusTextUI;
@@ -59,6 +63,8 @@ public class GameController : MonoBehaviour {
 
     void Start()
     {
+        debugFrameCount = 0;
+
         selectedLink = null; 
         setStatusText("");
         // ensure the starting link has the proper property
@@ -74,14 +80,15 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
+        debugFrameCount++;
+
         if (playerRef != null)
         {
             // always set the camera on top of the player.
             transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
-        }
+        } 
 
-        // add platform system
-
+        // add platform system 
         if (addingPlatforms)
         {
             // you are not clicking or holding down the mouse and there is no select link.  OR you have a select link and you are holding down the mouse button
@@ -160,7 +167,76 @@ public class GameController : MonoBehaviour {
             }
         } // end addingPlatforms block
 
-        
+
+        // testing to see if you can see if there are more than one link blocks over the mouse
+        mouseOverLinkRefs.Clear();
+        Vector3 mousePointInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        foreach (Transform t in worldGenerator.levelEntities)
+        {  
+
+            // look at all elements which have link blocks
+            if (t.GetComponent<LinkBlockBehavior>() != null) { 
+                if (t.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) || t.GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
+                {
+                    mouseOverLinkRefs.Add(t.GetComponent<LinkBlockBehavior>());
+                }
+            } else if(t.GetComponent<HelicopterRobotBehavior>() != null)
+            {
+                if (t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
+                    t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
+                {
+                    mouseOverLinkRefs.Add(t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>());
+                }
+            } else if (t.GetComponent<PlatformBehavior>() != null)
+            {
+                if (t.GetComponent<PlatformBehavior>().childLink.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
+                       t.GetComponent<PlatformBehavior>().childLink.GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
+                {
+                    mouseOverLinkRefs.Add(t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>());
+                }
+            }
+        }
+
+
+        if (mouseOverLinkRefs.Count > 0)
+        { 
+            LinkBlockBehavior priorityLink = null;
+            if (mouseOverLinkRefs.Count == 1)
+            {
+                priorityLink = mouseOverLinkRefs[0];
+            } else
+            {
+                // pick the one with the center closest to the mouse. 
+                LinkBlockBehavior minLb = null;
+                foreach (LinkBlockBehavior lb in mouseOverLinkRefs)
+                {
+                    if (lb.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
+                        (lb.parentPlatform != null && lb.parentPlatform.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld)))
+                    {
+                        minLb = lb;
+                    }
+                } 
+                priorityLink = minLb;
+            }
+
+            if (hoverLinkRef != priorityLink && (priorityLink.parentPlatform == null || 
+                (priorityLink.parentPlatform != null && !priorityLink.parentPlatform.isPlatHidden())))
+            {
+                setHoverLink(ref priorityLink);
+                string hoverTag = hoverLinkRef != null ? hoverLinkRef.getLogID() : ""; 
+                if (priorityLink != null && previousNotNullHoverLinkRef != null && previousNotNullHoverLinkRef.parentPlatform != null)
+                {
+                    previousNotNullHoverLinkRef.parentPlatform.updatePlatformValuesAndSprite(); // it should be returned to its "natural" state.
+                }
+            } 
+
+        }
+        else if (hoverLinkRef != null) // only set null if needed
+        {
+            removeHoverLink();
+            previousNotNullHoverLinkRef = null; // does this fall apart?
+        }
+
         // handle just clicking the mouse button
         if (Input.GetMouseButtonDown(0))
         {
@@ -188,25 +264,22 @@ public class GameController : MonoBehaviour {
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
             {
-                // Debug.Log("Deselect");
-
                 String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log("the link block " + selectedLink.logId + " was deselected at time: " + timestamp4);
-
                 setSelectedLink(null); // deselect adding link to deselect
                 setStatusText("Deselected link block");
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
             }
         } // if you are not clicking and not holding down the mouse button
-        else if (!Input.GetMouseButton(0))
+
+        if (!Input.GetMouseButton(0))
         {
             if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
             {
                 // establish connection  
                 if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
                 {
-                    // Debug.Log("Establishing connection");
                     // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
                     if (selectedLink.isConnectedToPlatform())
@@ -219,18 +292,18 @@ public class GameController : MonoBehaviour {
                         setStatusText("Established a connection.");
                     }
                     removeHoverArrow();
+                    removeHoverLink(); 
                     setStatusText("Established a connection.");
-
-                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + hoverLinkRef.logId + " at time: " + timestamp5);
+                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"); 
+                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
                 }
-
+                previousNotNullHoverLinkRef = null; // no longer needed to track
                 setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
             } else if (selectedLink != null && hoverLinkRef != selectedLink)
             {
-                // Debug.Log("Deselect");
+                previousNotNullHoverLinkRef = null; // no longer needed to track
                 setSelectedLink(null); // deselect adding link to deselect
                 setStatusText("Deselected link block");
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
@@ -270,7 +343,6 @@ public class GameController : MonoBehaviour {
                         numberOfTotalPlatformsInLevel++;
                     }
                 }
-                //Debug.Log("Number of platforms: " + numberOfTotalPlatformsInLevel);
 
                 if (startingLink.connectingPlatform == null)
                 {
@@ -293,15 +365,13 @@ public class GameController : MonoBehaviour {
                     {
                         if ((winConditon == WinCondition.SortListAscending && next.getValue() < temp.getValue()) ||
                             (winConditon == WinCondition.SortListDescending && next.getValue() > temp.getValue()))
-                        {
-                            //Debug.Log("Not sorted");
+                        { 
                             return false; // not sorted.
                         } // otherwise just keep on iterating.
                     }
                     temp = next;
                     sizeOfList++;
-                }
-                //Debug.Log("Size of the list: " + sizeOfList);
+                } 
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
         }
         return false;
@@ -314,91 +384,102 @@ public class GameController : MonoBehaviour {
     {
         if (selectedLink != null)
         {
-            selectedLink.setDisplaySelected(false, true);
+            selectedLink.setDisplayMarker(false, true);
         }
         selectedLink = aLink; // do other data processing?
 
         if (selectedLink != null)
         { 
-            selectedLink.setDisplaySelected(true, true);
+            selectedLink.setDisplayMarker(true, true);
         }
     }
 
-
-    public void setHoverLink(LinkBlockBehavior lb)
+    // remove the current hover link and set the "bridge" collider to default again. 
+    public void removeHoverLink()
     {
-        LinkBlockBehavior oldHoverLink = hoverLinkRef;
-        hoverLinkRef = lb;
-        // update the old hover link that is no longer hovered over.
-        if (oldHoverLink != null)
-        {
-            removeHoverArrow();
-            if (oldHoverLink != selectedLink) { // don't remove the marker on the selected link
-                oldHoverLink.setDisplaySelected(false);
+        removeHoverArrow();
+        if (hoverLinkRef != null) {  // only remove it if we actually need to remove it.
+            if (hoverLinkRef != selectedLink)
+            { // don't remove the marker on the selected link, but remove it otherwise.
+                hoverLinkRef.setDisplayMarker(false);
             }
-            // update the next connecting platform for when there was a bridge from this to the next link.
-            if (oldHoverLink.connectingPlatform != null)
+            // remove the "bridge" from the link we are no longer setting as the hover link.
+            // so that its collision is now normal. 
+            if (hoverLinkRef.connectingPlatform != null)
             {
-                //Debug.Log("Remove the bridge");
-                oldHoverLink.GetComponent<PolygonCollider2D>().points = new Vector2[0];  // remove the "bridge" collider
-                oldHoverLink.GetComponent<LineRenderer>().SetPositions(new Vector3[0]);
-                oldHoverLink.GetComponent<LineRenderer>().positionCount = 0;
-                oldHoverLink.connectingPlatform.updatePlatformValuesAndSprite();
+                hoverLinkRef.GetComponent<PolygonCollider2D>().points = new Vector2[0];  // remove the "bridge" collider
+                hoverLinkRef.GetComponent<LineRenderer>().SetPositions(new Vector3[0]);
+                hoverLinkRef.GetComponent<LineRenderer>().positionCount = 0;
+            }
+            // update the old hover link...
+            previousNotNullHoverLinkRef = hoverLinkRef; 
+            hoverLinkRef = null; // no more hover link.
+
+            // update the sprite of the connecting platform that we used to be revealing by the bridge
+            /// but only if you are no longer mousing over any other links
+            if (mouseOverLinkRefs.Count == 0) {
+                if (previousNotNullHoverLinkRef.parentPlatform != null)
+                {
+                    previousNotNullHoverLinkRef.parentPlatform.updatePlatformValuesAndSprite(); 
+                }
+                if (previousNotNullHoverLinkRef.connectingPlatform != null) { 
+                    previousNotNullHoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
+                }
             }
         }
-         
+    }
+
+    // this value being passed in CAN'T be null.
+    public void setHoverLink(ref LinkBlockBehavior lb)
+    {
+        removeHoverLink(); 
+        hoverLinkRef = lb; 
+
         // update the new hover link if there is one.
         if (hoverLinkRef != null && hoverLinkRef != selectedLink) // can't set the hover link to the selected link
         {
-            hoverLinkRef.setDisplaySelected(true); 
-            // faded arrow to show the outcome
-            removeHoverArrow();
-            if (selectedLink != null && hoverLinkRef != null && selectedLink != hoverLinkRef &&
-                hoverLinkRef.connectingPlatform != null)
+            // make that hover link block be displayed as selected. 
+            hoverLinkRef.setDisplayMarker(true);
+
+            // conditions for "bridging": there is a select link and a hover link, and they are not equal
+            if (selectedLink != null && hoverLinkRef != null && selectedLink != hoverLinkRef && hoverLinkRef.connectingPlatform != null)
             {
-                hoverLinkRef.setDisplaySelected(true);
+                hoverLinkRef.setDisplayMarker(true);
+                // draw the faded arrow
                 Color c = Color.gray;
                 c.a = 0.3f;
                 Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
                 hoverArrowLine = hoverArrowParts[0];
-                hoverArrowHead = hoverArrowParts[1]; 
+                hoverArrowHead = hoverArrowParts[1];
                 setStatusText("Release to set the first link equal to this one.");
 
                 // This is when the mouse is hovering over a link for establishing a link.
                 // update and create a "bridge" from this link to the next for next->next->.. option.
                 if (hoverLinkRef.connectingPlatform != null)
                 {
-                    Debug.Log("Create the 'next' bridge");
-                    // the line goes from the hover block to the other block.
-                    // http://mathworld.wolfram.com/PerpendicularVector.html
-                    Bounds otherBounds = hoverLinkRef.connectingPlatform.childLink.GetComponent<SpriteRenderer>().bounds; 
+                    // Create a "bridge" from this link to the next link
+                    Bounds otherBounds = hoverLinkRef.connectingPlatform.childLink.GetComponent<SpriteRenderer>().bounds;
                     Bounds hoverBounds = hoverLinkRef.GetComponent<SpriteRenderer>().bounds;
+                    Vector3 worldDiffNorm = (otherBounds.center - hoverBounds.center).normalized;
 
-                    // find the closest points on both bounding boxes to the center point to make the arrow.
-                    Vector3 betweenPoint = transform.InverseTransformPoint(
-                        new Vector3((otherBounds.center.x + hoverBounds.center.x) / 2, 
-                                (otherBounds.center.y + hoverBounds.center.y) / 2, 0));
-                    Vector3 p0 = otherBounds.center - hoverBounds.center; // (otherBounds.ClosestPoint(betweenPoint) - hoverBounds.center);  // convert from world to local points
-                    Vector3 p1 = new Vector3(); // (hoverBounds.ClosestPoint(betweenPoint) - hoverBounds.center);
+                    // extend the bridge a little farther than needed to make it more user friendly.
+                    Vector3 p0 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(otherBounds.center + (worldDiffNorm * 0.1f));
+                    Vector3 p1 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(hoverBounds.center);
                     Vector3 diff = p0 - p1;
-                    float scalePerpScale = 0.5f;
+                    float scalePerpScale = 0.8f;
+                    // http://mathworld.wolfram.com/PerpendicularVector.html
                     Vector3 perpDiff = (new Vector2(-diff.y, diff.x)).normalized;
                     Vector2[] bridgePoints = new Vector2[4];
                     bridgePoints[0] = p0 + (scalePerpScale * perpDiff);
                     bridgePoints[1] = p0 - (scalePerpScale * perpDiff);
                     bridgePoints[2] = p1 - (scalePerpScale * perpDiff);
                     bridgePoints[3] = p1 + (scalePerpScale * perpDiff);
-                    // verify where the lines are located
+
                     Vector3 md = new Vector3(0, 0, 40);
-                    Debug.DrawLine(transform.TransformPoint(p0) + md, transform.TransformPoint(p1) + md, Color.green, 3, false);
 
                     Vector3[] linePositions = new Vector3[2];
                     linePositions[0] = p0 + md;
                     linePositions[1] = p1 + md;
-                    // make sure line is being drawn in the right spot 
-                    Debug.Log(linePositions);
-                    Debug.Log(linePositions[0]);
-                    Debug.Log(linePositions[1]);
 
                     // TODO: Transform the collider to go from world space to local space;
                     hoverLinkRef.GetComponent<PolygonCollider2D>().points = bridgePoints;
@@ -406,14 +487,15 @@ public class GameController : MonoBehaviour {
                     hoverLinkRef.GetComponent<LineRenderer>().endColor = Color.cyan;
                     hoverLinkRef.GetComponent<LineRenderer>().positionCount = linePositions.Length;
                     hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
-                    hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale;
-                    hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale;
-                    Debug.Log(hoverLinkRef.GetComponent<LineRenderer>().positionCount);
+                    hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale - 0.2f; // make the path look a little smaller than it really is
+                    hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale - 0.2f; 
+                    
                     hoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
-                }
-            } 
-        } 
-    }
+                } // end creating the "bridge"
+            }
+        }
+
+    } // end set hover link
 
     /**
      * Set the game's status text
@@ -451,7 +533,6 @@ public class GameController : MonoBehaviour {
      */ 
     public void updateObjectiveHUDAndBlocks()
     {
-        // Debug.Log("Checking win!");
         if (winConditon != WinCondition.None)
         {
             objectiveHudPanelUI.gameObject.SetActive(true);
@@ -577,7 +658,7 @@ public class GameController : MonoBehaviour {
         Vector3 zOffset = new Vector3(0, 0, -10);
         Vector3[] linePos = new Vector3[2];
         linePos[0] = pFrom + zOffset;
-        linePos[1] = pTo + zOffset;
+        linePos[1] = pTo + zOffset - ((pTo - pFrom).normalized * 0.1f);
 
         float headLength = 0.25f;
         Vector3 diffNorm = (pTo - pFrom).normalized;
