@@ -22,6 +22,11 @@ public class PlayerBehavior : MonoBehaviour {
 
     public bool startOfMove = false;
 
+    /** the platform or link's logID that the player is currently standing on */
+    private string currentlyStandingOn;
+
+    private bool initAssgmt = true;
+
 	// Use this for initialization
 	void Start () {
         rb2 = gameObject.GetComponent<Rigidbody2D>();
@@ -33,6 +38,9 @@ public class PlayerBehavior : MonoBehaviour {
     void Update() {
         float horz = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
+        
+        float oldX = rb2.position.x;
+        float oldY = rb2.position.y;
 
         float newX = horz * Time.deltaTime * speed;
         float newY = rb2.velocity.y;
@@ -42,16 +50,15 @@ public class PlayerBehavior : MonoBehaviour {
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
             string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player started moving at time: " + timestampMove);
+            Debug.Log("Player started moving from: (" + Math.Round(oldX, 1) + ", " + Math.Round(oldY, 1) + ") at time: " + timestampMove);
             startOfMove = true;
-            //Debug.Log("move has started");
+
         }
         if(vert == 0 && horz == 0 && startOfMove)
         {
             startOfMove = false;
             string timestampEndMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player stopped moving at time: " + timestampEndMove);
-            //Debug.Log("move has ended");
+            Debug.Log("Player landed at : (" + Math.Round(rb2.position.x, 1) + ", " + Math.Round(rb2.position.y, 1) + ") at time: " + timestampEndMove);
         }
 
 
@@ -59,7 +66,7 @@ public class PlayerBehavior : MonoBehaviour {
         shoveVector = shoveVector * 0.9f; // to offset the effects of deltaTime
         if (shoveVector.magnitude > 1 || shoveVector.magnitude < -1)
         {
-            Debug.Log("Shove vector magnitude: " + shoveVector.magnitude);
+            //Debug.Log("Shove vector magnitude: " + shoveVector.magnitude);
             newMoveVect = newMoveVect + (Time.deltaTime * shoveVector); // add the shove amount to the total movement.
         } 
         rb2.velocity = newMoveVect;
@@ -99,8 +106,36 @@ public class PlayerBehavior : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // TODO: Only have this true when you are colliding on the ground below you.    
-        Debug.Log(collision.GetHashCode());
+        if (collision.gameObject.name == "GroundTop(Clone)")
+        {
+            //Debug.Log(collision.gameObject.GetComponent<GroundBehavior>().logId);
+            if(!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<GroundBehavior>().logId))
+            {
+                currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+                string timeStampNewGrnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log("Player landed onto ground: " + currentlyStandingOn + " at time: " + timeStampNewGrnd);
+            }
+            if (initAssgmt)
+            {
+                initAssgmt = false;
+                currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+            }
+        }
+        else if (collision.gameObject.name == "Platform(Clone)")
+        {
+            //Debug.Log(collision.gameObject.GetComponent<PlatformBehavior>().logId);
+            if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<PlatformBehavior>().logId))
+            {
+                currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+                string timeStampNewPlatf = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                Debug.Log("Player landed onto platform: " + currentlyStandingOn + " at time: " + timeStampNewPlatf);
+            }
+            if (initAssgmt)
+            {
+                initAssgmt = false;
+                currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+            }
+        }
         onGround = true;
     }
 
@@ -109,24 +144,43 @@ public class PlayerBehavior : MonoBehaviour {
         if (c2d.tag == "BottomOfWorld")
         {
             String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player fell off and died at time: " + timestamp1);
+            Debug.Log("Player fell off and died, level was reset at time: " + timestamp1);
             gameController.worldGenerator.resetLevel();
 
         }
         else if (c2d.tag == "GoalPortal")
         {
             String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log(c2d.GetComponent<GoalBehavior>().logId);
             Debug.Log("Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time: " + timestamp1);
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
+        //else
+        //{
+        //    Debug.Log(c2d.tag);
+        //}
+        /**
+        else if(c2d.tag == "PlatformTag")
+        {
+            Debug.Log("Made it here platform");
+            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player landed on " + c2d.GetComponent<PlatformBehavior>().logId + "at time: " + timestamp1);
+        }
+        else if (c2d.tag == "GroundTop")
+        {
+            Debug.Log("Made it here yo");
+            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Player landed on " + c2d.GetComponent<GroundBehavior>().logId + "at time: " + timestamp1);
+        }
+        */
     }
 
     // shove the player in the given direction
     public void setShoveForce(Vector2 sa)
     {
 
-        Debug.Log("PLayer being shoved!:  " + sa.x + ", " + sa.y);
+        //Debug.Log("PLayer being shoved!:  " + sa.x + ", " + sa.y);
         shoveVector = sa;
     }
 

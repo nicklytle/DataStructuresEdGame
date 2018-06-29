@@ -299,9 +299,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
-        //Debug.Log("RESET LEVEL");
-        string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-        Debug.Log("Level was RESET: " + timestampRST);
+
+        //string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        //Debug.Log("Level was RESET: " + timestampRST);
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
             lb.removeArrowBetween();

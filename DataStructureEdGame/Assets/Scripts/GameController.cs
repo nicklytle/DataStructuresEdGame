@@ -94,10 +94,10 @@ public class GameController : MonoBehaviour {
             // you are not clicking or holding down the mouse and there is no select link.  OR you have a select link and you are holding down the mouse button
             if ((!Input.GetMouseButton(0) && selectedLink == null) || (selectedLink != null && Input.GetMouseButton(0))) 
             {
-                Debug.Log("cond a");
+                //Debug.Log("cond a");
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
-                    Debug.Log("cond b");
+                    //Debug.Log("cond b");
                     // show a faded preview of the platform
                     PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
                     platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;

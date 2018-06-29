@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +33,10 @@ public class HUDBehavior : MonoBehaviour {
 
     public void OnResetButtonClick()
     { 
-        if (debounce > 1.0f) { 
+        if (debounce > 1.0f) {
+
+            string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            Debug.Log("Level was RESET: " + timestampRST);
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
         }
