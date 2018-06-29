@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour {
     // whether the player is currently in an the Add Platform mode.
     public bool addingPlatforms = false;
 
+    public bool enableLinkChaining = false;
+
     // to help track for double clicking
     public DateTime lastTimeClickedMillis;
 
@@ -41,7 +43,7 @@ public class GameController : MonoBehaviour {
     }
 
     // The win condition of this level.
-    public GameController.WinCondition winConditon;
+    public WinCondition winConditon;
 
     // References to important objects in the scene. 
     public Transform playerRef;
@@ -138,13 +140,14 @@ public class GameController : MonoBehaviour {
                     PlatformBehavior toBeAdded = platformsToAdd[0];
                     if (toBeAdded != null)
                     {
-                        platformsToAdd.Remove(toBeAdded);
+                        platformsToAdd.Remove(toBeAdded); 
+                        toBeAdded.isInLevel = true; // mark this as being in the level
                         Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         positionMcPosition.z = 0;
                         toBeAdded.transform.position = positionMcPosition;
                         toBeAdded.gameObject.SetActive(true);
-                        selectedLink.setConnectingPlatform(toBeAdded);
+                        selectedLink.setConnectingPlatform(toBeAdded); // connect the selected link to the new platform
                         addingPlatforms = false;
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
@@ -343,6 +346,7 @@ public class GameController : MonoBehaviour {
                         numberOfTotalPlatformsInLevel++;
                     }
                 }
+                Debug.Log(debugFrameCount + " | WIN CONDITION: Number of platforms in the level: " + numberOfTotalPlatformsInLevel);
 
                 if (startingLink.connectingPlatform == null)
                 {
@@ -371,7 +375,8 @@ public class GameController : MonoBehaviour {
                     }
                     temp = next;
                     sizeOfList++;
-                } 
+                }
+                Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
         }
         return false;
@@ -407,9 +412,12 @@ public class GameController : MonoBehaviour {
             // so that its collision is now normal. 
             if (hoverLinkRef.connectingPlatform != null)
             {
-                hoverLinkRef.GetComponent<PolygonCollider2D>().points = new Vector2[0];  // remove the "bridge" collider
-                hoverLinkRef.GetComponent<LineRenderer>().SetPositions(new Vector3[0]);
-                hoverLinkRef.GetComponent<LineRenderer>().positionCount = 0;
+                if (enableLinkChaining)
+                {
+                    hoverLinkRef.GetComponent<PolygonCollider2D>().points = new Vector2[0];  // remove the "bridge" collider
+                    hoverLinkRef.GetComponent<LineRenderer>().SetPositions(new Vector3[0]);
+                    hoverLinkRef.GetComponent<LineRenderer>().positionCount = 0;
+                }
             }
             // update the old hover link...
             previousNotNullHoverLinkRef = hoverLinkRef; 
@@ -457,40 +465,42 @@ public class GameController : MonoBehaviour {
                 // update and create a "bridge" from this link to the next for next->next->.. option.
                 if (hoverLinkRef.connectingPlatform != null)
                 {
-                    // Create a "bridge" from this link to the next link
-                    Bounds otherBounds = hoverLinkRef.connectingPlatform.childLink.GetComponent<SpriteRenderer>().bounds;
-                    Bounds hoverBounds = hoverLinkRef.GetComponent<SpriteRenderer>().bounds;
-                    Vector3 worldDiffNorm = (otherBounds.center - hoverBounds.center).normalized;
+                    if (enableLinkChaining) { 
+                        // Create a "bridge" from this link to the next link
+                        Bounds otherBounds = hoverLinkRef.connectingPlatform.childLink.GetComponent<SpriteRenderer>().bounds;
+                        Bounds hoverBounds = hoverLinkRef.GetComponent<SpriteRenderer>().bounds;
+                        Vector3 worldDiffNorm = (otherBounds.center - hoverBounds.center).normalized;
 
-                    // extend the bridge a little farther than needed to make it more user friendly.
-                    Vector3 p0 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(otherBounds.center + (worldDiffNorm * 0.1f));
-                    Vector3 p1 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(hoverBounds.center);
-                    Vector3 diff = p0 - p1;
-                    float scalePerpScale = 0.8f;
-                    // http://mathworld.wolfram.com/PerpendicularVector.html
-                    Vector3 perpDiff = (new Vector2(-diff.y, diff.x)).normalized;
-                    Vector2[] bridgePoints = new Vector2[4];
-                    bridgePoints[0] = p0 + (scalePerpScale * perpDiff);
-                    bridgePoints[1] = p0 - (scalePerpScale * perpDiff);
-                    bridgePoints[2] = p1 - (scalePerpScale * perpDiff);
-                    bridgePoints[3] = p1 + (scalePerpScale * perpDiff);
+                        // extend the bridge a little farther than needed to make it more user friendly.
+                        Vector3 p0 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(otherBounds.center + (worldDiffNorm * 0.1f));
+                        Vector3 p1 = hoverLinkRef.transform.worldToLocalMatrix.MultiplyPoint(hoverBounds.center);
+                        Vector3 diff = p0 - p1;
+                        float scalePerpScale = 0.8f;
+                        // http://mathworld.wolfram.com/PerpendicularVector.html
+                        Vector3 perpDiff = (new Vector2(-diff.y, diff.x)).normalized;
+                        Vector2[] bridgePoints = new Vector2[4];
+                        bridgePoints[0] = p0 + (scalePerpScale * perpDiff);
+                        bridgePoints[1] = p0 - (scalePerpScale * perpDiff);
+                        bridgePoints[2] = p1 - (scalePerpScale * perpDiff);
+                        bridgePoints[3] = p1 + (scalePerpScale * perpDiff);
 
-                    Vector3 md = new Vector3(0, 0, 40);
+                        Vector3 md = new Vector3(0, 0, 40);
 
-                    Vector3[] linePositions = new Vector3[2];
-                    linePositions[0] = p0 + md;
-                    linePositions[1] = p1 + md;
+                        Vector3[] linePositions = new Vector3[2];
+                        linePositions[0] = p0 + md;
+                        linePositions[1] = p1 + md;
 
-                    // TODO: Transform the collider to go from world space to local space;
-                    hoverLinkRef.GetComponent<PolygonCollider2D>().points = bridgePoints;
-                    hoverLinkRef.GetComponent<LineRenderer>().startColor = Color.cyan;
-                    hoverLinkRef.GetComponent<LineRenderer>().endColor = Color.cyan;
-                    hoverLinkRef.GetComponent<LineRenderer>().positionCount = linePositions.Length;
-                    hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
-                    hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale - 0.2f; // make the path look a little smaller than it really is
-                    hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale - 0.2f; 
+                        // TODO: Transform the collider to go from world space to local space;
+                        hoverLinkRef.GetComponent<PolygonCollider2D>().points = bridgePoints;
+                        hoverLinkRef.GetComponent<LineRenderer>().startColor = Color.cyan;
+                        hoverLinkRef.GetComponent<LineRenderer>().endColor = Color.cyan;
+                        hoverLinkRef.GetComponent<LineRenderer>().positionCount = linePositions.Length;
+                        hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
+                        hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale - 0.2f; // make the path look a little smaller than it really is
+                        hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale - 0.2f; 
                     
-                    hoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
+                        hoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
+                    }
                 } // end creating the "bridge"
             }
         }

@@ -20,7 +20,7 @@ if map_file and out_file
 	Block = Struct.new(:x,:y)
 	SizedBlock = Struct.new(:x,:y,:width,:height)
 	LinkBlock = Struct.new(:x,:y,:connectTo)
-	SingleLLPlatform = Struct.new(:x,:y,:name,:connectTo,:value)
+	SingleLLPlatform = Struct.new(:x,:y,:name,:connectTo,:value,:toAdd)
 
 	winCondition = map.properties["WinCondition"].to_str
 	player = nil
@@ -47,7 +47,11 @@ if map_file and out_file
 			elsif obj.type == "Goal"
 				goalPortal = Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int)
 			elsif obj.type == "SingleLLPlatform"
-				singleLinkedListPlatforms.push(SingleLLPlatform.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.name, obj.properties["ConnectTo"], obj.properties["Value"]))
+				toAdd = false 
+				if obj.properties.key?('ToAdd') and obj.properties['ToAdd'] == "true" 
+					toAdd = true
+				end
+				singleLinkedListPlatforms.push(SingleLLPlatform.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.name, obj.properties["ConnectTo"], obj.properties["Value"], toAdd))
 			elsif obj.type == "ObjectiveBlock"
 				objectiveBlocks.push(Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int))
 			end
@@ -106,7 +110,7 @@ if map_file and out_file
 	sllpId = 0
 	for p in singleLinkedListPlatforms
 		out_file.syswrite("{\"logId\":\"sllp#{sllpId}\",\"type\":\"SINGLE_LL_PLATFORM\",\"x\":#{p['x']},\"y\":#{p['y']},\"objId\":\"#{p['name']}\",")
-		out_file.syswrite("\"value\":\"#{p['value']}\",\"childLinkBlockConnectId\":\"#{p['connectTo']}\"}")
+		out_file.syswrite("\"value\":\"#{p['value']}\",\"childLinkBlockConnectId\":\"#{p['connectTo']}\",\"toAdd\":#{p['toAdd']}}")
 		if p != singleLinkedListPlatforms.last
 			out_file.syswrite(",")
 		end
