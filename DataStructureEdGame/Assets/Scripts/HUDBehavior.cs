@@ -10,10 +10,12 @@ public class HUDBehavior : MonoBehaviour {
 
     // public Text controlSchemeView;
     public Button addPlatformButton;
+    public Image addPlatformPanel;
     public PlatformBehavior oneToAdd;
      
     private float debounce; 
     public bool selected;
+    private int countPlatformsToAdd;
 
     void Start()
     {
@@ -22,12 +24,17 @@ public class HUDBehavior : MonoBehaviour {
         resetButton.onClick.AddListener(OnResetButtonClick);  
 
         addPlatformButton.onClick.AddListener(OnControlAddPlatform);
-
+        countPlatformsToAdd = -1;
     }
 
     void Update()
     {
         debounce += Time.fixedDeltaTime; 
+        if (gameController.platformsToAdd.Count != countPlatformsToAdd)
+        {
+            countPlatformsToAdd = gameController.platformsToAdd.Count; 
+            addPlatformPanel.gameObject.SetActive(countPlatformsToAdd != 0); // only activate if there are platforms to add
+        }
     }
 
     public void OnResetButtonClick()

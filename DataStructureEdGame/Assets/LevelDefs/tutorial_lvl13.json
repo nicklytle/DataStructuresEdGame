@@ -1,5 +1,5 @@
 {
-"winCondition":"SortListAscending",
+"winCondition":"None",
 "player":{"logId":"player","type":"PLAYER","x":18,"y":-15},
 "startLink":{"logId":"headLink","type":"LINK_BLOCK","x":14,"y":-15,"objIDConnectingTo":"A"},
 "goalPortal":{"logId":"goal","type":"GOAL_PORTAL","x":16,"y":-1},
