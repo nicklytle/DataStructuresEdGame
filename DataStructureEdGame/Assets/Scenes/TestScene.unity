@@ -280,7 +280,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.size
-      value: 13
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
       propertyPath: m_LocalPosition.x
@@ -347,7 +347,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
@@ -399,6 +399,11 @@ Prefab:
       propertyPath: levelDescriptionJsonFiles.Array.data[12]
       value: 
       objectReference: {fileID: 4900000, guid: d84059c022fdac24e90e8e41cecff23b, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[13]
+      value: 
+      objectReference: {fileID: 4900000, guid: 30f8eb3f618387742bf5494a3a5c7251, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
@@ -1467,6 +1472,7 @@ MonoBehaviour:
   worldGenerator: {fileID: 111316952}
   platformsToAdd: []
   addingPlatforms: 0
+  enableLinkChaining: 0
   linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
   hoverArrowLine: {fileID: 0}
   hoverArrowHead: {fileID: 0}
