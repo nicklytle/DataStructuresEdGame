@@ -18,7 +18,7 @@
 "linkBlocks":[
 ],
 "singleLinkedListPlatforms":[
-{"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":13,"y":-8,"objId":"A","value":"1","childLinkBlockConnectId":"B"},
-{"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":18,"y":-6,"objId":"B","value":"3","childLinkBlockConnectId":""}
+{"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":13,"y":-8,"objId":"A","value":"1","childLinkBlockConnectId":"B","toAdd":false},
+{"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":18,"y":-6,"objId":"B","value":"3","childLinkBlockConnectId":"","toAdd":false}
 ]
 }

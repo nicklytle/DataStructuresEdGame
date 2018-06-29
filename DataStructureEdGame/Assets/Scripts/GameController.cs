@@ -41,7 +41,7 @@ public class GameController : MonoBehaviour {
     }
 
     // The win condition of this level.
-    public GameController.WinCondition winConditon;
+    public WinCondition winConditon;
 
     // References to important objects in the scene. 
     public Transform playerRef;
@@ -138,13 +138,14 @@ public class GameController : MonoBehaviour {
                     PlatformBehavior toBeAdded = platformsToAdd[0];
                     if (toBeAdded != null)
                     {
-                        platformsToAdd.Remove(toBeAdded);
+                        platformsToAdd.Remove(toBeAdded); 
+                        toBeAdded.isInLevel = true; // mark this as being in the level
                         Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         positionMcPosition.z = 0;
                         toBeAdded.transform.position = positionMcPosition;
                         toBeAdded.gameObject.SetActive(true);
-                        selectedLink.setConnectingPlatform(toBeAdded);
+                        selectedLink.setConnectingPlatform(toBeAdded); // connect the selected link to the new platform
                         addingPlatforms = false;
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
@@ -343,6 +344,7 @@ public class GameController : MonoBehaviour {
                         numberOfTotalPlatformsInLevel++;
                     }
                 }
+                Debug.Log(debugFrameCount + " | WIN CONDITION: Number of platforms in the level: " + numberOfTotalPlatformsInLevel);
 
                 if (startingLink.connectingPlatform == null)
                 {
@@ -371,7 +373,8 @@ public class GameController : MonoBehaviour {
                     }
                     temp = next;
                     sizeOfList++;
-                } 
+                }
+                Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
         }
         return false;
