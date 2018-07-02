@@ -39,12 +39,12 @@ public class GameController : MonoBehaviour {
     {
         None,
         SortListAscending,
-        SortListDescending
+        SortListDescending,
+        SortListDuplicatesNotAllBlocks,
     }
 
     // The win condition of this level.
     public WinCondition winConditon;
-
     // References to important objects in the scene. 
     public Transform playerRef;
     public Transform helicopterRobotRef;
@@ -351,7 +351,8 @@ public class GameController : MonoBehaviour {
                 if (startingLink.connectingPlatform == null)
                 {
                     return (numberOfTotalPlatformsInLevel == 0); // if there are no platforms in the level
-                } else if (startingLink.connectingPlatform.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform == null)
+                }
+                else if (startingLink.connectingPlatform.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform == null)
                 {
                     return (numberOfTotalPlatformsInLevel == 1); // if there is only one platform in the level
                 }
@@ -369,7 +370,7 @@ public class GameController : MonoBehaviour {
                     {
                         if ((winConditon == WinCondition.SortListAscending && next.getValue() < temp.getValue()) ||
                             (winConditon == WinCondition.SortListDescending && next.getValue() > temp.getValue()))
-                        { 
+                        {
                             return false; // not sorted.
                         } // otherwise just keep on iterating.
                     }
@@ -378,9 +379,83 @@ public class GameController : MonoBehaviour {
                 }
                 Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
+
+            case WinCondition.SortListDuplicatesNotAllBlocks:
+                int listSize = 0; // number of elements connected to head list.
+                Dictionary<int, int> unique = new Dictionary<int, int>();
+                //this dictionary of all the levels at the start isn't helpful
+                foreach (PlatformBehavior pb in platformEntities)
+                {
+                    if(!unique.ContainsKey(pb.getValue()))
+                    {
+                        unique.Add(pb.getValue(), 1);
+                    }
+                    
+                    if (pb.isPlatformConnectingToStart())
+                    {
+                        listSize++;
+                    }
+                }
+                
+                if (startingLink.connectingPlatform == null)
+                {
+                    return (listSize == 0); // if there are no platforms in the level
+                }
+                else if (startingLink.connectingPlatform.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform == null)
+                {
+                    return (listSize == 1); // if there is only one platform in the level
+                }
+                //start traversing the list and comparing the current and next platform's values
+                PlatformBehavior tempDupl = startingLink.connectingPlatform.GetComponent<PlatformBehavior>();
+                //check student's list to make a dictionary...
+                Dictionary<int, int> PlayersList = new Dictionary<int, int>();
+                while (tempDupl != null)
+                {
+                    if (PlayersList.ContainsKey(tempDupl.getValue()))
+                    {
+                        Debug.Log("First false");
+                        return false;
+
+                        //PlayersList[tempDupl.getValue()]++;
+
+                        //int currentVal = PlayersList[tempDupl.getValue()];
+                        //PlayersList.Remove(tempDupl.getValue());
+                        //PlayersList.Add(tempDupl.getValue(), (currentVal + 1));
+                    }
+                    else if (!PlayersList.ContainsKey(tempDupl.getValue()) && PlayersList.Count < listSize)
+                    {
+                        PlayersList.Add(tempDupl.getValue(), 1);
+                        //return true;
+                        //first had listSize
+                        Debug.Log("Hello");
+                        if ((PlayersList.Count == unique.Count) && PlayersList.Count == listSize)
+                        {
+                            Debug.Log("I returned here line A" + PlayersList.Count + " " + unique.Count);
+                            return true;
+                        }
+                    }
+                    PlatformBehavior next = tempDupl.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
+                    if(next != null)
+                    {
+                        if(next.getValue() < tempDupl.getValue())
+                        {
+                            Debug.Log("Wassp");
+                            return false;
+                        }
+                    }
+                    tempDupl = next;
+                }
+                Debug.Log("I returned here line B");
+                return false;
         }
+        Debug.Log("I returned here line C");
         return false;
     }
+
+
+
+
+
 
     /**
      * Set what LinkBlock is being added by the Player.
@@ -681,3 +756,4 @@ public class GameController : MonoBehaviour {
         return arrowParts;
     }
 }
+

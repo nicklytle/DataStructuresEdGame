@@ -62,12 +62,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     public GameController.WinCondition GetWinConditionFromString(string str)
     {
+        //Debug.Log("The Win condition string is: " + str);
         if (str.Equals("SortListAscending"))
         {
+            //Debug.Log(GameController.WinCondition.SortListAscending);
             return GameController.WinCondition.SortListAscending;
         } else if (str.Equals("SortListDescending"))
         {
             return GameController.WinCondition.SortListDescending;
+        }
+        else if(str.Equals("SortListDuplicatesNotAllBlocks"))
+        {
+            //Debug.Log("Made it here");
+            //Debug.Log(GameController.WinCondition.SortListDuplicatesNotAllBlocks);
+            return GameController.WinCondition.SortListDuplicatesNotAllBlocks;
         }
         return GameController.WinCondition.None;
     }
