@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LoggingManager : MonoBehaviour {
 
+
+
     public int playerId;
     
 

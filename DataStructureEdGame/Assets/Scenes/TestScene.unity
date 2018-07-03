@@ -281,7 +281,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.size
-      value: 13
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
       propertyPath: m_LocalPosition.x
@@ -334,42 +334,42 @@ Prefab:
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[0]
       value: 
-      objectReference: {fileID: 4900000, guid: fc556d3b2bf301f46a52c285d67592e9, type: 3}
+      objectReference: {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[1]
       value: 
-      objectReference: {fileID: 4900000, guid: 3751148c74fd9b44c9a53b0a872e5091, type: 3}
+      objectReference: {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[2]
       value: 
-      objectReference: {fileID: 4900000, guid: 7328edb39bd81224793fc669046bf0b9, type: 3}
+      objectReference: {fileID: 4900000, guid: ad070d62c52d7b4439d4a64ca7b2f8a3, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[3]
       value: 
-      objectReference: {fileID: 4900000, guid: 9021d595aef6dc84db3081412724d4b2, type: 3}
+      objectReference: {fileID: 4900000, guid: 44472792a0e580f4780f70db13bd9576, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[4]
       value: 
-      objectReference: {fileID: 4900000, guid: 8041f68e22d365346aef61e7add93c25, type: 3}
+      objectReference: {fileID: 4900000, guid: 521f57d4dd703984f944d3f25852730b, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[5]
       value: 
-      objectReference: {fileID: 4900000, guid: edfec77d11bae214da49f2c9892c6102, type: 3}
+      objectReference: {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[6]
       value: 
-      objectReference: {fileID: 4900000, guid: 336e6c55f1336864dbe1bca45ed44881, type: 3}
+      objectReference: {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelDescriptionJsonFiles.Array.data[7]
@@ -1553,7 +1553,7 @@ MonoBehaviour:
   cursorDraggingTexture: {fileID: 2800000, guid: 5d37af810ade4aa4bb41791a2f4c4add,
     type: 3}
   cursorMode: 0
-  doubleClickDelay: 80
+  doubleClickDelay: 120
   winConditon: 0
   playerRef: {fileID: 0}
   helicopterRobotRef: {fileID: 0}

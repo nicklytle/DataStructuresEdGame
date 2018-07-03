@@ -136,7 +136,15 @@ public class PlayerBehavior : MonoBehaviour {
                 currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
             }
         }
-        onGround = true;
+
+        // for setting onGround, make sure that the other block is below the player
+        if (collision.collider.bounds.center.y < GetComponent<BoxCollider2D>().bounds.center.y) { 
+            onGround = true;
+        } else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<BoxCollider2D>().bounds.center.y)
+        {
+            // stop moving up
+            rb2.velocity = new Vector2(rb2.velocity.x, -0.1f);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D c2d)
