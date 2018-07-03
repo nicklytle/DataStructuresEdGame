@@ -1548,8 +1548,12 @@ MonoBehaviour:
   linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
   hoverArrowLine: {fileID: 0}
   hoverArrowHead: {fileID: 0}
-  cursorPointingTexture: {fileID: 0}
+  cursorPointingTexture: {fileID: 2800000, guid: cb6a2c50bbac6d24c84b8fccff928faf,
+    type: 3}
+  cursorDraggingTexture: {fileID: 2800000, guid: 5d37af810ade4aa4bb41791a2f4c4add,
+    type: 3}
   cursorMode: 0
+  doubleClickDelay: 80
   winConditon: 0
   playerRef: {fileID: 0}
   helicopterRobotRef: {fileID: 0}

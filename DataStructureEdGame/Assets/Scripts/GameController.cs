@@ -32,7 +32,9 @@ public class GameController : MonoBehaviour {
     public Transform hoverArrowHead;
 
     public Texture2D cursorPointingTexture;
+    public Texture2D cursorDraggingTexture;
     public CursorMode cursorMode = CursorMode.Auto;
+    public int doubleClickDelay;
 
     // different win conditions for the level.
     public enum WinCondition
@@ -238,6 +240,9 @@ public class GameController : MonoBehaviour {
         {
             removeHoverLink();
             previousNotNullHoverLinkRef = null; // does this fall apart?
+            if (!Input.GetMouseButton(0)) { 
+                setCursorToDefault(); // if you are not dragging, then default the cursor
+            }
         }
 
         // handle just clicking the mouse button
@@ -249,6 +254,7 @@ public class GameController : MonoBehaviour {
                 setSelectedLink(hoverLinkRef);
                 String timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log(selectedLink.logId + " was clicked at time: " + timestamp2);
+                setCursorToDragging();
 
             }  // if you're selecting a link and also hovering over the select link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
@@ -256,20 +262,21 @@ public class GameController : MonoBehaviour {
                 String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
                 setSelectedLink(null);
-                if (hoverLinkRef.connectingPlatform != null) { 
+                Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
+                if (hoverLinkRef.connectingPlatform != null && (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
                     hoverLinkRef.removeLinkConnection();
                     setStatusText("Removed link"); 
                 }
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
-                Cursor.SetCursor(null, new Vector2(), cursorMode); 
+                setCursorToPointer();
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
             {
                 String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log("the link block " + selectedLink.logId + " was deselected at time: " + timestamp4);
                 deselectSelectedLink();
-                Cursor.SetCursor(null, new Vector2(), cursorMode); 
+                setCursorToDefault(); 
             }
         } // if you are not clicking and not holding down the mouse button
 
@@ -292,7 +299,8 @@ public class GameController : MonoBehaviour {
                         setStatusText("Established a connection.");
                     }
                     removeHoverArrow();
-                    removeHoverLink(); 
+                    removeHoverLink();
+                    setCursorToDefault();
                     setStatusText("Established a connection.");
                     String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"); 
                     Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
@@ -306,12 +314,14 @@ public class GameController : MonoBehaviour {
             } else if (selectedLink == null && hoverLinkRef != null)
             {
                 // you can click on the hover link, so change the cursor to show that.
-                Cursor.SetCursor(cursorPointingTexture, new Vector2(), cursorMode);
+                setCursorToPointer();
+            } else if (selectedLink != null && hoverLinkRef == selectedLink)
+            {
+                setCursorToPointer(); // click to delete
             }
         } 
-
-
-        if (Input.GetMouseButtonDown(0))
+         
+        if (Input.GetMouseButton(0))
         {
             lastTimeClickedMillis = System.DateTime.Now;
         }
@@ -359,8 +369,7 @@ public class GameController : MonoBehaviour {
                     PlatformBehavior next = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
                     if (next == null)
                     {
-                        break;
-                        //return true;
+                        break; 
                     }
                     else
                     {
@@ -409,24 +418,13 @@ public class GameController : MonoBehaviour {
                 {
                     if (PlayersList.ContainsKey(tempDupl.getValue()))
                     {
-                        Debug.Log("First false");
-                        return false;
-
-                        //PlayersList[tempDupl.getValue()]++;
-
-                        //int currentVal = PlayersList[tempDupl.getValue()];
-                        //PlayersList.Remove(tempDupl.getValue());
-                        //PlayersList.Add(tempDupl.getValue(), (currentVal + 1));
+                        return false; 
                     }
                     else if (!PlayersList.ContainsKey(tempDupl.getValue()) && PlayersList.Count < listSize)
                     {
-                        PlayersList.Add(tempDupl.getValue(), 1);
-                        //return true;
-                        //first had listSize
-                        Debug.Log("Hello");
+                        PlayersList.Add(tempDupl.getValue(), 1); 
                         if ((PlayersList.Count == unique.Count) && PlayersList.Count == listSize)
                         {
-                            Debug.Log("I returned here line A" + PlayersList.Count + " " + unique.Count);
                             return true;
                         }
                     }
@@ -435,16 +433,13 @@ public class GameController : MonoBehaviour {
                     {
                         if(next.getValue() < tempDupl.getValue())
                         {
-                            Debug.Log("Wassp");
                             return false;
                         }
                     }
                     tempDupl = next;
                 }
-                Debug.Log("I returned here line B");
                 return false;
         }
-        Debug.Log("I returned here line C");
         return false;
     }
 
@@ -468,17 +463,17 @@ public class GameController : MonoBehaviour {
     }
 
     public void deselectSelectedLink()
-    {
+    { 
+        setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
-        setStatusText("Deselected link block");
-        Cursor.SetCursor(null, new Vector2(), cursorMode);
+        setStatusText("Deselected link block"); 
         updateObjectiveHUDAndBlocks(); // update any objective blocks
         updatePlatformEntities();
     }
 
     // remove the current hover link and set the "bridge" collider to default again. 
     public void removeHoverLink()
-    {
+    { 
         removeHoverArrow();
         if (hoverLinkRef != null) {  // only remove it if we actually need to remove it.
             if (hoverLinkRef != selectedLink)
@@ -597,7 +592,7 @@ public class GameController : MonoBehaviour {
      */ 
     public void setHoverPlatformReference(PlatformBehavior platform)
     {
-        if (selectedLink != null /*&& platform != null && !platform.isPhasedOut*/ ) // you can only connect to a platform when there is a Link you have selected.
+        if (selectedLink != null) // you can only connect to a platform when there is a Link you have selected.
         {
             if (selectedLink.parentPlatform != null && selectedLink.parentPlatform == platform)
                 return; // don't change anything if the platform is the parent of the adding link.
@@ -702,12 +697,7 @@ public class GameController : MonoBehaviour {
     public Transform[] createArrowInstanceBetweenLinkPlatform(LinkBlockBehavior lb, PlatformBehavior pb, Color color)
     {
         // determine the start and end points of the arrow.
-        Bounds linkBounds = lb.GetComponent<SpriteRenderer>().bounds; // the bounds for this link block.;
-        /*if (lb.parentPlatform != null) // If this link is a child link, then the parent platform's bounds is the link bounds for rendering
-        {
-            linkBounds = lb.parentPlatform.GetComponent<SpriteRenderer>().bounds;
-        }
-        */
+        Bounds linkBounds = lb.GetComponent<SpriteRenderer>().bounds; 
         Bounds platBounds = pb.GetComponent<SpriteRenderer>().bounds;
 
         // find the closest points on both bounding boxes to the center point to make the arrow.
@@ -756,6 +746,24 @@ public class GameController : MonoBehaviour {
         lineRenderer.SetPositions(linePos);
         lineRendererHead.SetPositions(linePosHead);
         return arrowParts;
+    }
+
+    private void setCursorToDefault()
+    {
+        Debug.Log("SET CURSOR TO DEFAULT");
+        Cursor.SetCursor(null, new Vector2(), cursorMode);
+    }
+
+    private void setCursorToPointer()
+    {
+        Debug.Log("SET CURSOR TO POINTER");
+        Cursor.SetCursor(cursorPointingTexture, new Vector2(12, 0), cursorMode);
+    }
+
+    private void setCursorToDragging()
+    {
+        Debug.Log("SET CURSOR TO DRAGGING");
+        Cursor.SetCursor(cursorDraggingTexture, new Vector2(18, 8), cursorMode);
     }
 }
 
