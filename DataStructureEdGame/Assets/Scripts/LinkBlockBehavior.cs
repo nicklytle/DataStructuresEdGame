@@ -77,11 +77,6 @@ public class LinkBlockBehavior : MonoBehaviour
             Transform[] linkArrowParts = gameController.createArrowInstanceBetweenLinkPlatform(this, connectingPlatform, color);
             linkArrow = linkArrowParts[0];
             linkArrowHead = linkArrowParts[1];
-
-            // reveal the next link in addition to this one
-            
-            // TODO: make a "bridge" from this link to the next link for traversing next->next->next-> ...
-
         } // end render arrow
     }
 
@@ -96,8 +91,7 @@ public class LinkBlockBehavior : MonoBehaviour
             Destroy(linkArrow.gameObject);
             linkArrow = null;
             Destroy(linkArrowHead.gameObject);
-            linkArrowHead = null;
-            //Debug.Log("delete the link arrow");
+            linkArrowHead = null; 
         }
     }
     
@@ -124,8 +118,7 @@ public class LinkBlockBehavior : MonoBehaviour
      *  Set the playform this is going to be linking to.
      */
     public void setConnectingPlatform(PlatformBehavior platform)
-    {
-        //Debug.Log("Setting the connected platform link connection");
+    { 
         if (platform != null)
         {
             connectingPlatform = platform;
@@ -140,7 +133,7 @@ public class LinkBlockBehavior : MonoBehaviour
 
     public void setDisplayMarker(bool b)
     {
-        setDisplayMarker(b, false); //  transform.Find("SelectMarker").gameObject.SetActive(b);
+        setDisplayMarker(b, false); 
     }
 
     public void setDisplayMarker(bool b, bool highlighted)
@@ -148,52 +141,21 @@ public class LinkBlockBehavior : MonoBehaviour
         if (!highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != defaultSelectMarkerSprite)
         {
             transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = defaultSelectMarkerSprite;
-            //Debug.Log("I'm set to blue");
         } else if (highlighted && transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite != highlightSelectMarkerSprite)
         {
             transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = highlightSelectMarkerSprite;
-            //Debug.Log("Or I'm set to some orange");
         }
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
     void OnMouseOver()
     {
-        //if (!gameController.mouseOverLinkRefs.Contains(this))
-        //{
-        //    gameController.mouseOverLinkRefs.Add(this);
-        //}
-        //gameController.mouseOverLinkRef = this;
-        if (parentPlatform == null || (parentPlatform != null && !parentPlatform.isPlatHidden()))  // can only interact with it when it is not hidden
-        {
-            // TODO: change cursor when you can click on it
-            Cursor.SetCursor(gameController.pointerCursorTexture, Vector2.zero, gameController.cursorMode);
-            //gameController.setHoverLink(this);   // gameController.mouseOverLinkRef = this; 
-            if (gameController.selectedLink == null)
-            {
-                gameController.setStatusText("Click and hold to select this link.");
-            }
-        } else
-        {
-            Debug.Log("Could not make this the hover link!");
-            Debug.Log(parentPlatform);
-            if (parentPlatform != null) 
-                Debug.Log(parentPlatform.isHidden);
-        }
+
     }
 
     void OnMouseExit()
     {
-        //if (gameController.mouseOverLinkRefs.Contains(this))
-        //{
-        //    gameController.mouseOverLinkRefs.Remove(this);
-        //}
-        //gameController.mouseOverLinkRef = null;
-        Cursor.SetCursor(null, Vector2.zero, gameController.cursorMode);
-        if (gameController.selectedLink == null)
-        {
-            gameController.setStatusText("");
-        } 
+
     }
     
 

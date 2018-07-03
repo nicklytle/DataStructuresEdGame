@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour {
     public Transform hoverArrowLine;
     public Transform hoverArrowHead;
 
-    public Texture2D pointerCursorTexture;
+    public Texture2D cursorPointingTexture;
     public CursorMode cursorMode = CursorMode.Auto;
 
     // different win conditions for the level.
@@ -198,7 +198,7 @@ public class GameController : MonoBehaviour {
                     mouseOverLinkRefs.Add(t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>());
                 }
             }
-        }
+        } // end populating mouseOverLinkRefs.
 
 
         if (mouseOverLinkRefs.Count > 0)
@@ -255,28 +255,25 @@ public class GameController : MonoBehaviour {
             {
                 String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
-
                 setSelectedLink(null);
                 if (hoverLinkRef.connectingPlatform != null) { 
                     hoverLinkRef.removeLinkConnection();
-                    setStatusText("Removed link");
-
+                    setStatusText("Removed link"); 
                 }
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
+                Cursor.SetCursor(null, new Vector2(), cursorMode); 
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
             {
                 String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 Debug.Log("the link block " + selectedLink.logId + " was deselected at time: " + timestamp4);
-                setSelectedLink(null); // deselect adding link to deselect
-                setStatusText("Deselected link block");
-                updateObjectiveHUDAndBlocks(); // update any objective blocks
-                updatePlatformEntities();
+                deselectSelectedLink();
+                Cursor.SetCursor(null, new Vector2(), cursorMode); 
             }
         } // if you are not clicking and not holding down the mouse button
 
-        if (!Input.GetMouseButton(0))
+        if (!Input.GetMouseButton(0)) // if the mouse button is NOT being held down.
         {
             if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
             {
@@ -301,16 +298,15 @@ public class GameController : MonoBehaviour {
                     Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
                 }
                 previousNotNullHoverLinkRef = null; // no longer needed to track
-                setSelectedLink(null);
-                updateObjectiveHUDAndBlocks(); // update any objective blocks
-                updatePlatformEntities();
+                deselectSelectedLink();
             } else if (selectedLink != null && hoverLinkRef != selectedLink)
             {
                 previousNotNullHoverLinkRef = null; // no longer needed to track
-                setSelectedLink(null); // deselect adding link to deselect
-                setStatusText("Deselected link block");
-                updateObjectiveHUDAndBlocks(); // update any objective blocks
-                updatePlatformEntities();
+                deselectSelectedLink();
+            } else if (selectedLink == null && hoverLinkRef != null)
+            {
+                // you can click on the hover link, so change the cursor to show that.
+                Cursor.SetCursor(cursorPointingTexture, new Vector2(), cursorMode);
             }
         } 
 
@@ -452,10 +448,7 @@ public class GameController : MonoBehaviour {
         return false;
     }
 
-
-
-
-
+    
 
     /**
      * Set what LinkBlock is being added by the Player.
@@ -472,6 +465,15 @@ public class GameController : MonoBehaviour {
         { 
             selectedLink.setDisplayMarker(true, true);
         }
+    }
+
+    public void deselectSelectedLink()
+    {
+        setSelectedLink(null); // deselect adding link to deselect
+        setStatusText("Deselected link block");
+        Cursor.SetCursor(null, new Vector2(), cursorMode);
+        updateObjectiveHUDAndBlocks(); // update any objective blocks
+        updatePlatformEntities();
     }
 
     // remove the current hover link and set the "bridge" collider to default again. 
