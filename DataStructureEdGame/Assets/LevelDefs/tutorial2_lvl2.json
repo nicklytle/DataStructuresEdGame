@@ -27,5 +27,9 @@
 {"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":6,"y":-6,"objId":"A","value":"5","childLinkBlockConnectId":"","toAdd":false},
 {"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":18,"y":-12,"objId":"B","value":"6","childLinkBlockConnectId":"","toAdd":false},
 {"logId":"sllp2","type":"SINGLE_LL_PLATFORM","x":23,"y":-9,"objId":"C","value":"7","childLinkBlockConnectId":"","toAdd":false}
+],
+"instructionBlocks":[
+{"logId":"ib0","type":"INSTRUCTION_BLOCK","x":11,"y":-4,"screenId":"DeleteInstructions"},
+{"logId":"ib1","type":"INSTRUCTION_BLOCK","x":7,"y":-11,"screenId":"CreateInstructions"}
 ]
 }

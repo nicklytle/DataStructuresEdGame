@@ -21,5 +21,7 @@ namespace Assets.Scripts.WorldGeneration
 
         // stuff specific to single-linked lists.
         public SingleLinkedListPlatform[] singleLinkedListPlatforms;
+
+        public InstructionBlock[] instructionBlocks;
     }
 }

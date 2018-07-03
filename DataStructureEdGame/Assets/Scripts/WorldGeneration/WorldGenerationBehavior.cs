@@ -22,6 +22,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform playerPreFab;
     public Transform goalPortalPreFab;
     public Transform objectiveBlockPreFab;
+    public Transform instructionViewBlockPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
     public Transform helicopterRobotPreFab;
@@ -223,6 +224,15 @@ public class WorldGenerationBehavior : MonoBehaviour {
             //Debug.Log("fire blocks " + ob.logId + timestamp8);
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
+        }
+        
+        // create the instruction blocks (question marks)
+        for (int i = 0; i < level.instructionBlocks.Length; i++)
+        {
+            Vector2 loc = new Vector2((float)(level.instructionBlocks[i].x + (1 / 2f)), (float)(level.instructionBlocks[i].y - 1 ));
+            Transform newInstructBlock = Instantiate(instructionViewBlockPreFab, loc, Quaternion.identity);
+            newInstructBlock.GetComponent<InstructionViewBlockBehavior>().screenId = level.instructionBlocks[i].screenId;
+            levelEntities.Add(newInstructBlock);
         }
 
         // create the platforms.

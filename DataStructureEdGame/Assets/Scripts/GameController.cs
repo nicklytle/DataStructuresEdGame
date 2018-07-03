@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
     public long debugFrameCount;
 
     public WorldGenerationBehavior worldGenerator;
+    public InstructionScreensBehavior instructionScreenBehavior;
     // a referernce to all objective entities in the level
     private List<ObjectiveBlockBehavior> objectiveBlocks;
     // a reference to all platform entities in the level.
@@ -764,6 +765,16 @@ public class GameController : MonoBehaviour {
     {
         Debug.Log("SET CURSOR TO DRAGGING");
         Cursor.SetCursor(cursorDraggingTexture, new Vector2(18, 8), cursorMode);
+    }
+
+    public void showInstructionScreen(string key)
+    {
+        instructionScreenBehavior.showScreen(key);
+    }
+
+    public void hideInstructionScreen(string key)
+    {
+        instructionScreenBehavior.hideScreen(key);
     }
 }
 

@@ -164,6 +164,10 @@ public class PlayerBehavior : MonoBehaviour {
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
+        else if (c2d.tag == "InstructionViewBlock")
+        {
+            gameController.showInstructionScreen(c2d.GetComponent<InstructionViewBlockBehavior>().screenId);
+        }
         //else
         //{
         //    Debug.Log(c2d.tag);
@@ -182,6 +186,14 @@ public class PlayerBehavior : MonoBehaviour {
             Debug.Log("Player landed on " + c2d.GetComponent<GroundBehavior>().logId + "at time: " + timestamp1);
         }
         */
+    }
+
+    void OnTriggerExit2D(Collider2D c2d)
+    {
+        if (c2d.tag == "InstructionViewBlock")
+        {
+            gameController.hideInstructionScreen(c2d.GetComponent<InstructionViewBlockBehavior>().screenId);
+        }
     }
 
     // shove the player in the given direction

@@ -21,7 +21,8 @@ if map_file and out_file
 	SizedBlock = Struct.new(:x,:y,:width,:height)
 	LinkBlock = Struct.new(:x,:y,:connectTo)
 	SingleLLPlatform = Struct.new(:x,:y,:name,:connectTo,:value,:toAdd)
-
+	InstructionBlock = Struct.new(:x,:y,:screenId)
+	
 	winCondition = map.properties["WinCondition"].to_str
 	player = nil
 	startLink = nil
@@ -29,8 +30,9 @@ if map_file and out_file
 	helicopterRobot = nil
 	blocks = []
 	linkBlocks = []
-	objectiveBlocks = []
 	singleLinkedListPlatforms = []
+	objectiveBlocks = []
+	instructionBlocks = []
 
 	for group in map.object_groups
 		for obj in group.objects 
@@ -54,6 +56,8 @@ if map_file and out_file
 				singleLinkedListPlatforms.push(SingleLLPlatform.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.name, obj.properties["ConnectTo"], obj.properties["Value"], toAdd))
 			elsif obj.type == "ObjectiveBlock"
 				objectiveBlocks.push(Block.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int))
+			elsif obj.type == "InstructionViewBlock"
+				instructionBlocks.push(InstructionBlock.new((obj.x / 64).to_int, mh - (obj.y / 64).to_int, obj.name))
 			end
 		end
 	end
@@ -117,7 +121,19 @@ if map_file and out_file
 		sllpId = sllpId + 1
 		out_file.syswrite("\n")
 	end
-	out_file.syswrite("]\n") # end singleLinkedListPlatforms
+	out_file.syswrite("],\n") # end singleLinkedListPlatforms
+	out_file.syswrite("\"instructionBlocks\":[\n") # start instructionBlocks
+	ibId = 0
+	for ib in instructionBlocks
+		out_file.syswrite("{\"logId\":\"ib#{ibId}\",\"type\":\"INSTRUCTION_BLOCK\",\"x\":#{ib['x']},\"y\":#{ib['y']},\"screenId\":\"#{ib['screenId']}\"}")
+		if ib != instructionBlocks.last
+			out_file.syswrite(",")
+		end
+		ibId = ibId + 1
+		out_file.syswrite("\n")
+	end
+	out_file.syswrite("]\n") # end instructionBlocks
+	
 	out_file.syswrite("}")
 	puts "Done."
 else
