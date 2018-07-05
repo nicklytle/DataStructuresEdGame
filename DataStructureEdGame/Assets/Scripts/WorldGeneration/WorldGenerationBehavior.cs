@@ -342,13 +342,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // make sure there is a level file for this
         if (levelFileIndex < levelDescriptionJsonFiles.Length)
         {
-            gameController.setStatusText("");
+            //gameController.setStatusText("");
             CreateWorldFromLevelDescription();
             string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampCRTNextLevel);
         } else
         {
-            gameController.setStatusText("You have won!");
+            //gameController.setStatusText("You have won!");
             string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampEnd);
             /// .Log("GAME IS WON!");

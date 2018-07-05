@@ -9,7 +9,6 @@ public class LoggingManager : MonoBehaviour {
 
     public int playerId;
     
-
 	// Use this for initialization
 	void Start () {
 		
