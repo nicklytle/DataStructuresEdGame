@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour {
     public Text statusTextUI;
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
+    public Text codeTextUI;
 
     void Start()
     {
@@ -80,7 +81,8 @@ public class GameController : MonoBehaviour {
         platformEntities = new List<PlatformBehavior>();
         objectiveBlocks = new List<ObjectiveBlockBehavior>();
         // initial world generation
-        worldGenerator.ManualStartGenerator();
+        worldGenerator.ManualStartGenerator(); 
+
     }
 
     void Update()
@@ -152,7 +154,8 @@ public class GameController : MonoBehaviour {
                     PlatformBehavior toBeAdded = platformsToAdd[0];
                     if (toBeAdded != null)
                     {
-                        platformsToAdd.Remove(toBeAdded); 
+                        platformsToAdd.Remove(toBeAdded);
+                        // configure the properties for the new platform
                         toBeAdded.isInLevel = true; // mark this as being in the level
                         Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         Vector3 positionMcPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -160,7 +163,10 @@ public class GameController : MonoBehaviour {
                         toBeAdded.transform.position = positionMcPosition;
                         toBeAdded.gameObject.SetActive(true);
                         selectedLink.setConnectingPlatform(toBeAdded); // connect the selected link to the new platform
+                        // end adding platform 
                         addingPlatforms = false;
+                        // append code and log
+                        appendCodeText(selectedLink.getCodeVariableString() + " = new Node();");
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         updateObjectiveHUDAndBlocks();
@@ -172,6 +178,7 @@ public class GameController : MonoBehaviour {
                 {
                     removeHoverArrow();
                 }
+                deselectSelectedLink();
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
                 String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -271,14 +278,17 @@ public class GameController : MonoBehaviour {
             }  // if you're selecting a link and also hovering over the select link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
             {
-                String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
-                setSelectedLink(null);
                 Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
-                if (hoverLinkRef.connectingPlatform != null && (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
-                    hoverLinkRef.removeLinkConnection();
-                    setStatusText("Removed link"); 
+                if ((DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
+                    appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
+                    if (hoverLinkRef.connectingPlatform != null) { 
+                        hoverLinkRef.removeLinkConnection();
+                        setStatusText("Removed link");
+                        String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                        Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
+                    }
                 }
+                setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
                 setCursorToPointer();
@@ -301,6 +311,7 @@ public class GameController : MonoBehaviour {
                 {
                     // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
+                    appendCodeText(selectedLink.getCodeVariableString() + " = " + hoverLinkRef.getCodeVariableString() + ";");
                     if (selectedLink.isConnectedToPlatform())
                     {
                         selectedLink.removeLinkConnection();
@@ -308,8 +319,7 @@ public class GameController : MonoBehaviour {
                     if (hoverLinkRef.connectingPlatform != null && hoverLinkRef.connectingPlatform != selectedLink.parentPlatform)
                     {
                         selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
-                        setStatusText("Established a connection.");
-                    }
+                    } 
                     removeHoverArrow();
                     removeHoverLink();
                     setCursorToDefault();
@@ -701,6 +711,21 @@ public class GameController : MonoBehaviour {
     {
         objectiveBlocks.Clear();
         platformEntities.Clear();
+    }
+        
+    public void appendCodeText(string line)
+    {
+        if (codeTextUI.text.Length > 0) { 
+            codeTextUI.text = codeTextUI.text + "\n" + line;
+        } else
+        {
+            codeTextUI.text = line;
+        }
+    }
+
+    public void clearCodeText()
+    {
+        codeTextUI.text = "";
     }
 
     /**

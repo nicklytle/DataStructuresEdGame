@@ -171,6 +171,26 @@ public class LinkBlockBehavior : MonoBehaviour
         }
     }
 
+    public string getCodeVariableString()
+    {
+        string str = getLogID();
+        if (this == gameController.startingLink)
+        {
+            str = "list.head";
+        } else if (isHelicopterLink)
+        {
+            str = "temp";
+        }
+        else if (parentPlatform != null)
+        {
+            // simulate accessing the next field from a variable.
+            Debug.Log(parentPlatform);
+            Debug.Log(parentPlatform.getMostRecentlyConnectedLink());
+            str = parentPlatform.getMostRecentlyConnectedLink().getCodeVariableString() + ".next";
+        }
+        return str;
+    }
+
 
     public string getLogID()
     {

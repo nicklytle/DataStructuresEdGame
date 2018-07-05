@@ -310,6 +310,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         gameController.setLevelPlatformEntitiesList(levelPlatformEntities);
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
+        
+        gameController.clearCodeText();
     }
 
     /**
