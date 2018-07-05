@@ -8,10 +8,13 @@ public class InstructionScreensBehavior : MonoBehaviour {
 
     public RectTransform moveInstructions;
     public RectTransform platformStateInstructions;
+    public RectTransform platformHiddenRevealInstructions;
+    public RectTransform addPlatformInstructions;
     public RectTransform deleteInstructions;
     public RectTransform createInstructions;
+    public RectTransform goalInstructions;
     public RectTransform robotInstructions;
-
+    
     private void changeScreen(string key, bool b)
     {
         if (key.Equals("MoveInstructions"))
@@ -22,6 +25,14 @@ public class InstructionScreensBehavior : MonoBehaviour {
         {
             platformStateInstructions.gameObject.SetActive(b);
         }
+        else if (key.Equals("PlatformHiddenRevealInstructions"))
+        {
+            platformHiddenRevealInstructions.gameObject.SetActive(b);
+        }
+        else if (key.Equals("AddPlatformInstructions"))
+        {
+            addPlatformInstructions.gameObject.SetActive(b);
+        }
         else if(key.Equals("DeleteInstructions"))
         {
             deleteInstructions.gameObject.SetActive(b);
@@ -29,6 +40,10 @@ public class InstructionScreensBehavior : MonoBehaviour {
         else if (key.Equals("CreateInstructions"))
         {
             createInstructions.gameObject.SetActive(b);
+        }
+        else if (key.Equals("GoalInstructions"))
+        {
+            goalInstructions.gameObject.SetActive(b);
         }
         else if(key.Equals("HelicopterRobotInstructions"))
         {

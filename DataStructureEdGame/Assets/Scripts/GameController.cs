@@ -133,6 +133,15 @@ public class GameController : MonoBehaviour {
                         hoverArrowLine = hoverArrowParts[0];
                         hoverArrowHead = hoverArrowParts[1];
                     }
+
+                    // cancel placing with escape or right click
+                    if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+                    {
+                        addingPlatforms = false;
+                        deselectSelectedLink();
+                        removeHoverArrow();
+                        platToDisplayAndAdd.gameObject.SetActive(false);
+                    }
                 }
             } 
             // you have a select link and you have released the mouse button
@@ -154,6 +163,8 @@ public class GameController : MonoBehaviour {
                         addingPlatforms = false;
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
+                        updateObjectiveHUDAndBlocks();
+                        updatePlatformEntities();
                     }
                 }
                 //to remove that gray 'prediction' arrow now that you've added the platform
