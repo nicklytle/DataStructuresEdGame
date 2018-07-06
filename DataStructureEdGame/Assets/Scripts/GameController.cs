@@ -65,14 +65,15 @@ public class GameController : MonoBehaviour {
     public Text statusTextUI;
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
-    public Text codeTextUI;
+    // public Text codeTextUI;
+    public CodePanelBehavior codePanelBehavior;
 
     void Start()
     {
         debugFrameCount = 0;
 
         selectedLink = null; 
-        setStatusText("");
+        //setStatusText("");
         // ensure the starting link has the proper property
         if (startingLink != null)
         {
@@ -81,8 +82,8 @@ public class GameController : MonoBehaviour {
         platformEntities = new List<PlatformBehavior>();
         objectiveBlocks = new List<ObjectiveBlockBehavior>();
         // initial world generation
-        worldGenerator.ManualStartGenerator(); 
-
+        worldGenerator.ManualStartGenerator();
+        
     }
 
     void Update()
@@ -166,7 +167,7 @@ public class GameController : MonoBehaviour {
                         // end adding platform 
                         addingPlatforms = false;
                         // append code and log
-                        appendCodeText(selectedLink.getCodeVariableString() + " = new Node();");
+                        codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = new Node();");
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         updateObjectiveHUDAndBlocks();
@@ -280,10 +281,10 @@ public class GameController : MonoBehaviour {
             {
                 Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
                 if ((DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
-                    appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
+                    codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
                     if (hoverLinkRef.connectingPlatform != null) { 
                         hoverLinkRef.removeLinkConnection();
-                        setStatusText("Removed link");
+                        //setStatusText("Removed link");
                         String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
                     }
@@ -311,7 +312,7 @@ public class GameController : MonoBehaviour {
                 {
                     // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
-                    appendCodeText(selectedLink.getCodeVariableString() + " = " + hoverLinkRef.getCodeVariableString() + ";");
+                    codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = " + hoverLinkRef.getCodeVariableString() + ";");
                     if (selectedLink.isConnectedToPlatform())
                     {
                         selectedLink.removeLinkConnection();
@@ -323,7 +324,7 @@ public class GameController : MonoBehaviour {
                     removeHoverArrow();
                     removeHoverLink();
                     setCursorToDefault();
-                    setStatusText("Established a connection.");
+                    //setStatusText("Established a connection.");
                     String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"); 
                     Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
                 }
@@ -488,7 +489,7 @@ public class GameController : MonoBehaviour {
     { 
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
-        setStatusText("Deselected link block"); 
+        //setStatusText("Deselected link block"); 
         updateObjectiveHUDAndBlocks(); // update any objective blocks
         updatePlatformEntities();
     }
@@ -553,7 +554,7 @@ public class GameController : MonoBehaviour {
                 Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
                 hoverArrowLine = hoverArrowParts[0];
                 hoverArrowHead = hoverArrowParts[1];
-                setStatusText("Release to set the first link equal to this one.");
+                //setStatusText("Release to set the first link equal to this one.");
 
                 // This is when the mouse is hovering over a link for establishing a link.
                 // update and create a "bridge" from this link to the next for next->next->.. option.
@@ -711,21 +712,6 @@ public class GameController : MonoBehaviour {
     {
         objectiveBlocks.Clear();
         platformEntities.Clear();
-    }
-        
-    public void appendCodeText(string line)
-    {
-        if (codeTextUI.text.Length > 0) { 
-            codeTextUI.text = codeTextUI.text + "\n" + line;
-        } else
-        {
-            codeTextUI.text = line;
-        }
-    }
-
-    public void clearCodeText()
-    {
-        codeTextUI.text = "";
     }
 
     /**

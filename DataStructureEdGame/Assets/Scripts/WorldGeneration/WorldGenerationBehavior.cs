@@ -311,7 +311,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
         
-        gameController.clearCodeText();
+        gameController.codePanelBehavior.clearCodeText();
     }
 
     /**
