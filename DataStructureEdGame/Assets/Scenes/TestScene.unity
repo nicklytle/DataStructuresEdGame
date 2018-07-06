@@ -257,7 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6c68d8d944b4f40afd58dbdcf91c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerId: 0
 --- !u!4 &319232012
 Transform:
   m_ObjectHideFlags: 0
@@ -348,7 +347,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
@@ -1566,6 +1565,8 @@ MonoBehaviour:
   statusTextUI: {fileID: 1950673981}
   objectiveHudPanelUI: {fileID: 1060193297}
   objectiveTextUI: {fileID: 455446035}
+  currentPlayerLogs: {fileID: 319232011}
+  currentPlayerID: 0
 --- !u!1 &1950673979
 GameObject:
   m_ObjectHideFlags: 0
