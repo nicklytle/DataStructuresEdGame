@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LinkBlockBehavior : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class LinkBlockBehavior : MonoBehaviour
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
     public Sprite defaultSelectMarkerSprite;  // what the sprite of the selected marker is by default
     public Sprite highlightSelectMarkerSprite; // the sprite of the selected marker when it is highlighted.
+
+    // for displaying the code variable name of this link block
+    public Image variableNamePanel;
+    public Text variableNameText;
+    public string variableName; // the string representing the variable name of this link
 
     // special flags for the type of link block.
     public bool isStartingLink;
@@ -146,6 +152,11 @@ public class LinkBlockBehavior : MonoBehaviour
             transform.Find("SelectMarker").GetComponent<SpriteRenderer>().sprite = highlightSelectMarkerSprite;
         }
         transform.Find("SelectMarker").gameObject.SetActive(b);
+        variableNamePanel.gameObject.SetActive(b);
+        if (b)
+        {
+            variableNameText.text = getCodeVariableString();
+        }
     }
 
     void OnMouseOver()
@@ -173,7 +184,7 @@ public class LinkBlockBehavior : MonoBehaviour
 
     public string getCodeVariableString()
     {
-        string str = getLogID();
+        string str = variableName;
         if (this == gameController.startingLink)
         {
             str = "list.head";

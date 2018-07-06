@@ -993,7 +993,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
@@ -6095,7 +6095,7 @@ MonoBehaviour:
   cursorDraggingTexture: {fileID: 2800000, guid: 5d37af810ade4aa4bb41791a2f4c4add,
     type: 3}
   cursorMode: 0
-  doubleClickDelay: 120
+  doubleClickDelay: 180
   winConditon: 0
   playerRef: {fileID: 0}
   helicopterRobotRef: {fileID: 0}

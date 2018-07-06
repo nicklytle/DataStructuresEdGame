@@ -204,7 +204,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
-
             //string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             //Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
             levelLinkBlocks.Add(lb);
@@ -312,6 +311,21 @@ public class WorldGenerationBehavior : MonoBehaviour {
         gameController.updatePlatformEntities();
         
         gameController.codePanelBehavior.clearCodeText();
+        string[] varNames = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q", "r", "z", "y" };
+        int varIndex = 0;
+        // verify that no link blocks are being displayed
+        foreach (LinkBlockBehavior lb in levelLinkBlocks)
+        {
+            if (!lb.isHelicopterLink && !lb.isStartingLink) { 
+                lb.variableName = varNames[varIndex++];
+            }
+            lb.setDisplayMarker(false);
+        }
+        // also do this for the robot
+        if (gameController.helicopterRobotRef != null)
+        {
+            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
+        }
     }
 
     /**
