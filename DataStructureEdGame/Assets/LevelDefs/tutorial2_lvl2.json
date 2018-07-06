@@ -3,7 +3,7 @@
 "player":{"logId":"player","type":"PLAYER","x":2,"y":-4},
 "startLink":{"logId":"headLink","type":"LINK_BLOCK","x":10,"y":-9,"objIDConnectingTo":"A"},
 "goalPortal":{"logId":"goal","type":"GOAL_PORTAL","x":31,"y":-5},
-"helicopterRobot":{"logId":"helicopterRobot","type":"HELICOPTER_ROBOT","x":18,"y":-7},
+"helicopterRobot":{"logId":"helicopterRobot","type":"HELICOPTER_ROBOT","x":39,"y":-19},
 "blocks":[
 {"logId":"g0","type":"GROUND","x":1,"y":-7,"width":5,"height":7},
 {"logId":"g1","type":"GROUND","x":1,"y":-6,"width":5,"height":1},
@@ -27,5 +27,9 @@
 {"logId":"sllp0","type":"SINGLE_LL_PLATFORM","x":6,"y":-6,"objId":"A","value":"5","childLinkBlockConnectId":"","toAdd":false},
 {"logId":"sllp1","type":"SINGLE_LL_PLATFORM","x":18,"y":-12,"objId":"B","value":"6","childLinkBlockConnectId":"","toAdd":false},
 {"logId":"sllp2","type":"SINGLE_LL_PLATFORM","x":23,"y":-9,"objId":"C","value":"7","childLinkBlockConnectId":"","toAdd":false}
+],
+"instructionBlocks":[
+{"logId":"ib0","type":"INSTRUCTION_BLOCK","x":11,"y":-4,"screenId":"DeleteInstructions"},
+{"logId":"ib1","type":"INSTRUCTION_BLOCK","x":7,"y":-11,"screenId":"CreateInstructions"}
 ]
 }

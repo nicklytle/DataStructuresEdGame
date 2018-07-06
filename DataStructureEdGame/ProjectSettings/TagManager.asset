@@ -8,6 +8,7 @@ TagManager:
   - GoalPortal
   - GroundTop
   - PlatformTag
+  - InstructionViewBlock
   layers:
   - Default
   - TransparentFX

@@ -8,7 +8,7 @@ public class PlatformBehavior : MonoBehaviour {
     public string logId; // the ID of this object when it is logged
 
     public GameController gameController; // reference to the very important game controller.
-    public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to.
+    public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to. 
     public GameObject childLink; // reference to the child link object.
     public GameObject childValueBlock; // reference to the child link object.
     private int value;
@@ -178,6 +178,34 @@ public class PlatformBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+    }
+
+    public LinkBlockBehavior getMostRecentlyConnectedLink()
+    {
+        if (incomingConnectionLinkBlocks.Count > 0)
+        {
+            // if a helicopter/temp points to it, return that first.
+            // if the start link points to it, return that.
+            // if a direct link block points to it, return that first.
+            // otherwise, do additional chaining?
+            LinkBlockBehavior linkToReturn = null;
+            foreach (LinkBlockBehavior lb in incomingConnectionLinkBlocks)
+            {
+                if (lb.isHelicopterLink || lb.isStartingLink || lb.parentPlatform == null)
+                {
+                    linkToReturn = lb;
+                    break;
+                }
+            }
+            if (linkToReturn != null) { 
+                return linkToReturn;  
+            }
+            // by default, just return the most recent one.
+            return incomingConnectionLinkBlocks[incomingConnectionLinkBlocks.Count - 1]; ;
+        } else
+        {    // this shouldn't ever be called though.
+            return null;
+        }
     }
 
     public string getLogID()

@@ -22,7 +22,6 @@ public class LoggingManager : MonoBehaviour
         request.ContentType = "application/x-www-form-urlencoded";
 
 
-
         request.ContentLength = byteArray.Length;
         Stream dataStream = request.GetRequestStream();
         dataStream.Write(byteArray, 0, byteArray.Length);

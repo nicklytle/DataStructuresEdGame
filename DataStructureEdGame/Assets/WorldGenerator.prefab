@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1371151059048822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -50}
+  m_LocalPosition: {x: 5.3742075, y: 5.9120245, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -54,9 +54,12 @@ MonoBehaviour:
   gameController: {fileID: 0}
   levelFileIndex: 0
   levelDescriptionJsonFiles:
-  - {fileID: 4900000, guid: 5074a54206065df49a1229187f9e239d, type: 3}
-  - {fileID: 4900000, guid: 4a9cc9500f8d5c14599565e9baa835b6, type: 3}
-  - {fileID: 4900000, guid: 4a9cc9500f8d5c14599565e9baa835b6, type: 3}
+  - {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
+  - {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
+  - {fileID: 4900000, guid: ad070d62c52d7b4439d4a64ca7b2f8a3, type: 3}
+  - {fileID: 4900000, guid: 44472792a0e580f4780f70db13bd9576, type: 3}
+  - {fileID: 4900000, guid: 521f57d4dd703984f944d3f25852730b, type: 3}
+  - {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
   generateWorld: 1
   levelEntities: []
   levelLinkBlocks: []
@@ -70,6 +73,8 @@ MonoBehaviour:
     type: 2}
   objectiveBlockPreFab: {fileID: 4489806183366962, guid: 8b7d8df49e52cce4bbc2f286e9c81cc6,
     type: 2}
+  instructionViewBlockPreFab: {fileID: 4369293335303846, guid: 3ebfcfbe050852f479efad997fc2187f,
+    type: 2}
   linkBlockPreFab: {fileID: 4305965019959856, guid: 0a4afe0f813d7844a91776882ba27e36,
     type: 2}
   singleLinkedListPreFab: {fileID: 4652640774922600, guid: de76bf392785109488c1c9620518da94,
@@ -80,4 +85,4 @@ MonoBehaviour:
     type: 3}
   nullStartLinkBlockSprite: {fileID: 21300000, guid: aafdf6e86cda78f44b13f697dfabe43b,
     type: 3}
-  listOfPlatsToAdd: {fileID: 0}
+  background: {fileID: 0}

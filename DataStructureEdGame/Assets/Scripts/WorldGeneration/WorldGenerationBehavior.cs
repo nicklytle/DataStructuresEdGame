@@ -22,6 +22,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform playerPreFab;
     public Transform goalPortalPreFab;
     public Transform objectiveBlockPreFab;
+    public Transform instructionViewBlockPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
     public Transform helicopterRobotPreFab;
@@ -203,7 +204,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
-
             //string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             //Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
             levelLinkBlocks.Add(lb);
@@ -223,6 +223,15 @@ public class WorldGenerationBehavior : MonoBehaviour {
             //Debug.Log("fire blocks " + ob.logId + timestamp8);
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
+        }
+        
+        // create the instruction blocks (question marks)
+        for (int i = 0; i < level.instructionBlocks.Length; i++)
+        {
+            Vector2 loc = new Vector2((float)(level.instructionBlocks[i].x + (1 / 2f)), (float)(level.instructionBlocks[i].y - 1 ));
+            Transform newInstructBlock = Instantiate(instructionViewBlockPreFab, loc, Quaternion.identity);
+            newInstructBlock.GetComponent<InstructionViewBlockBehavior>().screenId = level.instructionBlocks[i].screenId;
+            levelEntities.Add(newInstructBlock);
         }
 
         // create the platforms.
@@ -300,6 +309,23 @@ public class WorldGenerationBehavior : MonoBehaviour {
         gameController.setLevelPlatformEntitiesList(levelPlatformEntities);
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
+        
+        gameController.codePanelBehavior.clearCodeText();
+        string[] varNames = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q", "r", "z", "y" };
+        int varIndex = 0;
+        // verify that no link blocks are being displayed
+        foreach (LinkBlockBehavior lb in levelLinkBlocks)
+        {
+            if (!lb.isHelicopterLink && !lb.isStartingLink) { 
+                lb.variableName = varNames[varIndex++];
+            }
+            lb.setDisplayMarker(false);
+        }
+        // also do this for the robot
+        if (gameController.helicopterRobotRef != null)
+        {
+            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
+        }
     }
 
     /**
@@ -330,13 +356,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // make sure there is a level file for this
         if (levelFileIndex < levelDescriptionJsonFiles.Length)
         {
-            gameController.setStatusText("");
+            //gameController.setStatusText("");
             CreateWorldFromLevelDescription();
             string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampCRTNextLevel);
         } else
         {
-            gameController.setStatusText("You have won!");
+            //gameController.setStatusText("You have won!");
             string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampEnd);
             /// .Log("GAME IS WON!");
