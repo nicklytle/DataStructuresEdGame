@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
     // a referernce to all objective entities in the level
     private List<ObjectiveBlockBehavior> objectiveBlocks;
     // a reference to all platform entities in the level.
-    private List<PlatformBehavior> platformEntities;h
+    private List<PlatformBehavior> platformEntities;
 
     // a queue of platforms that may be added in this level
     public List<PlatformBehavior> platformsToAdd;

@@ -34,7 +34,7 @@ public class LoggingManager : MonoBehaviour
         reader.Close();
         dataStream.Close();
         response.Close();
-
+        /*
         //to receive data get a response from the server
         WebRequest request2 = WebRequest.Create("http://localhost/test/sendingDataToPHP.php");
         WebResponse response2 = request2.GetResponse();
@@ -44,6 +44,7 @@ public class LoggingManager : MonoBehaviour
         Debug.Log(responseFromServer2);
         reader2.Close();
         response2.Close();
+        */
     }
 
 }
