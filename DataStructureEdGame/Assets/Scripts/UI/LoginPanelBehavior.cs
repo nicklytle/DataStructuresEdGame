@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class LoginPanelBehavior : MonoBehaviour {
 
+    // TEMPORARY debug login button
+    public Button debugSkipLoginButton;
+
     public LoggingManager loggingManager;
 
     // need references to the canvases for transitions
@@ -22,8 +25,19 @@ public class LoginPanelBehavior : MonoBehaviour {
 	void Start () {
         debounce = false;
         submitButton.onClick.AddListener(onSubmitButtonPressed);
+
+        // TEMPORARY
+        debugSkipLoginButton.onClick.AddListener(skipLoginShortcut);
     }
-	
+
+    void skipLoginShortcut()
+    {
+        Debug.Log("Skipping log in");
+        gameCanvas.gameObject.SetActive(true);
+        menuCanvas.gameObject.SetActive(false);
+        gameController.currentPlayerID = -1;
+        gameController.worldGenerator.ManualStartGenerator();
+    }
 
     void onSubmitButtonPressed()
     {
