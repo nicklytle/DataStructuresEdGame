@@ -14,7 +14,7 @@ public class LoggingManager : MonoBehaviour
     // Use this for initialization
     public void send_To_Server(int playerId, string actionMsg, string actionType, string timestamp)
     {
-        if (disableLogging) { 
+        if (disableLogging) {
             //to send data/submit a request to the server
             WebRequest request = WebRequest.Create("http://localhost/test/sendingDataToPHP.php"); //put in address of the PHP script
             request.Method = "POST";
@@ -23,7 +23,7 @@ public class LoggingManager : MonoBehaviour
 
             //not sure what to put here
             request.ContentType = "application/x-www-form-urlencoded";
-            
+
             request.ContentLength = byteArray.Length;
             Stream dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);
@@ -48,7 +48,36 @@ public class LoggingManager : MonoBehaviour
             response2.Close();
             */
         }
+    }
 
+
+    public string attempt_Login(string playerId, string pw) {
+        WebRequest request = WebRequest.Create("http://localhost/test/loginAuthentication.php"); 
+        request.Method = "POST";
+        string dataToPost = "playerID=" + playerId + "&pw=" + pw;
+        byte[] byteArray = Encoding.UTF8.GetBytes(dataToPost);
+        
+        request.ContentType = "application/x-www-form-urlencoded";
+        request.ContentLength = byteArray.Length;
+
+        // write the request data
+        Stream dataStream = request.GetRequestStream();
+        dataStream.Write(byteArray, 0, byteArray.Length);
+        dataStream.Close();
+
+        WebResponse response = request.GetResponse();
+        dataStream = response.GetResponseStream();
+        StreamReader reader = new StreamReader(dataStream);
+        string responseFromServer = reader.ReadToEnd();
+        Debug.Log("Response: " + responseFromServer);
+
+        // close all of the connections
+        reader.Close();
+        dataStream.Close();
+        response.Close();
+
+        // return if it was a success or not.
+        return responseFromServer;
     }
 
 }
