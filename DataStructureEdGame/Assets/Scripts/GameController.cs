@@ -14,7 +14,7 @@ public class GameController : MonoBehaviour {
     // a referernce to all objective entities in the level
     private List<ObjectiveBlockBehavior> objectiveBlocks;
     // a reference to all platform entities in the level.
-    private List<PlatformBehavior> platformEntities;
+    private List<PlatformBehavior> platformEntities;h
 
     // a queue of platforms that may be added in this level
     public List<PlatformBehavior> platformsToAdd;
@@ -68,12 +68,16 @@ public class GameController : MonoBehaviour {
     // public Text codeTextUI;
     public CodePanelBehavior codePanelBehavior;
 
+    public LoggingManager currentPlayerLogs;
+    //TEMPORARY CHANGE THIS!! after we make logging work
+    public int currentPlayerID = 0000;
+
     void Start()
     {
         debugFrameCount = 0;
 
-        selectedLink = null; 
-        //setStatusText("");
+
+        selectedLink = null;
         // ensure the starting link has the proper property
         if (startingLink != null)
         {
@@ -83,7 +87,7 @@ public class GameController : MonoBehaviour {
         objectiveBlocks = new List<ObjectiveBlockBehavior>();
         // initial world generation
         worldGenerator.ManualStartGenerator();
-        
+
     }
 
     void Update()
@@ -102,10 +106,8 @@ public class GameController : MonoBehaviour {
             // you are not clicking or holding down the mouse and there is no select link.  OR you have a select link and you are holding down the mouse button
             if ((!Input.GetMouseButton(0) && selectedLink == null) || (selectedLink != null && Input.GetMouseButton(0))) 
             {
-                //Debug.Log("cond a");
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
-                    //Debug.Log("cond b");
                     // show a faded preview of the platform
                     PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
                     platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
@@ -169,9 +171,14 @@ public class GameController : MonoBehaviour {
                         // append code and log
                         codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = new Node();");
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                        Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
+                        //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
+                        string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
+                        currentPlayerLogs.send_To_Server(currentPlayerID, actMsg, "connection", timestamp1);
+
+
                         updateObjectiveHUDAndBlocks();
                         updatePlatformEntities();
+
                     }
                 }
                 //to remove that gray 'prediction' arrow now that you've added the platform

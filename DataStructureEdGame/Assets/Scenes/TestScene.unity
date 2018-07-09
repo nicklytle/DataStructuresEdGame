@@ -578,6 +578,202 @@ MonoBehaviour:
   m_GameObject: {fileID: 202089778}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a6c68d8d944b4f40afd58dbdcf91c78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &319232012
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 319232010}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.390879, y: -10.404089, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &332821811
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 5.3742075
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 5.9120245
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4405655326494156, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: gameController
+      value: 
+      objectReference: {fileID: 1909570818}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: background
+      value: 
+      objectReference: {fileID: 663304323}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: generateWorld
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[2]
+      value: 
+      objectReference: {fileID: 4900000, guid: ad070d62c52d7b4439d4a64ca7b2f8a3, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelFileIndex
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[3]
+      value: 
+      objectReference: {fileID: 4900000, guid: 44472792a0e580f4780f70db13bd9576, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[4]
+      value: 
+      objectReference: {fileID: 4900000, guid: 521f57d4dd703984f944d3f25852730b, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[5]
+      value: 
+      objectReference: {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[6]
+      value: 
+      objectReference: {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[7]
+      value: 
+      objectReference: {fileID: 4900000, guid: 4f8f802b5b6eea6439dde1cda1b72078, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[8]
+      value: 
+      objectReference: {fileID: 4900000, guid: fd4e804a6fcab664480fa88b35efaa1d, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[9]
+      value: 
+      objectReference: {fileID: 4900000, guid: 5ee8fa496778f4349910a05382fca4dd, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[10]
+      value: 
+      objectReference: {fileID: 4900000, guid: d766a190840e61e4d91e69544220c89c, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[11]
+      value: 
+      objectReference: {fileID: 4900000, guid: d84059c022fdac24e90e8e41cecff23b, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[12]
+      value: 
+      objectReference: {fileID: 4900000, guid: 30f8eb3f618387742bf5494a3a5c7251, type: 3}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: levelDescriptionJsonFiles.Array.data[13]
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &358409623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 358409624}
+  - component: {fileID: 358409626}
+  - component: {fileID: 358409625}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &358409624
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 358409623}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1881759259}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &358409625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 358409623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -6603,30 +6799,37 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
---- !u!222 &2091717261
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2091717258}
---- !u!1 &2106214083
+  m_EditorClassIdentifier:
+  debugLinkControlVersion: 1
+  debugFrameCount: 0
+  worldGenerator: {fileID: 111316952}
+  platformsToAdd: []
+  addingPlatforms: 0
+  enableLinkChaining: 0
+  linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+  hoverArrowLine: {fileID: 0}
+  hoverArrowHead: {fileID: 0}
+  cursorPointingTexture: {fileID: 2800000, guid: cb6a2c50bbac6d24c84b8fccff928faf,
+    type: 3}
+  cursorDraggingTexture: {fileID: 2800000, guid: 5d37af810ade4aa4bb41791a2f4c4add,
+    type: 3}
+  cursorMode: 0
+  doubleClickDelay: 120
+  winConditon: 0
+  playerRef: {fileID: 0}
+  helicopterRobotRef: {fileID: 0}
+  selectedLink: {fileID: 0}
+  startingLink: {fileID: 0}
+  hoverPlatformRef: {fileID: 0}
+  hoverLinkRef: {fileID: 0}
+  previousNotNullHoverLinkRef: {fileID: 0}
+  mouseOverLinkRefs: []
+  statusTextUI: {fileID: 1950673981}
+  objectiveHudPanelUI: {fileID: 1060193297}
+  objectiveTextUI: {fileID: 455446035}
+  currentPlayerLogs: {fileID: 319232011}
+  currentPlayerID: 0
+--- !u!1 &1950673979
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
