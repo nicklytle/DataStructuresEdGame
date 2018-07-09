@@ -28,6 +28,9 @@ public class LoginPanelBehavior : MonoBehaviour {
 
         // TEMPORARY
         debugSkipLoginButton.onClick.AddListener(skipLoginShortcut);
+
+        playerIdInputField.ActivateInputField();
+        passwordInputField.ActivateInputField();
     }
 
     void skipLoginShortcut()
@@ -36,7 +39,7 @@ public class LoginPanelBehavior : MonoBehaviour {
         gameCanvas.gameObject.SetActive(true);
         menuCanvas.gameObject.SetActive(false);
         gameController.currentPlayerID = -1;
-        gameController.worldGenerator.ManualStartGenerator();
+        gameController.worldGenerator.ManualStartGenerator(); 
     }
 
     void onSubmitButtonPressed()
@@ -55,7 +58,7 @@ public class LoginPanelBehavior : MonoBehaviour {
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
                     gameController.currentPlayerID = System.Convert.ToInt32(playerId);
-                    gameController.worldGenerator.ManualStartGenerator();
+                    gameController.worldGenerator.ManualStartGenerator(); 
                 }
                 else if (loginAttemptResponse.Equals("fail"))
                 {

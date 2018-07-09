@@ -8,11 +8,11 @@ public class CodePanelBehavior : MonoBehaviour {
     public Text codeTextUI;
     public Scrollbar scrollBar;
     private int lines;
-    private float initialYSize;
+    private float ySize;
 
     void Start()
     {
-        initialYSize = codeTextUI.rectTransform.sizeDelta.y;
+        ySize = 90; // codeTextUI.rectTransform.sizeDelta.y;
     }
 
     public void appendCodeText(string line)
@@ -30,18 +30,21 @@ public class CodePanelBehavior : MonoBehaviour {
         if (lines > 5)
         {
             // increase the size of the text box
-            codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, 
-                codeTextUI.rectTransform.sizeDelta.y + 18); // expand by 18 for each line (hardcoded for the font size.
+            ySize += 18; // expand by 18 for each line (hardcoded for the font size.
+            Debug.Log("ySize = " + ySize); 
             Debug.Log(codeTextUI.rectTransform.position);
             scrollBar.value = 0; // move to the bottom
             scrollBar.value = 0; // to verify that the position updated properly.
         }
+        codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, ySize);
     }
 
     public void clearCodeText()
     {
         codeTextUI.text = "";
         lines = 0;
-        codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, initialYSize); // reset the size (hard coded)
+        codeTextUI.rectTransform.gameObject.SetActive(true);
+        codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, ySize); // reset the size
+        Debug.Log("Cleared code text");
     }
 }

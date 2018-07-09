@@ -310,7 +310,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
         
-        gameController.codePanelBehavior.clearCodeText();
         string[] varNames = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q", "r", "z", "y" };
         int varIndex = 0;
         // verify that no link blocks are being displayed
@@ -326,7 +325,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
         }
+
+        gameController.codePanelBehavior.clearCodeText();
     }
+
 
     /**
      * Reset the level, rebuilding the level that is in the levelDescriptionFile value.
