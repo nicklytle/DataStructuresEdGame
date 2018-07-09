@@ -922,6 +922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6c68d8d944b4f40afd58dbdcf91c78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameRef: {fileID: 1909570818}
   disableLogging: 1
 --- !u!4 &319232012
 Transform:
@@ -993,7 +994,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
@@ -6777,8 +6778,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1767194790}
   m_HandleRect: {fileID: 1767194789}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

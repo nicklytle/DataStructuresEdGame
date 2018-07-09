@@ -9,16 +9,20 @@ using UnityEngine;
 public class LoggingManager : MonoBehaviour
 {
 
+    public GameController gameRef;
+
     public bool disableLogging;
 
     // Use this for initialization
-    public void send_To_Server(int playerId, string actionMsg, string actionType, string timestamp)
+    public void send_To_Server(string actionMsg, string timestamp)
     {
         if (disableLogging) { 
             //to send data/submit a request to the server
             WebRequest request = WebRequest.Create("http://localhost/test/sendingDataToPHP.php"); //put in address of the PHP script
             request.Method = "POST";
-            string dataToPost = "playerID=" + playerId + "&actionMsg=" + actionMsg + "&actionType=" + actionType + "&timestamp=" + timestamp;
+            //string dataToPost = "logID=" + logID + "&playerID=" + playerId + "&levelFile=" + levelFile + "&actionMsg=" + actionMsg + "&timestamp=" + timestamp;
+            string dataToPost = "playerID=" + gameRef.currentPlayerID + "&levelFile=" + gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name + "&actionMsg=" + actionMsg + "&timestamp=" + timestamp;
+            Debug.Log("data to post: " + dataToPost);
             byte[] byteArray = Encoding.UTF8.GetBytes(dataToPost);
 
             //not sure what to put here
@@ -32,10 +36,13 @@ public class LoggingManager : MonoBehaviour
             dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string responseFromServer = reader.ReadToEnd();
+
             Debug.Log(responseFromServer);
+
             reader.Close();
             dataStream.Close();
             response.Close();
+
             /*
             //to receive data get a response from the server
             WebRequest request2 = WebRequest.Create("http://localhost/test/sendingDataToPHP.php");

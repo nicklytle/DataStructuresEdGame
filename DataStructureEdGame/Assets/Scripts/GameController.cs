@@ -173,7 +173,7 @@ public class GameController : MonoBehaviour {
                         String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
-                        currentPlayerLogs.send_To_Server(currentPlayerID, actMsg, "connection", timestamp1);
+                        currentPlayerLogs.send_To_Server(actMsg, timestamp1);
 
 
                         updateObjectiveHUDAndBlocks();
