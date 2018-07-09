@@ -18,7 +18,7 @@ public class LoggingManager : MonoBehaviour
             //to send data/submit a request to the server
             WebRequest request = WebRequest.Create("http://localhost/test/sendingDataToPHP.php"); //put in address of the PHP script
             request.Method = "POST";
-            string dataToPost = "playerID=" + playerId + "&actionMsg=" + actionMsg + "&actionType=" + actionType + "&timestamp" + timestamp;
+            string dataToPost = "playerID=" + playerId + "&actionMsg=" + actionMsg + "&actionType=" + actionType + "&timestamp=" + timestamp;
             byte[] byteArray = Encoding.UTF8.GetBytes(dataToPost);
 
             //not sure what to put here
