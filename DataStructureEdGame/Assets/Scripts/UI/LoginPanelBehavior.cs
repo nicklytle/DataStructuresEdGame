@@ -19,11 +19,11 @@ public class LoginPanelBehavior : MonoBehaviour {
     public Button submitButton;
     public InputField playerIdInputField;
     public InputField passwordInputField;
-    private bool debounce;
+    private bool submitPressed;
 
 	// Use this for initialization
 	void Start () {
-        debounce = false;
+        submitPressed = false;
         submitButton.onClick.AddListener(onSubmitButtonPressed);
 
         // TEMPORARY
@@ -42,38 +42,53 @@ public class LoginPanelBehavior : MonoBehaviour {
         gameController.worldGenerator.ManualStartGenerator(); 
     }
 
-    void onSubmitButtonPressed()
+    void Update()
     {
-        if (!debounce) {
-            debounce = true;
-            Debug.Log("Submit");
-            string playerId = playerIdInputField.text;
-            string pw = passwordInputField.text;
-            if (playerId.Length > 0 && pw.Length > 0) { 
-                string loginAttemptResponse = loggingManager.attempt_Login(playerId, pw);
-                statusText.text = "";
-                if (loginAttemptResponse.Equals("success"))
+        // if there was a response sent out, wait for the response to come back.
+        if (submitPressed)
+        {
+            if (loggingManager.loginAttemptResponse.Length > 0)
+            {
+                // process the response.
+                Debug.Log(loggingManager.loginAttemptResponse);
+                if (loggingManager.loginAttemptResponse.StartsWith("success"))
                 {
-                    Debug.Log("Login successful!");
+                    string playerIdExtracted = loggingManager.loginAttemptResponse.Substring(loggingManager.loginAttemptResponse.IndexOf(' ') + 1);
+
+                    Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
-                    gameController.currentPlayerID = System.Convert.ToInt32(playerId);
-                    gameController.worldGenerator.ManualStartGenerator(); 
+                    gameController.currentPlayerID = System.Convert.ToInt32(playerIdExtracted);
+                    gameController.worldGenerator.ManualStartGenerator();
                 }
-                else if (loginAttemptResponse.Equals("fail"))
+                else if (loggingManager.loginAttemptResponse.Equals("fail"))
                 {
-                    statusText.text = "Login failed. Please try again."; 
+                    statusText.text = "Login failed. Please try again.";
                 }
                 else
                 {
                     statusText.text = "Database error. Please notify an instructor.";
                 }
+
+                submitPressed = false;
+            }
+        }
+    }
+
+    void onSubmitButtonPressed()
+    {
+        if (!submitPressed) {
+            submitPressed = true;
+            Debug.Log("Submit");
+            string playerId = playerIdInputField.text;
+            string pw = passwordInputField.text;
+            if (playerId.Length > 0 && pw.Length > 0) { 
+                loggingManager.beginAttemptLogin(playerId, pw); 
             }
             else
             {
                 statusText.text = "Please provide a Player ID and Password"; 
             }
-            debounce = false;
         }
     }
 }

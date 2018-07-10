@@ -4,7 +4,7 @@
 
 $host = 'localhost';
 $user = 'root';
-$pass = '';
+$pass = 'rootroot';
 $db = 'EdGameDB';
 $con = mysqli_connect($host, $user, $pass, $db);
 if(mysqli_connect_errno()){
@@ -12,7 +12,12 @@ if(mysqli_connect_errno()){
 	exit(1);
 }
 
-header('Content-Type: text/plain');
+// from: https://docs.unity3d.com/Manual/webgl-networking.html
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Origin: *");
+
 
 $playerId = $_POST['playerID'];
 $pw = $_POST['pw'];
@@ -33,7 +38,7 @@ $res_arr = $res->fetch_assoc();
 
 # verify that the password matches the playerId
 if (isset($res_arr['password']) && $res_arr['password'] == $pw) {
-	echo 'success';
+	echo 'success ' . $playerId;
 } else {
 	echo 'fail';
 }
