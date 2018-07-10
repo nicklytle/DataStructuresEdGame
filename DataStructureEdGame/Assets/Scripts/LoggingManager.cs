@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class LoggingManager : MonoBehaviour
 {
@@ -12,79 +13,59 @@ public class LoggingManager : MonoBehaviour
     public GameController gameRef;
 
     public bool disableLogging;
+    public string loginAttemptResponse;  // store the response from the login attempt.
 
-    // Use this for initialization
-    public void send_To_Server(string actionMsg, string timestamp)
+
+    private IEnumerator sendLogToServer(string actionMsg, string timestamp)
     {
-        if (disableLogging) {
-            //to send data/submit a request to the server
-            WebRequest request = WebRequest.Create("http://localhost/test/sendingDataToPHP.php"); //put in address of the PHP script
-            request.Method = "POST";
-            //string dataToPost = "logID=" + logID + "&playerID=" + playerId + "&levelFile=" + levelFile + "&actionMsg=" + actionMsg + "&timestamp=" + timestamp;
-            string dataToPost = "playerID=" + gameRef.currentPlayerID + "&levelFile=" + gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name + "&actionMsg=" + actionMsg + "&timestamp=" + timestamp;
-            Debug.Log("data to post: " + dataToPost);
-            byte[] byteArray = Encoding.UTF8.GetBytes(dataToPost);
+        string logUrl = "http://localhost/test/sendingDataToPHP.php";
+        WWWForm logForm = new WWWForm();
+        logForm.AddField("playerID", gameRef.currentPlayerID);
+        logForm.AddField("levelFile", gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name);
+        logForm.AddField("actionMsg", actionMsg);
+        logForm.AddField("timestamp", timestamp);
 
-            //not sure what to put here
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            request.ContentLength = byteArray.Length;
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            dataStream.Close();
-            WebResponse response = request.GetResponse();
-            dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
-
-            Debug.Log(responseFromServer);
-
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-
-            /*
-            //to receive data get a response from the server
-            WebRequest request2 = WebRequest.Create("http://localhost/test/sendingDataToPHP.php");
-            WebResponse response2 = request2.GetResponse();
-            Stream dataStream2 = response2.GetResponseStream();
-            StreamReader reader2 = new StreamReader(dataStream2);
-            string responseFromServer2 = reader2.ReadToEnd();
-            Debug.Log(responseFromServer2);
-            reader2.Close();
-            response2.Close();
-            */
+        using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
+        {
+            Debug.Log("Sending log data");
+            yield return www.Send();
+            if (www.isError)
+            {
+                Debug.Log("Error with sending the log message");
+            } 
         }
     }
 
 
-    public string attempt_Login(string playerId, string pw) {
-        WebRequest request = WebRequest.Create("http://localhost/test/loginAuthentication.php"); 
-        request.Method = "POST";
-        string dataToPost = "playerID=" + playerId + "&pw=" + pw;
-        byte[] byteArray = Encoding.UTF8.GetBytes(dataToPost);
-        
-        request.ContentType = "application/x-www-form-urlencoded";
-        request.ContentLength = byteArray.Length;
+    public void send_To_Server(string actionMsg, string timestamp)
+    {
+        if (disableLogging) {
+            StartCoroutine(sendLogToServer(actionMsg, timestamp));
+        }
+    }
 
-        // write the request data
-        Stream dataStream = request.GetRequestStream();
-        dataStream.Write(byteArray, 0, byteArray.Length);
-        dataStream.Close();
 
-        WebResponse response = request.GetResponse();
-        dataStream = response.GetResponseStream();
-        StreamReader reader = new StreamReader(dataStream);
-        string responseFromServer = reader.ReadToEnd();
-        Debug.Log("Response: " + responseFromServer);
+    private IEnumerator attemptLogin(string playerId, string pw)
+    {
+        string loginUrl = "http://localhost/test/loginAuthentication.php";
+        WWWForm loginForm = new WWWForm();
+        loginForm.AddField("playerID", playerId);
+        loginForm.AddField("pw", pw);
 
-        // close all of the connections
-        reader.Close();
-        dataStream.Close();
-        response.Close();
+        using (UnityWebRequest www = UnityWebRequest.Post(loginUrl, loginForm))
+        {
+            yield return www.Send();
+            if (!www.isError)
+            {
+                loginAttemptResponse = www.downloadHandler.text;
+            }
 
-        // return if it was a success or not.
-        return responseFromServer;
+        }
+    }
+
+    public void beginAttemptLogin(string playerId, string pw) {
+        loginAttemptResponse = ""; 
+        StartCoroutine(attemptLogin(playerId, pw));
     }
 
 }
