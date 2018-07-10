@@ -720,6 +720,7 @@ MonoBehaviour:
   addPlatformPanel: {fileID: 1090070145}
   oneToAdd: {fileID: 0}
   selected: 0
+  currentPlayerLogs: {fileID: 319232011}
 --- !u!1 &202089778
 GameObject:
   m_ObjectHideFlags: 0

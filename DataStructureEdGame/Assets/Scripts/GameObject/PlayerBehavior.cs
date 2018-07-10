@@ -50,7 +50,8 @@ public class PlayerBehavior : MonoBehaviour {
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
             string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player started moving from: (" + Math.Round(oldX, 1) + ", " + Math.Round(oldY, 1) + ") at time: " + timestampMove);
+            string actMsg = "Player started moving from: (" + Math.Round(oldX, 1) + ", " + Math.Round(oldY, 1) + ")";
+            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampMove);
             startOfMove = true;
 
         }
@@ -58,7 +59,8 @@ public class PlayerBehavior : MonoBehaviour {
         {
             startOfMove = false;
             string timestampEndMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player landed at : (" + Math.Round(rb2.position.x, 1) + ", " + Math.Round(rb2.position.y, 1) + ") at time: " + timestampEndMove);
+            string actMsg2 = "Player landed at : (" + Math.Round(rb2.position.x, 1) + ", " + Math.Round(rb2.position.y, 1) + ")";
+            gameController.currentPlayerLogs.send_To_Server(actMsg2, timestampEndMove);
         }
 
 
@@ -98,7 +100,8 @@ public class PlayerBehavior : MonoBehaviour {
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             string timestampJump = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Player: " + logId + " jumped at time: " + timestampJump);
+            string actMsg3 = "Player: " + logId + " jumped.";
+            gameController.currentPlayerLogs.send_To_Server(actMsg3, timestampJump);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
         }
@@ -113,7 +116,8 @@ public class PlayerBehavior : MonoBehaviour {
             {
                 currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
                 string timeStampNewGrnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log("Player landed onto ground: " + currentlyStandingOn + " at time: " + timeStampNewGrnd);
+                string actMsg = "Player landed onto ground: " + currentlyStandingOn;
+                gameController.currentPlayerLogs.send_To_Server(actMsg, timeStampNewGrnd);
             }
             if (initAssgmt)
             {
@@ -128,7 +132,8 @@ public class PlayerBehavior : MonoBehaviour {
             {
                 currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
                 string timeStampNewPlatf = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log("Player landed onto platform: " + currentlyStandingOn + " at time: " + timeStampNewPlatf);
+                string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
+                gameController.currentPlayerLogs.send_To_Server(actMsg1, timeStampNewPlatf);
             }
             if (initAssgmt)
             {
@@ -152,7 +157,8 @@ public class PlayerBehavior : MonoBehaviour {
         if (c2d.tag == "BottomOfWorld")
         {
             String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player fell off and died, level was reset at time: " + timestamp1);
+            string actMsg = "Player fell off and died, level was reset";
+            gameController.currentPlayerLogs.send_To_Server(actMsg, timestamp1);
             gameController.worldGenerator.resetLevel();
 
         }
@@ -160,7 +166,9 @@ public class PlayerBehavior : MonoBehaviour {
         {
             String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             Debug.Log(c2d.GetComponent<GoalBehavior>().logId);
-            Debug.Log("Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time: " + timestamp1);
+            string actMsg = "Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time";
+            gameController.currentPlayerLogs.send_To_Server(actMsg, timestamp1);
+
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
         }
