@@ -1109,7 +1109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameRef: {fileID: 1909570818}
-  disableLogging: 1
+  enableLogging: 1
   loginAttemptResponse: 
 --- !u!4 &319232012
 Transform:
@@ -1181,7 +1181,7 @@ Prefab:
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}

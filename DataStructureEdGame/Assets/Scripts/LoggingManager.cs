@@ -12,7 +12,7 @@ public class LoggingManager : MonoBehaviour
 
     public GameController gameRef;
 
-    public bool disableLogging;
+    public bool enableLogging;
     public string loginAttemptResponse;  // store the response from the login attempt.
 
 
@@ -39,7 +39,7 @@ public class LoggingManager : MonoBehaviour
 
     public void send_To_Server(string actionMsg, string timestamp)
     {
-        if (disableLogging) {
+        if (enableLogging) {
             StartCoroutine(sendLogToServer(actionMsg, timestamp));
         }
     }

@@ -87,7 +87,8 @@ public class LoginPanelBehavior : MonoBehaviour {
             }
             else
             {
-                statusText.text = "Please provide a Player ID and Password"; 
+                statusText.text = "Please provide a Player ID and Password";
+                submitPressed = false;
             }
         }
     }
