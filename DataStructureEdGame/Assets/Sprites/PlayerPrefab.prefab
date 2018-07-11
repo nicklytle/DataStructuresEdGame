@@ -99,12 +99,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f04b4da3c996b54daf2a2054977fa12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logId: 
   gameController: {fileID: 0}
-  speed: 340
+  speed: 320
   jumpSpeed: 8
   onGround: 0
   frontView: {fileID: 21300000, guid: 0a9cb81ed5faa8947a25153ab0ff0b58, type: 3}
   leftSideView: {fileID: 21300000, guid: 5a904ac4fa26df5408a7f96871258c92, type: 3}
+  shoveVector: {x: 0, y: 0}
+  startOfMove: 0
 --- !u!212 &212106642893559230
 SpriteRenderer:
   m_ObjectHideFlags: 1

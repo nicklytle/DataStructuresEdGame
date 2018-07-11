@@ -31,6 +31,8 @@ public class GameController : MonoBehaviour {
     // References to the hover arrow parts showing a preview of the arrow.
     public Transform hoverArrowLine;
     public Transform hoverArrowHead;
+    // Reference to the Red X block
+    public GameObject redXSprite;
 
     public Texture2D cursorPointingTexture;
     public Texture2D cursorDraggingTexture;
@@ -517,7 +519,8 @@ public class GameController : MonoBehaviour {
 
     // remove the current hover link and set the "bridge" collider to default again. 
     public void removeHoverLink()
-    { 
+    {
+        redXSprite.SetActive(false);
         removeHoverArrow();
         if (hoverLinkRef != null) {  // only remove it if we actually need to remove it.
             if (hoverLinkRef != selectedLink)
@@ -565,6 +568,21 @@ public class GameController : MonoBehaviour {
             // make that hover link block be displayed as selected. 
             hoverLinkRef.setDisplayMarker(true);
 
+            // Make a red X appear over the arrow of the selected link connection if the selected link connection will be removed 
+            // if the connection establishing action is complete.
+            if (selectedLink != null && selectedLink.connectingPlatform != null && (hoverLinkRef.connectingPlatform == null || selectedLink.connectingPlatform != hoverLinkRef.connectingPlatform))
+            {
+                /*Bounds linkBounds = selectedLink.GetComponent<SpriteRenderer>().bounds;
+                Bounds platBounds = selectedLink.connectingPlatform.GetComponent<SpriteRenderer>().bounds;
+
+                // find the closest points on both bounding boxes to the center point to make the arrow.
+                Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
+                    (linkBounds.center.y + platBounds.center.y) / 2, 0); */
+
+                redXSprite.SetActive(true);
+                redXSprite.transform.position = selectedLink.GetComponent<SpriteRenderer>().bounds.center + new Vector3(0, 0, -18);
+            }
+
             // conditions for "bridging": there is a select link and a hover link, and they are not equal
             if (selectedLink != null && hoverLinkRef != null && selectedLink != hoverLinkRef && hoverLinkRef.connectingPlatform != null)
             {
@@ -575,7 +593,6 @@ public class GameController : MonoBehaviour {
                 Transform[] hoverArrowParts = createArrowInstanceBetweenLinkPlatform(selectedLink, hoverLinkRef.connectingPlatform, c);
                 hoverArrowLine = hoverArrowParts[0];
                 hoverArrowHead = hoverArrowParts[1];
-                //setStatusText("Release to set the first link equal to this one.");
 
                 // This is when the mouse is hovering over a link for establishing a link.
                 // update and create a "bridge" from this link to the next for next->next->.. option.
@@ -678,15 +695,15 @@ public class GameController : MonoBehaviour {
             if (winConditon == WinCondition.SortListAscending)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in ascending order\nThe List is sorted!";
+                    objectiveTextUI.text = "Sort the list in increasing order\nThe List is sorted!";
                 else
-                    objectiveTextUI.text = "Sort the list in ascending order\nThe List is not sorted.";
+                    objectiveTextUI.text = "Sort the list in increasing order\nThe List is not sorted.";
             } else if (winConditon == WinCondition.SortListDescending)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in descending order\nThe List is sorted!";
+                    objectiveTextUI.text = "Sort the list in decreasing order\nThe List is sorted!";
                 else
-                    objectiveTextUI.text = "Sort the list in descending order\nThe List is not sorted.";
+                    objectiveTextUI.text = "Sort the list in decreasing order\nThe List is not sorted.";
             }
             else if (winConditon == WinCondition.SortListDuplicatesNotAllBlocks)
             {

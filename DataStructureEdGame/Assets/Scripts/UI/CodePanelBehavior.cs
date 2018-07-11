@@ -12,7 +12,7 @@ public class CodePanelBehavior : MonoBehaviour {
 
     void Start()
     {
-        ySize = 90; // codeTextUI.rectTransform.sizeDelta.y;
+        ySize = 72; // codeTextUI.rectTransform.sizeDelta.y;
     }
 
     public void appendCodeText(string line)
