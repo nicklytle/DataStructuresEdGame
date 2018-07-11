@@ -66,12 +66,17 @@ public class GameController : MonoBehaviour {
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
     public Text levelOnTextUI;
+
+    public Canvas winGameCanvas;
+    public Canvas gameCanvas;
+
     // public Text codeTextUI;
     public CodePanelBehavior codePanelBehavior;
 
     public LoggingManager currentPlayerLogs;
     //TEMPORARY CHANGE THIS!! after we make logging work
     public int currentPlayerID = 0000;
+
 
     void Start()
     {

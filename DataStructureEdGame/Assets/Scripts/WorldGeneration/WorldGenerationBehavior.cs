@@ -364,15 +364,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
             string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "level " + (levelFileIndex + 1) + " was created";
             gameController.currentPlayerLogs.send_To_Server(actMsg, timestampCRTNextLevel);
-
-
-
         } else
-        {
-
+        { 
             string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "Game is won!";
             gameController.currentPlayerLogs.send_To_Server(actMsg, timestampEnd);
+            gameController.gameCanvas.gameObject.SetActive(false);
+            gameController.winGameCanvas.gameObject.SetActive(true);
         }
     }
 

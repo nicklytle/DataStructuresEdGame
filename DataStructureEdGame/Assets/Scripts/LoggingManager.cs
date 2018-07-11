@@ -21,7 +21,12 @@ public class LoggingManager : MonoBehaviour
         string logUrl = "http://localhost/test/sendingDataToPHP.php";
         WWWForm logForm = new WWWForm();
         logForm.AddField("playerID", gameRef.currentPlayerID);
-        logForm.AddField("levelFile", gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name);
+        string levelFileName = "NO LEVEL";
+        if (gameRef.worldGenerator.levelFileIndex < gameRef.worldGenerator.levelDescriptionJsonFiles.Length)
+        {
+            levelFileName = gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name;
+        }
+        logForm.AddField("levelFile", levelFileName);
         logForm.AddField("actionMsg", actionMsg);
         logForm.AddField("timestamp", timestamp);
 
