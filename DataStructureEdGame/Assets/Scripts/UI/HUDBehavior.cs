@@ -18,6 +18,9 @@ public class HUDBehavior : MonoBehaviour {
     public bool selected;
     private int countPlatformsToAdd;
 
+
+    public LoggingManager currentPlayerLogs;
+
     void Start()
     {
         selected = false;
@@ -43,7 +46,9 @@ public class HUDBehavior : MonoBehaviour {
         if (debounce > 1.0f) {
 
             string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Level was RESET: " + timestampRST);
+            string actMsg = "Level was reset";
+            currentPlayerLogs.send_To_Server(actMsg, timestampRST);
+
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
         }

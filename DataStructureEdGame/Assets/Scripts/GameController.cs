@@ -174,7 +174,7 @@ public class GameController : MonoBehaviour {
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
                         currentPlayerLogs.send_To_Server(actMsg, timestamp1);
-
+                       
 
                         updateObjectiveHUDAndBlocks();
                         updatePlatformEntities();
@@ -190,7 +190,9 @@ public class GameController : MonoBehaviour {
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
                 String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log("Clicked without clicking on a hover link and a select link at time: " + timestamp);
+                string actMsg = "Clicked without clicking on a hover link and a select link";
+                currentPlayerLogs.send_To_Server(actMsg, timestamp);
+
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
                     platformsToAdd[0].gameObject.SetActive(false); // cancel placing the platform
@@ -293,7 +295,9 @@ public class GameController : MonoBehaviour {
                         hoverLinkRef.removeLinkConnection();
                         //setStatusText("Removed link");
                         String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                        Debug.Log("the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted at time: " + timestamp3);
+                        string actMsg = "the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted";
+                        currentPlayerLogs.send_To_Server(actMsg, timestamp3);
+
                     }
                 }
                 setSelectedLink(null);
@@ -304,7 +308,9 @@ public class GameController : MonoBehaviour {
             else if (selectedLink != null && hoverLinkRef == null)
             {
                 String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log("the link block " + selectedLink.logId + " was deselected at time: " + timestamp4);
+                string actMsg = "the link block " + selectedLink.logId + " was deselected";
+                currentPlayerLogs.send_To_Server(actMsg, timestamp4);
+
                 deselectSelectedLink();
                 setCursorToDefault(); 
             }
@@ -332,8 +338,10 @@ public class GameController : MonoBehaviour {
                     removeHoverLink();
                     setCursorToDefault();
                     //setStatusText("Established a connection.");
-                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"); 
-                    Debug.Log("Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null") + " at time: " + timestamp5);
+                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                    string actMsg = "Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null");
+                    currentPlayerLogs.send_To_Server(actMsg, timestamp5);
+
                 }
                 previousNotNullHoverLinkRef = null; // no longer needed to track
                 deselectSelectedLink();
