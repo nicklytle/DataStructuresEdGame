@@ -182,6 +182,8 @@ public class GameController : MonoBehaviour {
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
                         currentPlayerLogs.send_To_Server(actMsg, timestamp1);
+
+                        GameObject.Find("AddPlatformButton").GetComponentInChildren<Text>().text = "Add Platform (" + platformsToAdd.Count + ")";
                        
 
                         updateObjectiveHUDAndBlocks();

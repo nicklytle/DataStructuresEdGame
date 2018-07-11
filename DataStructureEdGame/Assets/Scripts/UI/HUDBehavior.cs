@@ -29,6 +29,7 @@ public class HUDBehavior : MonoBehaviour {
 
         addPlatformButton.onClick.AddListener(OnControlAddPlatform);
         countPlatformsToAdd = -1;
+
     }
 
     void Update()
@@ -38,6 +39,11 @@ public class HUDBehavior : MonoBehaviour {
         {
             countPlatformsToAdd = gameController.platformsToAdd.Count; 
             addPlatformPanel.gameObject.SetActive(countPlatformsToAdd != 0); // only activate if there are platforms to add
+        }
+        if (debounce > 1.0f && Input.GetKeyDown(KeyCode.P))
+        {
+            OnResetButtonClick();
+            debounce = 0;
         }
     }
 
