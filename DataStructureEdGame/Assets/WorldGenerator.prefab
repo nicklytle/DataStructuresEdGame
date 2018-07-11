@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  levelFileIndex: 0
+  levelFileIndex: 7
   levelDescriptionJsonFiles:
   - {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
   - {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
@@ -60,6 +60,8 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 44472792a0e580f4780f70db13bd9576, type: 3}
   - {fileID: 4900000, guid: 521f57d4dd703984f944d3f25852730b, type: 3}
   - {fileID: 4900000, guid: 78abb9ebc0ddb3e44bfd299b2aaae732, type: 3}
+  - {fileID: 4900000, guid: 17f2576c2d85b7f449c1a078b527d78b, type: 3}
+  - {fileID: 4900000, guid: 3bf39b502b7047745ad4f86ff0e200f6, type: 3}
   generateWorld: 1
   levelEntities: []
   levelLinkBlocks: []

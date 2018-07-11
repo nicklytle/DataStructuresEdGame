@@ -327,6 +327,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
 
         gameController.codePanelBehavior.clearCodeText();
+        gameController.levelOnTextUI.text = "Level " + (levelFileIndex + 1);
     }
 
 

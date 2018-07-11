@@ -65,6 +65,7 @@ public class GameController : MonoBehaviour {
     public Text statusTextUI;
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
+    public Text levelOnTextUI;
     // public Text codeTextUI;
     public CodePanelBehavior codePanelBehavior;
 
@@ -663,13 +664,33 @@ public class GameController : MonoBehaviour {
             if (isWinSatisfied)
             {
                 objectiveHudPanelUI.color = new Color(0, 1, 0, (160.0f / 255.0f));
-                objectiveTextUI.text = "Sort the list in ascending order\nThe List is sorted!";
             }
             else
             {
                 objectiveHudPanelUI.color = new Color(1f, 0.02f, 0.02f, (160.0f / 255.0f));
-                objectiveTextUI.text = "Sort the list in ascending order\nThe List is not sorted!";
             }
+
+            if (winConditon == WinCondition.SortListAscending)
+            {
+                if (isWinSatisfied)
+                    objectiveTextUI.text = "Sort the list in ascending order\nThe List is sorted!";
+                else
+                    objectiveTextUI.text = "Sort the list in ascending order\nThe List is not sorted.";
+            } else if (winConditon == WinCondition.SortListDescending)
+            {
+                if (isWinSatisfied)
+                    objectiveTextUI.text = "Sort the list in descending order\nThe List is sorted!";
+                else
+                    objectiveTextUI.text = "Sort the list in descending order\nThe List is not sorted.";
+            }
+            else if (winConditon == WinCondition.SortListDuplicatesNotAllBlocks)
+            {
+                if (isWinSatisfied)
+                    objectiveTextUI.text = "Delete all duplicate blocks\nThe List has no duplicates!";
+                else
+                    objectiveTextUI.text = "Delete all duplicate blocks\nThe List contains duplicates.";
+            }
+
             // update the blocks
             for (int i = 0; i < objectiveBlocks.Count; i++)
             {

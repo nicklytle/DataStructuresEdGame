@@ -27,7 +27,6 @@ public class LoggingManager : MonoBehaviour
 
         using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
         {
-            Debug.Log("Sending log data");
             yield return www.Send();
             if (www.isError)
             {

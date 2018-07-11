@@ -33,5 +33,7 @@
 {"logId":"sllp4","type":"SINGLE_LL_PLATFORM","x":30,"y":-12,"objId":"E","value":"7","childLinkBlockConnectId":"F","toAdd":false},
 {"logId":"sllp5","type":"SINGLE_LL_PLATFORM","x":35,"y":-14,"objId":"F","value":"7","childLinkBlockConnectId":"G","toAdd":false},
 {"logId":"sllp6","type":"SINGLE_LL_PLATFORM","x":40,"y":-12,"objId":"G","value":"9","childLinkBlockConnectId":"","toAdd":false}
+],
+"instructionBlocks":[
 ]
 }
