@@ -362,13 +362,17 @@ public class WorldGenerationBehavior : MonoBehaviour {
             //gameController.setStatusText("");
             CreateWorldFromLevelDescription();
             string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampCRTNextLevel);
+            string actMsg = "level " + (levelFileIndex + 1) + " was created";
+            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampCRTNextLevel);
+
+
+
         } else
         {
-            //gameController.setStatusText("You have won!");
+
             string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("level " + (levelFileIndex + 1) + " was created: " + timestampEnd);
-            /// .Log("GAME IS WON!");
+            string actMsg = "Game is won!";
+            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampEnd);
         }
     }
 
