@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.WorldGeneration;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorldGenerationBehavior : MonoBehaviour {
 
@@ -277,12 +278,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
+
+                GameObject.Find("AddPlatformButton").GetComponentInChildren<Text>().text = "Add Platform (" + gameController.platformsToAdd.Count + ")";
             } else
             {
                 newPlat.isInLevel = true;
             }
-            //string timestamp15 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("size of addable platform list: " + gameController.platformsToAdd.Count + " " + timestamp15);
         }
 
         // establishing links for the link blocks with the platforms
@@ -325,6 +326,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
         }
+
 
         gameController.codePanelBehavior.clearCodeText();
         gameController.levelOnTextUI.text = "Level " + (levelFileIndex + 1);
