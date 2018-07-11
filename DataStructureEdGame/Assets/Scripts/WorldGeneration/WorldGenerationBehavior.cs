@@ -278,8 +278,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
-
-                GameObject.Find("AddPlatformButton").GetComponentInChildren<Text>().text = "Add Platform (" + gameController.platformsToAdd.Count + ")";
+                gameController.addPlatformButtonTextUI.text = "Add Platform (" + gameController.platformsToAdd.Count + ")";
             } else
             {
                 newPlat.isInLevel = true;

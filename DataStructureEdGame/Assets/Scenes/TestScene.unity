@@ -1529,7 +1529,7 @@ GameObject:
   - component: {fileID: 358409626}
   - component: {fileID: 358409625}
   m_Layer: 5
-  m_Name: Text
+  m_Name: AddPlatformButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9528,6 +9528,7 @@ MonoBehaviour:
   objectiveHudPanelUI: {fileID: 1060193297}
   objectiveTextUI: {fileID: 455446035}
   levelOnTextUI: {fileID: 1662282398}
+  addPlatformButtonTextUI: {fileID: 358409625}
   winGameCanvas: {fileID: 1394945826}
   gameCanvas: {fileID: 129705161}
   codePanelBehavior: {fileID: 1534049699}

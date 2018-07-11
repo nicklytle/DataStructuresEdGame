@@ -68,6 +68,7 @@ public class GameController : MonoBehaviour {
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
     public Text levelOnTextUI;
+    public Text addPlatformButtonTextUI;
 
     public Canvas winGameCanvas;
     public Canvas gameCanvas;
@@ -183,7 +184,7 @@ public class GameController : MonoBehaviour {
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
                         currentPlayerLogs.send_To_Server(actMsg, timestamp1);
 
-                        GameObject.Find("AddPlatformButton").GetComponentInChildren<Text>().text = "Add Platform (" + platformsToAdd.Count + ")";
+                        addPlatformButtonTextUI.text = "Add Platform (" + platformsToAdd.Count + ")";
                        
 
                         updateObjectiveHUDAndBlocks();
