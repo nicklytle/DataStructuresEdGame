@@ -813,7 +813,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &129705159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,7 +1472,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 2, y: 63}
+  m_AnchoredPosition: {x: 2.0013, y: 55.8}
   m_SizeDelta: {x: -70, y: 58}
   m_Pivot: {x: 0.54698175, y: 0.8078252}
 --- !u!114 &337094012
@@ -2189,7 +2189,7 @@ GameObject:
   - component: {fileID: 493327519}
   - component: {fileID: 493327518}
   m_Layer: 5
-  m_Name: PhasedImage
+  m_Name: PlatformImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2210,8 +2210,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 64}
-  m_SizeDelta: {x: 358, y: -242}
+  m_AnchoredPosition: {x: 134.39, y: 91.039}
+  m_SizeDelta: {x: 268.8, y: -264.3}
   m_Pivot: {x: 0.5, y: 0.4057676}
 --- !u!114 &493327518
 MonoBehaviour:
@@ -3534,13 +3534,16 @@ RectTransform:
   - {fileID: 1912144208}
   - {fileID: 337094011}
   - {fileID: 1036908242}
+  - {fileID: 1902103643}
+  - {fileID: 1631452645}
+  - {fileID: 1156123271}
   m_Father: {fileID: 874829293}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.5, y: 31}
-  m_SizeDelta: {x: -427, y: -363}
+  m_AnchoredPosition: {x: -3.5, y: 14.249994}
+  m_SizeDelta: {x: -427, y: -329.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &879943233
 MonoBehaviour:
@@ -3607,8 +3610,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -6.577446, y: 61.943}
-  m_SizeDelta: {x: -140, y: 76.679}
+  m_AnchoredPosition: {x: -9.6, y: 61.943}
+  m_SizeDelta: {x: -145.5, y: 76.7}
   m_Pivot: {x: 0.54698175, y: 0.8078252}
 --- !u!114 &885376953
 MonoBehaviour:
@@ -3642,7 +3645,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This represents a Node being accessible because a pointer points to it
+  m_Text: This represents you not being able to access a Node when no pointers point
+    to it
 --- !u!222 &885376954
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5153,7 +5157,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Helicopter Robot represents a temporary pointer to help with operations
+  m_Text: The Helicopter Robot represents a temporary pointer to help you reveal and
+    access Nodes
 --- !u!222 &1117109503
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5517,6 +5522,80 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1151366158}
+--- !u!1 &1156123270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1156123271}
+  - component: {fileID: 1156123273}
+  - component: {fileID: 1156123272}
+  m_Layer: 5
+  m_Name: AnalogyHint (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1156123271
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1156123270}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 879943232}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -8.0762, y: 118.3}
+  m_SizeDelta: {x: -171.9, y: 58}
+  m_Pivot: {x: 0.54698175, y: 0.8078252}
+--- !u!114 &1156123272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1156123270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: d25749e58e604374da7fdb9d14b41b17, type: 3}
+    m_FontSize: 20
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Link Blocks represent pointer variables which point to Objects
+--- !u!222 &1156123273
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1156123270}
 --- !u!1 &1187361156
 GameObject:
   m_ObjectHideFlags: 0
@@ -5584,7 +5663,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This represents assigning a pointer equal to another pointer
+  m_Text: This represents you assigning a pointer equal to another pointer
 --- !u!222 &1187361159
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8175,6 +8254,80 @@ RectTransform:
   m_AnchoredPosition: {x: 0.000015258789, y: -95.00003}
   m_SizeDelta: {x: 0, y: -189.99997}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1631452644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1631452645}
+  - component: {fileID: 1631452647}
+  - component: {fileID: 1631452646}
+  m_Layer: 5
+  m_Name: TextLink
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1631452645
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1631452644}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 879943232}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -166.81, y: -41}
+  m_SizeDelta: {x: 190, y: -377.9}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1631452646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1631452644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 18
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Links connect to Platforms
+--- !u!222 &1631452647
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1631452644}
 --- !u!1 &1659865208
 GameObject:
   m_ObjectHideFlags: 0
@@ -8370,7 +8523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1682594723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8954,7 +9107,7 @@ GameObject:
   - component: {fileID: 1759030925}
   - component: {fileID: 1759030924}
   m_Layer: 5
-  m_Name: TextPhased
+  m_Name: TextPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8975,8 +9128,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.000011444, y: -75.8}
-  m_SizeDelta: {x: 386.1, y: -344.3}
+  m_AnchoredPosition: {x: 134.39, y: -47.8}
+  m_SizeDelta: {x: 285.6, y: -371.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1759030924
 MonoBehaviour:
@@ -9010,8 +9163,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Platforms have two components: a Value and a Link Block connecting to the
-    next Platform
+  m_Text: 'Platforms have two parts: a Value and a Link Block connecting to the next
+    Platform
 
 
 '
@@ -9052,7 +9205,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9675,6 +9828,74 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1902103642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1902103643}
+  - component: {fileID: 1902103645}
+  - component: {fileID: 1902103644}
+  m_Layer: 5
+  m_Name: LinkImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1902103643
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1902103642}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 879943232}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -165.01, y: 91.039}
+  m_SizeDelta: {x: 186.4, y: -264.3}
+  m_Pivot: {x: 0.5, y: 0.4057676}
+--- !u!114 &1902103644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1902103642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 21300000, guid: c26feff709e504b4b911756fe912d80c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1902103645
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1902103642}
 --- !u!1 &1902770861
 GameObject:
   m_ObjectHideFlags: 0
@@ -9944,7 +10165,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Platforms
+  m_Text: Links and Platforms
 --- !u!222 &1912144210
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10018,7 +10239,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This represents creating a new Node object
+  m_Text: This represents you creating a new Node object
 --- !u!222 &1990548412
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10451,7 +10672,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: This represents assigning a pointer to null
+  m_Text: This represents you assigning a pointer to null
 --- !u!222 &2050219031
 CanvasRenderer:
   m_ObjectHideFlags: 0
