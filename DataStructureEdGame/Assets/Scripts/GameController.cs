@@ -293,8 +293,8 @@ public class GameController : MonoBehaviour {
             if (selectedLink == null && hoverLinkRef != null)
             {
                 setSelectedLink(hoverLinkRef);
-                String timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                Debug.Log(selectedLink.logId + " was clicked at time: " + timestamp2);
+                //Debug.Log("The user has selected link block: " + selectedLink.logId);
+                //currentPlayerLogs.send_To_Server("The user has selected link block: " + selectedLink.logId);
                 setCursorToDragging();
 
             }  // if you're selecting a link and also hovering over the select link and clicking
@@ -306,7 +306,7 @@ public class GameController : MonoBehaviour {
                     if (hoverLinkRef.connectingPlatform != null) { 
                         hoverLinkRef.removeLinkConnection();
 
-                        string actMsg = "the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted";
+                        string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it's deleted";
                         currentPlayerLogs.send_To_Server(actMsg);
 
                     }
@@ -506,11 +506,16 @@ public class GameController : MonoBehaviour {
         if (selectedLink != null)
         { 
             selectedLink.setDisplayMarker(true, true);
+            Debug.Log("The player has selected the link: " + selectedLink.logId);
+            currentPlayerLogs.send_To_Server("The player has selected the link: " + selectedLink.logId);
         }
     }
 
     public void deselectSelectedLink()
-    { 
+    {
+        string actMsg = "The player deselected the link: " + selectedLink.logId;
+        Debug.Log("The player deselected the link: " + selectedLink.logId);
+        currentPlayerLogs.send_To_Server(actMsg);
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
         //setStatusText("Deselected link block"); 
@@ -559,7 +564,8 @@ public class GameController : MonoBehaviour {
 
     // this value being passed in CAN'T be null.
     public void setHoverLink(ref LinkBlockBehavior lb)
-    {;
+    {
+        Debug.Log("The user has hovered over link block " + lb.getLogID());
         currentPlayerLogs.send_To_Server("The user has hovered over link block " + lb.getLogID());
         removeHoverLink(); 
         hoverLinkRef = lb; 
@@ -666,7 +672,7 @@ public class GameController : MonoBehaviour {
             }
             hoverPlatformRef = platform;
             if (selectedLink != null && hoverPlatformRef != null) // only display it for this platform if you're also selecting a Link.
-            { 
+            {
                 hoverPlatformRef.setDisplaySelected(true);
             }
         }
