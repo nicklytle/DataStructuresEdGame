@@ -7,13 +7,14 @@ using UnityEngine.UI;
 public class HUDBehavior : MonoBehaviour {
 
     public GameController gameController;
-    public Button resetButton;
 
-    // public Text controlSchemeView;
+    [Header("References to Important UI Elements")]
     public Button addPlatformButton;
+    public Button resetButton;
     public Image addPlatformPanel;
-    public PlatformBehavior oneToAdd;
-     
+
+    [Header("Internal variables")]
+    public PlatformBehavior oneToAdd; 
     private float debounce; 
     public bool selected;
     private int countPlatformsToAdd;

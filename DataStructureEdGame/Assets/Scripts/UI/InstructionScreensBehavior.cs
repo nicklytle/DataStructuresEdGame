@@ -5,7 +5,7 @@ using UnityEngine;
 public class InstructionScreensBehavior : MonoBehaviour {
 
     // this class is used to keep a global reference of instruction screens
-
+    [Header("Instruction UI Panels")]
     public RectTransform moveInstructions;
     public RectTransform platformStateInstructions;
     public RectTransform platformHiddenRevealInstructions;

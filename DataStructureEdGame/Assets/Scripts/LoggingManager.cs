@@ -11,16 +11,15 @@ public class LoggingManager : MonoBehaviour
 {
 
     public GameController gameRef;
-
+    public int currentPlayerID;
     public bool enableLogging;
     public string loginAttemptResponse;  // store the response from the login attempt.
-
 
     private IEnumerator sendLogToServer(string actionMsg, string timestamp)
     {
         string logUrl = "http://localhost/test/sendingDataToPHP.php";
         WWWForm logForm = new WWWForm();
-        logForm.AddField("playerID", gameRef.currentPlayerID);
+        logForm.AddField("playerID", currentPlayerID);
         string levelFileName = "NO LEVEL";
         if (gameRef.worldGenerator.levelFileIndex < gameRef.worldGenerator.levelDescriptionJsonFiles.Length)
         {

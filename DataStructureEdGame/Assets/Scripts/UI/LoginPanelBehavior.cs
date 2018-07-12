@@ -5,16 +5,17 @@ using UnityEngine.UI;
 
 public class LoginPanelBehavior : MonoBehaviour {
 
-    // TEMPORARY debug login button
+    // temporary
     public Button debugSkipLoginButton;
 
     public LoggingManager loggingManager;
-
-    // need references to the canvases for transitions
-    public Canvas gameCanvas;
-    public Canvas menuCanvas;
     public GameController gameController;
 
+    [Header("Canvas References")]
+    public Canvas gameCanvas;
+    public Canvas menuCanvas;
+    
+    [Header("Important UI References")]
     public Text statusText;
     public Button submitButton;
     public InputField playerIdInputField;
@@ -38,7 +39,7 @@ public class LoginPanelBehavior : MonoBehaviour {
         Debug.Log("Skipping log in");
         gameCanvas.gameObject.SetActive(true);
         menuCanvas.gameObject.SetActive(false);
-        gameController.currentPlayerID = -1;
+        gameController.currentPlayerLogs.currentPlayerID = -1;
         gameController.worldGenerator.ManualStartGenerator(); 
     }
 
@@ -58,7 +59,7 @@ public class LoginPanelBehavior : MonoBehaviour {
                     Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
-                    gameController.currentPlayerID = System.Convert.ToInt32(playerIdExtracted);
+                    gameController.currentPlayerLogs.currentPlayerID = System.Convert.ToInt32(playerIdExtracted);
                     gameController.worldGenerator.ManualStartGenerator();
                 }
                 else if (loggingManager.loginAttemptResponse.Equals("fail"))

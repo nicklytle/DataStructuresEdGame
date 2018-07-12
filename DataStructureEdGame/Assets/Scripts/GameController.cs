@@ -6,39 +6,6 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    public int debugLinkControlVersion;
-    public long debugFrameCount;
-
-    public WorldGenerationBehavior worldGenerator;
-    public InstructionScreensBehavior instructionScreenBehavior;
-    // a referernce to all objective entities in the level
-    private List<ObjectiveBlockBehavior> objectiveBlocks;
-    // a reference to all platform entities in the level.
-    private List<PlatformBehavior> platformEntities;
-
-    // a queue of platforms that may be added in this level
-    public List<PlatformBehavior> platformsToAdd;
-    // whether the player is currently in an the Add Platform mode.
-    public bool addingPlatforms = false;
-
-    public bool enableLinkChaining = false;
-
-    // to help track for double clicking
-    public DateTime lastTimeClickedMillis;
-
-    // the Prefab for line renderer stuff.
-    public Transform linePreFab;
-    // References to the hover arrow parts showing a preview of the arrow.
-    public Transform hoverArrowLine;
-    public Transform hoverArrowHead;
-    // Reference to the Red X block
-    public GameObject redXSprite;
-
-    public Texture2D cursorPointingTexture;
-    public Texture2D cursorDraggingTexture;
-    public CursorMode cursorMode = CursorMode.Auto;
-    public int doubleClickDelay;
-
     // different win conditions for the level.
     public enum WinCondition
     {
@@ -48,38 +15,65 @@ public class GameController : MonoBehaviour {
         SortListDuplicatesNotAllBlocks,
     }
 
-    // The win condition of this level.
-    public WinCondition winConditon;
-    // References to important objects in the scene. 
-    public Transform playerRef;
-    public Transform helicopterRobotRef;
-    public LinkBlockBehavior selectedLink; // what Link block the player is adding a connection to, if any
-    
-    // Linked list properties
-    public LinkBlockBehavior startingLink; // what is this level's starting link block?
-    public PlatformBehavior hoverPlatformRef; // the platform the mouse is hovering over for version 1.
-    public LinkBlockBehavior hoverLinkRef; // the link block the mouse is hovering over. 
-    public LinkBlockBehavior previousNotNullHoverLinkRef;
-    //public LinkBlockBehavior mouseOverLinkRef; // the link block the mouse is hovering over. 
-    public List<LinkBlockBehavior> mouseOverLinkRefs; // the link block the mouse is hovering over. 
+    public LoggingManager currentPlayerLogs;
+    public WorldGenerationBehavior worldGenerator;
 
-    // references to important UI elements.
-    public Text statusTextUI;
+    [Header("Debugging")]
+    public int debugLinkControlVersion;
+    public long debugFrameCount;
+
+    [Header("Gameplay options")]
+    public bool enableLinkChaining = false;
+
+    [Header("PreFabs and Game Objects")]
+    // the Prefab for line renderer stuff.
+    public Transform linePreFab;
+    // Reference to the Red X block
+    public GameObject redXSprite;
+
+    [Header("Cursor")]
+    public Texture2D cursorPointingTexture;
+    public Texture2D cursorDraggingTexture;
+    public CursorMode cursorMode = CursorMode.Auto;
+    [Tooltip("How many milliseconds the user has to click twice to double click.")]
+    public int doubleClickDelay;
+
+    [Header("Level specific Properties")]
+    public WinCondition winConditon;
+
+    [Header("UI Element References")]
     public Image objectiveHudPanelUI;
     public Text objectiveTextUI;
     public Text levelOnTextUI;
     public Text addPlatformButtonTextUI;
 
+    [Header("UI Element Scripts")]
+    public CodePanelBehavior codePanelBehavior;
+    public InstructionScreensBehavior instructionScreenBehavior;
+
+    [Header("Canvas References")]
     public Canvas winGameCanvas;
     public Canvas gameCanvas;
 
-    // public Text codeTextUI;
-    public CodePanelBehavior codePanelBehavior;
+    [Header("Internal references")]
+    public Transform playerRef;
+    public Transform helicopterRobotRef;
+    public LinkBlockBehavior startingLink; // what is this level's starting link block?
+    public LinkBlockBehavior selectedLink; // what Link block the player is adding a connection to, if any
+    public LinkBlockBehavior hoverLinkRef; // the link block the mouse is hovering over. 
+    public LinkBlockBehavior previousNotNullHoverLinkRef;
+    public List<LinkBlockBehavior> mouseOverLinkRefs; // the link block the mouse is hovering over. 
+    public Transform hoverArrowLine;
+    public Transform hoverArrowHead;
+    public DateTime lastTimeClickedMillis;// a queue of platforms that may be added in this level
+    public List<PlatformBehavior> platformsToAdd;
+    // whether the player is currently in an the Add Platform mode.
+    public bool addingPlatforms = false;
 
-    public LoggingManager currentPlayerLogs;
-    //TEMPORARY CHANGE THIS!! after we make logging work
-    public int currentPlayerID = 0000;
-
+    // a referernce to all objective entities in the level
+    private List<ObjectiveBlockBehavior> objectiveBlocks;
+    // a reference to all platform entities in the level.
+    private List<PlatformBehavior> platformEntities;
 
     void Start()
     {
@@ -642,35 +636,6 @@ public class GameController : MonoBehaviour {
 
     } // end set hover link
 
-    /**
-     * Set the game's status text
-     */
-    public void setStatusText(string t)
-    {
-        statusTextUI.text = t;
-    }
-
-    /**
-     * Set what Platform is being connected to by the player. 'addingLink' must not be null.
-     */ 
-    public void setHoverPlatformReference(PlatformBehavior platform)
-    {
-        if (selectedLink != null) // you can only connect to a platform when there is a Link you have selected.
-        {
-            if (selectedLink.containerPlatform != null && selectedLink.containerPlatform == platform)
-                return; // don't change anything if the platform is the parent of the adding link.
-            
-            if (hoverPlatformRef != null)
-            {
-                hoverPlatformRef.setDisplaySelected(false);
-            }
-            hoverPlatformRef = platform;
-            if (selectedLink != null && hoverPlatformRef != null) // only display it for this platform if you're also selecting a Link.
-            { 
-                hoverPlatformRef.setDisplaySelected(true);
-            }
-        }
-    }
 
     /**
      * This will update the objective block states based on the win condition.
@@ -697,15 +662,15 @@ public class GameController : MonoBehaviour {
             if (winConditon == WinCondition.SortListAscending)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in increasing order\nThe List is sorted!";
+                    objectiveTextUI.text = "Sort the list in increasing order while including all Platforms.\nThe List is sorted!";
                 else
-                    objectiveTextUI.text = "Sort the list in increasing order\nThe List is not sorted.";
+                    objectiveTextUI.text = "Sort the list in increasing order while including all Platforms.\nThe List is not sorted.";
             } else if (winConditon == WinCondition.SortListDescending)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in decreasing order\nThe List is sorted!";
+                    objectiveTextUI.text = "Sort the list in decreasing order while including all Platforms.\nThe List is sorted!";
                 else
-                    objectiveTextUI.text = "Sort the list in decreasing order\nThe List is not sorted.";
+                    objectiveTextUI.text = "Sort the list in decreasing order while including all Platforms.\nThe List is not sorted.";
             }
             else if (winConditon == WinCondition.SortListDuplicatesNotAllBlocks)
             {

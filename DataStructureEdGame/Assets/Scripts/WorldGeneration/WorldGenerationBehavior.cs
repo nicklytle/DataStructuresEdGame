@@ -10,14 +10,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     public GameController gameController;
 
-    // world generation properties.
+    [Header("World generation files and options")]
     public int levelFileIndex;
     public TextAsset[] levelDescriptionJsonFiles;
     public bool generateWorld;
+
+    [Header("Internal references to game objects")]
     public List<Transform> levelEntities; // all of the entities that were generated for the level.
     public List<LinkBlockBehavior> levelLinkBlocks;
+    // references to Sprite
+    public Sprite startLinkBlockSprite;
+    public Sprite nullStartLinkBlockSprite;
+    public BackgroundBehavior background;
 
-    // references to PreFabs
+    [Header("PreFabs used in World Generation")]
     public Transform groundPreFab;
     public Transform groundTopPreFab;
     public Transform playerPreFab;
@@ -26,19 +32,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform instructionViewBlockPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
-    public Transform helicopterRobotPreFab;
-
-    // references to Sprite
-    public Sprite startLinkBlockSprite;
-    public Sprite nullStartLinkBlockSprite;
-
-    // level backdrop
-    public BackgroundBehavior background;
-
-    // Use this for initialization
-    void Start () {
-
-    }
+    public Transform helicopterRobotPreFab;    
+    
 
     public void ManualStartGenerator()
     {
@@ -64,10 +59,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     public GameController.WinCondition GetWinConditionFromString(string str)
     {
-        //Debug.Log("The Win condition string is: " + str);
         if (str.Equals("SortListAscending"))
         {
-            //Debug.Log(GameController.WinCondition.SortListAscending);
             return GameController.WinCondition.SortListAscending;
         } else if (str.Equals("SortListDescending"))
         {
@@ -75,12 +68,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
         else if(str.Equals("SortListDuplicatesNotAllBlocks"))
         {
-            //Debug.Log("Made it here");
-            //Debug.Log(GameController.WinCondition.SortListDuplicatesNotAllBlocks);
             return GameController.WinCondition.SortListDuplicatesNotAllBlocks;
         }
         return GameController.WinCondition.None;
     }
+
 
     /**
      * Generate a world using the given .JSON file in 'levelDescriptionJson'
@@ -107,10 +99,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 obj.GetComponent<BoxCollider2D>().size = sizeOfBlock;
                 if (objToInstances == groundPreFab || objToInstances == groundTopPreFab)
                 {
-                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block
-
-                    //string timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                    //Debug.Log("Ground logID: " + obj.GetComponent<GroundBehavior>().logId + " " + timestamp1);
+                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block 
                 }
                 levelEntities.Add(obj);
             }
@@ -122,9 +111,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
             gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
-
-            //string timestamp14 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Player logID " + gameController.playerRef.GetComponent<PlayerBehavior>().logId + " " + timestamp14);
             levelEntities.Add(gameController.playerRef);
             // move the backdrop right behind the player initially.
             background.initialPosition = gameController.playerRef.position + new Vector3(0, 0, -10);
@@ -135,11 +121,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.goalPortal.x + (1 / 2f)), (float)(level.goalPortal.y - (1 / 2f)));
             Transform goal = Instantiate(goalPortalPreFab, loc, Quaternion.identity);
             goal.GetComponent<GoalBehavior>().logId = level.goalPortal.logId;
-
-            //DateTime date2 = DateTime.Now;
-            //string timestamp2 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Goal logID " + goal.GetComponent<GoalBehavior>().logId + " " + timestamp2);
-
             levelEntities.Add(goal);
         }
         if (level.helicopterRobot != null)
@@ -151,16 +132,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
             robotBehavior.targetLocation = robot.position;
             robotBehavior.logId = level.helicopterRobot.logId;
 
-            //string timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Robot itself: " + robotBehavior.logId + " " + timestamp3);
-
-
             gameController.helicopterRobotRef = robot;
             robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
             robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
 
-            //string timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Helicopter robo LINK logID " + robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId + " " + timestamp4);
             levelEntities.Add(robot);
         }
         
@@ -184,15 +159,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
             startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
             startLinkBehavior.logId = level.startLink.logId;
 
-            //string timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Head link LogID " + startLinkBehavior.logId + " " + timestamp5);
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
             levelLinkBlocks.Add(startLinkBehavior);
             levelLinkBlocksConnIds.Add(level.startLink.objIDConnectingTo);
 
-            //string timestamp6 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Head link connection " + level.startLink.objIDConnectingTo + " " + timestamp6);
             levelEntities.Add(startLinkTran);
         }
 
@@ -205,8 +176,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
             lb.gameController = gameController;
             lb.logId = level.linkBlocks[i].logId;
-            //string timestamp7 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("each link " + i + " block " + lb.logId + " " + timestamp7);
+
             levelLinkBlocks.Add(lb);
             levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
             levelEntities.Add(newLink);
@@ -220,8 +190,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
             ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
             ob.logId = level.objectiveBlocks[i].logId;
 
-            //string timestamp8 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("fire blocks " + ob.logId + timestamp8);
             levelObjectiveBlocks.Add(ob);
             levelEntities.Add(newOBlock);
         }
@@ -245,36 +213,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
             LinkBlockBehavior innerLink = newLLPlatform.Find("LinkBlock").GetComponent<LinkBlockBehavior>();
             innerLink.gameController = gameController;
             innerLink.containerPlatform = newPlat;
+            innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
             newPlat.gameController = gameController;
             newPlat.childLink = innerLink.gameObject;
             newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
             newPlat.setValue(level.singleLinkedListPlatforms[i].value);
             newPlat.logId = level.singleLinkedListPlatforms[i].logId;
 
-            //string timestamp9 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("platform logID " + newPlat.logId + timestamp9);
-
-            innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
-            //string timestamp10 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("link inside the platform logID " + innerLink.logId + " "  + timestamp10);
-
-
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
-            //string timestamp11 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("platform object ID " + level.singleLinkedListPlatforms[i].objId + " " + timestamp11);
-
-
             levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
             levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
-
-            //string timestamp12 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            //Debug.Log("Connecting block " + level.singleLinkedListPlatforms[i].childLinkBlockConnectId + "  " + level.singleLinkedListPlatforms.Length + ": " + timestamp12);
-
             levelEntities.Add(newLLPlatform);
             levelPlatformEntities.Add(newPlat);
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
-                //Debug.Log("Platform needs to be added");
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
@@ -337,9 +289,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
-
-        //string timestampRST = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-        //Debug.Log("Level was RESET: " + timestampRST);
         foreach (LinkBlockBehavior lb in levelLinkBlocks)
         {
             lb.removeArrowBetween();
@@ -360,7 +309,6 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // make sure there is a level file for this
         if (levelFileIndex < levelDescriptionJsonFiles.Length)
         {
-            //gameController.setStatusText("");
             CreateWorldFromLevelDescription();
             string actMsg = "level " + (levelFileIndex + 1) + " was created";
             gameController.currentPlayerLogs.send_To_Server(actMsg);
@@ -373,8 +321,4 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
 }
