@@ -244,7 +244,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             PlatformBehavior newPlat = newLLPlatform.GetComponent<PlatformBehavior>();
             LinkBlockBehavior innerLink = newLLPlatform.Find("LinkBlock").GetComponent<LinkBlockBehavior>();
             innerLink.gameController = gameController;
-            innerLink.parentPlatform = newPlat;
+            innerLink.containerPlatform = newPlat;
             newPlat.gameController = gameController;
             newPlat.childLink = innerLink.gameObject;
             newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
@@ -362,14 +362,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             //gameController.setStatusText("");
             CreateWorldFromLevelDescription();
-            string timestampCRTNextLevel = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "level " + (levelFileIndex + 1) + " was created";
-            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampCRTNextLevel);
+            gameController.currentPlayerLogs.send_To_Server(actMsg);
         } else
         { 
-            string timestampEnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "Game is won!";
-            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampEnd);
+            gameController.currentPlayerLogs.send_To_Server(actMsg);
             gameController.gameCanvas.gameObject.SetActive(false);
             gameController.winGameCanvas.gameObject.SetActive(true);
         }

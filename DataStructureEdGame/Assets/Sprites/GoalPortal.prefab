@@ -20,8 +20,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4853196251448216}
   - component: {fileID: 212089259810658022}
-  - component: {fileID: 61774469577709552}
   - component: {fileID: 114190884271662844}
+  - component: {fileID: 58258443488413812}
   m_Layer: 0
   m_Name: GoalPortal
   m_TagString: GoalPortal
@@ -42,8 +42,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61774469577709552
-BoxCollider2D:
+--- !u!58 &58258443488413812
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -55,18 +55,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.37, y: 2.2}
-    newSize: {x: 2.37, y: 2.2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.64, y: 0.64}
-  m_EdgeRadius: 0
+  m_Radius: 0.8
 --- !u!114 &114190884271662844
 MonoBehaviour:
   m_ObjectHideFlags: 1

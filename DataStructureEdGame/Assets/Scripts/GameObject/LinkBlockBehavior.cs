@@ -9,7 +9,7 @@ public class LinkBlockBehavior : MonoBehaviour
 
     public GameController gameController;
 
-    public PlatformBehavior parentPlatform; // if this link block is in a platform, then this is the parent 
+    public PlatformBehavior containerPlatform; // if this link block is in a platform, then this is the parent 
     public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
 
     // references to the arrow instances
@@ -40,7 +40,7 @@ public class LinkBlockBehavior : MonoBehaviour
 
     void Start()
     {
-        if (parentPlatform == null)
+        if (containerPlatform == null)
         {
             UpdateLinkArrow();
         }
@@ -71,7 +71,7 @@ public class LinkBlockBehavior : MonoBehaviour
         { 
             // set the arrow color
             Color color = Color.red;
-            if ((parentPlatform != null && parentPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
+            if ((containerPlatform != null && containerPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
             {
                 color = Color.gray;  // arrowPreFab = linkArrowFadedPreFab;
             }
@@ -192,12 +192,12 @@ public class LinkBlockBehavior : MonoBehaviour
         {
             str = "temp";
         }
-        else if (parentPlatform != null)
+        else if (containerPlatform != null)
         {
             // simulate accessing the next field from a variable.
-            Debug.Log(parentPlatform);
-            Debug.Log(parentPlatform.getMostRecentlyConnectedLink());
-            str = parentPlatform.getMostRecentlyConnectedLink().getCodeVariableString() + ".next";
+            Debug.Log(containerPlatform);
+            Debug.Log(containerPlatform.getMostRecentlyConnectedLink());
+            str = containerPlatform.getMostRecentlyConnectedLink().getCodeVariableString() + ".next";
         }
         return str;
     }

@@ -41,9 +41,10 @@ public class LoggingManager : MonoBehaviour
     }
 
 
-    public void send_To_Server(string actionMsg, string timestamp)
+    public void send_To_Server(string actionMsg)
     {
-        if (enableLogging) {
+        if (enableLogging) { 
+            String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             StartCoroutine(sendLogToServer(actionMsg, timestamp));
         }
     }

@@ -49,18 +49,16 @@ public class PlayerBehavior : MonoBehaviour {
         
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
-            string timestampMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "Player started moving from: (" + Math.Round(oldX, 1) + ", " + Math.Round(oldY, 1) + ")";
-            gameController.currentPlayerLogs.send_To_Server(actMsg, timestampMove);
+            gameController.currentPlayerLogs.send_To_Server(actMsg);
             startOfMove = true;
 
         }
         if(vert == 0 && horz == 0 && startOfMove)
         {
             startOfMove = false;
-            string timestampEndMove = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg2 = "Player landed at : (" + Math.Round(rb2.position.x, 1) + ", " + Math.Round(rb2.position.y, 1) + ")";
-            gameController.currentPlayerLogs.send_To_Server(actMsg2, timestampEndMove);
+            gameController.currentPlayerLogs.send_To_Server(actMsg2);
         }
 
 
@@ -99,9 +97,8 @@ public class PlayerBehavior : MonoBehaviour {
 
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
-            string timestampJump = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg3 = "Player: " + logId + " jumped.";
-            gameController.currentPlayerLogs.send_To_Server(actMsg3, timestampJump);
+            gameController.currentPlayerLogs.send_To_Server(actMsg3);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
         }
@@ -115,9 +112,8 @@ public class PlayerBehavior : MonoBehaviour {
             if(!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<GroundBehavior>().logId))
             {
                 currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
-                string timeStampNewGrnd = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string actMsg = "Player landed onto ground: " + currentlyStandingOn;
-                gameController.currentPlayerLogs.send_To_Server(actMsg, timeStampNewGrnd);
+                gameController.currentPlayerLogs.send_To_Server(actMsg);
             }
             if (initAssgmt)
             {
@@ -131,9 +127,8 @@ public class PlayerBehavior : MonoBehaviour {
             if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<PlatformBehavior>().logId))
             {
                 currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
-                string timeStampNewPlatf = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
-                gameController.currentPlayerLogs.send_To_Server(actMsg1, timeStampNewPlatf);
+                gameController.currentPlayerLogs.send_To_Server(actMsg1);
             }
             if (initAssgmt)
             {
@@ -143,9 +138,14 @@ public class PlayerBehavior : MonoBehaviour {
         }
 
         // for setting onGround, make sure that the other block is below the player
-        if (collision.collider.bounds.center.y < GetComponent<BoxCollider2D>().bounds.center.y) { 
-            onGround = true;
-        } else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<BoxCollider2D>().bounds.center.y)
+        if (collision.collider.bounds.center.y < GetComponent<CircleCollider2D>().bounds.center.y)
+        // if (collision.collider.bounds.center.y < GetComponent<BoxCollider2D>().bounds.center.y)
+            {
+
+                onGround = true;
+        }
+        // else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<BoxCollider2D>().bounds.center.y)
+        else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<CircleCollider2D>().bounds.center.y)
         {
             // stop moving up
             rb2.velocity = new Vector2(rb2.velocity.x, -0.1f);
@@ -156,18 +156,15 @@ public class PlayerBehavior : MonoBehaviour {
     {
         if (c2d.tag == "BottomOfWorld")
         {
-            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
             string actMsg = "Player fell off and died, level was reset";
-            gameController.currentPlayerLogs.send_To_Server(actMsg, timestamp1);
+            gameController.currentPlayerLogs.send_To_Server(actMsg);
             gameController.worldGenerator.resetLevel();
 
         }
         else if (c2d.tag == "GoalPortal")
         {
-            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log(c2d.GetComponent<GoalBehavior>().logId);
             string actMsg = "Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time";
-            gameController.currentPlayerLogs.send_To_Server(actMsg, timestamp1);
+            gameController.currentPlayerLogs.send_To_Server(actMsg);
 
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
             gameController.worldGenerator.resetLevel();
@@ -176,24 +173,7 @@ public class PlayerBehavior : MonoBehaviour {
         {
             gameController.showInstructionScreen(c2d.GetComponent<InstructionViewBlockBehavior>().screenId);
         }
-        //else
-        //{
-        //    Debug.Log(c2d.tag);
-        //}
-        /**
-        else if(c2d.tag == "PlatformTag")
-        {
-            Debug.Log("Made it here platform");
-            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player landed on " + c2d.GetComponent<PlatformBehavior>().logId + "at time: " + timestamp1);
-        }
-        else if (c2d.tag == "GroundTop")
-        {
-            Debug.Log("Made it here yo");
-            String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Debug.Log("Player landed on " + c2d.GetComponent<GroundBehavior>().logId + "at time: " + timestamp1);
-        }
-        */
+
     }
 
     void OnTriggerExit2D(Collider2D c2d)

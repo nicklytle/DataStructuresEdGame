@@ -179,10 +179,10 @@ public class GameController : MonoBehaviour {
                         addingPlatforms = false;
                         // append code and log
                         codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = new Node();");
-                        String timestamp1 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
-                        currentPlayerLogs.send_To_Server(actMsg, timestamp1);
+                        currentPlayerLogs.send_To_Server(actMsg);
 
                         addPlatformButtonTextUI.text = "Add Platform (" + platformsToAdd.Count + ")";
                        
@@ -200,9 +200,8 @@ public class GameController : MonoBehaviour {
                 deselectSelectedLink();
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
-                String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string actMsg = "Clicked without clicking on a hover link and a select link";
-                currentPlayerLogs.send_To_Server(actMsg, timestamp);
+                currentPlayerLogs.send_To_Server(actMsg);
 
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
@@ -245,6 +244,7 @@ public class GameController : MonoBehaviour {
 
         if (mouseOverLinkRefs.Count > 0)
         { 
+            // this block is tryin to decide which link block the mouse is over should be the hover link.
             LinkBlockBehavior priorityLink = null;
             if (mouseOverLinkRefs.Count == 1)
             {
@@ -256,7 +256,7 @@ public class GameController : MonoBehaviour {
                 foreach (LinkBlockBehavior lb in mouseOverLinkRefs)
                 {
                     if (lb.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
-                        (lb.parentPlatform != null && lb.parentPlatform.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld)))
+                        (lb.containerPlatform != null && lb.containerPlatform.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld)))
                     {
                         minLb = lb;
                     }
@@ -264,14 +264,15 @@ public class GameController : MonoBehaviour {
                 priorityLink = minLb;
             }
 
-            if (hoverLinkRef != priorityLink && (priorityLink.parentPlatform == null || 
-                (priorityLink.parentPlatform != null && !priorityLink.parentPlatform.isPlatHidden())))
+            // 
+            if (hoverLinkRef != priorityLink && (priorityLink.containerPlatform == null || 
+                (priorityLink.containerPlatform != null && !priorityLink.containerPlatform.isPlatHidden())))
             {
                 setHoverLink(ref priorityLink);
                 string hoverTag = hoverLinkRef != null ? hoverLinkRef.getLogID() : ""; 
-                if (priorityLink != null && previousNotNullHoverLinkRef != null && previousNotNullHoverLinkRef.parentPlatform != null)
+                if (priorityLink != null && previousNotNullHoverLinkRef != null && previousNotNullHoverLinkRef.containerPlatform != null)
                 {
-                    previousNotNullHoverLinkRef.parentPlatform.updatePlatformValuesAndSprite(); // it should be returned to its "natural" state.
+                    previousNotNullHoverLinkRef.containerPlatform.updatePlatformValuesAndSprite(); // it should be returned to its "natural" state.
                 }
             } 
 
@@ -304,10 +305,9 @@ public class GameController : MonoBehaviour {
                     codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
                     if (hoverLinkRef.connectingPlatform != null) { 
                         hoverLinkRef.removeLinkConnection();
-                        //setStatusText("Removed link");
-                        String timestamp3 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
                         string actMsg = "the link block " + selectedLink.logId + " double clicked had an existing link so now it's deleted";
-                        currentPlayerLogs.send_To_Server(actMsg, timestamp3);
+                        currentPlayerLogs.send_To_Server(actMsg);
 
                     }
                 }
@@ -318,9 +318,8 @@ public class GameController : MonoBehaviour {
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
             {
-                String timestamp4 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 string actMsg = "the link block " + selectedLink.logId + " was deselected";
-                currentPlayerLogs.send_To_Server(actMsg, timestamp4);
+                currentPlayerLogs.send_To_Server(actMsg);
 
                 deselectSelectedLink();
                 setCursorToDefault(); 
@@ -332,7 +331,7 @@ public class GameController : MonoBehaviour {
             if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
             {
                 // establish connection  
-                if (hoverLinkRef.parentPlatform == null || selectedLink.parentPlatform != hoverLinkRef.parentPlatform)
+                if (hoverLinkRef.containerPlatform == null || selectedLink.containerPlatform != hoverLinkRef.containerPlatform)
                 {
                     // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
@@ -341,7 +340,7 @@ public class GameController : MonoBehaviour {
                     {
                         selectedLink.removeLinkConnection();
                     }
-                    if (hoverLinkRef.connectingPlatform != null && hoverLinkRef.connectingPlatform != selectedLink.parentPlatform)
+                    if (hoverLinkRef.connectingPlatform != null && hoverLinkRef.connectingPlatform != selectedLink.containerPlatform)
                     {
                         selectedLink.setConnectingPlatform(hoverLinkRef.connectingPlatform);
                     } 
@@ -349,9 +348,8 @@ public class GameController : MonoBehaviour {
                     removeHoverLink();
                     setCursorToDefault();
                     //setStatusText("Established a connection.");
-                    String timestamp5 = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
                     string actMsg = "Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null");
-                    currentPlayerLogs.send_To_Server(actMsg, timestamp5);
+                    currentPlayerLogs.send_To_Server(actMsg);
 
                 }
                 previousNotNullHoverLinkRef = null; // no longer needed to track
@@ -548,9 +546,9 @@ public class GameController : MonoBehaviour {
             // update the sprite of the connecting platform that we used to be revealing by the bridge
             /// but only if you are no longer mousing over any other links
             if (mouseOverLinkRefs.Count == 0) {
-                if (previousNotNullHoverLinkRef.parentPlatform != null)
+                if (previousNotNullHoverLinkRef.containerPlatform != null)
                 {
-                    previousNotNullHoverLinkRef.parentPlatform.updatePlatformValuesAndSprite(); 
+                    previousNotNullHoverLinkRef.containerPlatform.updatePlatformValuesAndSprite(); 
                 }
                 if (previousNotNullHoverLinkRef.connectingPlatform != null) { 
                     previousNotNullHoverLinkRef.connectingPlatform.updatePlatformValuesAndSprite();
@@ -561,7 +559,8 @@ public class GameController : MonoBehaviour {
 
     // this value being passed in CAN'T be null.
     public void setHoverLink(ref LinkBlockBehavior lb)
-    {
+    {;
+        currentPlayerLogs.send_To_Server("The user has hovered over link block " + lb.getLogID());
         removeHoverLink(); 
         hoverLinkRef = lb; 
 
@@ -658,7 +657,7 @@ public class GameController : MonoBehaviour {
     {
         if (selectedLink != null) // you can only connect to a platform when there is a Link you have selected.
         {
-            if (selectedLink.parentPlatform != null && selectedLink.parentPlatform == platform)
+            if (selectedLink.containerPlatform != null && selectedLink.containerPlatform == platform)
                 return; // don't change anything if the platform is the parent of the adding link.
             
             if (hoverPlatformRef != null)

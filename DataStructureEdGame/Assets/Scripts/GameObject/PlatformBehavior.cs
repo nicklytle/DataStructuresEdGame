@@ -70,7 +70,7 @@ public class PlatformBehavior : MonoBehaviour {
         {
             // if the link going to it is the helicopter or an external link then it is revealed.
             // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
-            if (lnk.isHelicopterLink || lnk.parentPlatform == null ||
+            if (lnk.isHelicopterLink || lnk.containerPlatform == null ||
                   (lnk == gameController.hoverLinkRef && gameController.selectedLink != null) ||
                   (gameController.hoverLinkRef == childLink) )
             {
@@ -171,7 +171,7 @@ public class PlatformBehavior : MonoBehaviour {
         childLink = transform.Find("LinkBlock").gameObject;
         childValueBlock = transform.Find("ValueBlock").gameObject;
         childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
-        childLink.GetComponent<LinkBlockBehavior>().parentPlatform = this;
+        childLink.GetComponent<LinkBlockBehavior>().containerPlatform = this;
         // updatePlatformValuesAndSprite();
     }
 
@@ -191,7 +191,7 @@ public class PlatformBehavior : MonoBehaviour {
             LinkBlockBehavior linkToReturn = null;
             foreach (LinkBlockBehavior lb in incomingConnectionLinkBlocks)
             {
-                if (lb.isHelicopterLink || lb.isStartingLink || lb.parentPlatform == null)
+                if (lb.isHelicopterLink || lb.isStartingLink || lb.containerPlatform == null)
                 {
                     linkToReturn = lb;
                     break;
