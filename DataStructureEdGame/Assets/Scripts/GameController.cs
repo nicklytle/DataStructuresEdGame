@@ -294,7 +294,7 @@ public class GameController : MonoBehaviour {
             }  // if you're selecting a link and also hovering over the select link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
             {
-                Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
+                //Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
                 if ((DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
                     codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
                     if (hoverLinkRef.connectingPlatform != null) { 
@@ -393,7 +393,7 @@ public class GameController : MonoBehaviour {
                         numberOfTotalPlatformsInLevel++;
                     }
                 }
-                Debug.Log(debugFrameCount + " | WIN CONDITION: Number of platforms in the level: " + numberOfTotalPlatformsInLevel);
+                //Debug.Log(debugFrameCount + " | WIN CONDITION: Number of platforms in the level: " + numberOfTotalPlatformsInLevel);
 
                 if (startingLink.connectingPlatform == null)
                 {
@@ -423,7 +423,7 @@ public class GameController : MonoBehaviour {
                     temp = next;
                     sizeOfList++;
                 }
-                Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
+                //Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
 
             case WinCondition.SortListDuplicatesNotAllBlocks:
@@ -500,7 +500,7 @@ public class GameController : MonoBehaviour {
         if (selectedLink != null)
         { 
             selectedLink.setDisplayMarker(true, true);
-            Debug.Log("The player has selected the link: " + selectedLink.logId);
+            //Debug.Log("The player has selected the link: " + selectedLink.logId);
             currentPlayerLogs.send_To_Server("The player has selected the link: " + selectedLink.logId);
         }
     }
@@ -508,7 +508,7 @@ public class GameController : MonoBehaviour {
     public void deselectSelectedLink()
     {
         string actMsg = "The player deselected the link: " + selectedLink.logId;
-        Debug.Log("The player deselected the link: " + selectedLink.logId);
+        //Debug.Log("The player deselected the link: " + selectedLink.logId);
         currentPlayerLogs.send_To_Server(actMsg);
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
@@ -559,7 +559,7 @@ public class GameController : MonoBehaviour {
     // this value being passed in CAN'T be null.
     public void setHoverLink(ref LinkBlockBehavior lb)
     {
-        Debug.Log("The user has hovered over link block " + lb.getLogID());
+        //Debug.Log("The user has hovered over link block " + lb.getLogID());
         currentPlayerLogs.send_To_Server("The user has hovered over link block " + lb.getLogID());
         removeHoverLink(); 
         hoverLinkRef = lb; 
@@ -804,19 +804,19 @@ public class GameController : MonoBehaviour {
 
     private void setCursorToDefault()
     {
-        Debug.Log("SET CURSOR TO DEFAULT");
+        //Debug.Log("SET CURSOR TO DEFAULT");
         Cursor.SetCursor(null, new Vector2(), cursorMode);
     }
 
     private void setCursorToPointer()
     {
-        Debug.Log("SET CURSOR TO POINTER");
+        //Debug.Log("SET CURSOR TO POINTER");
         Cursor.SetCursor(cursorPointingTexture, new Vector2(12, 0), cursorMode);
     }
 
     private void setCursorToDragging()
     {
-        Debug.Log("SET CURSOR TO DRAGGING");
+        //Debug.Log("SET CURSOR TO DRAGGING");
         Cursor.SetCursor(cursorDraggingTexture, new Vector2(18, 8), cursorMode);
     }
 

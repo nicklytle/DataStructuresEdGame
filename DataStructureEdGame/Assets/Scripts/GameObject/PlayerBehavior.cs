@@ -106,43 +106,48 @@ public class PlayerBehavior : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "GroundTop(Clone)")
-        {
-            //Debug.Log(collision.gameObject.GetComponent<GroundBehavior>().logId);
-            if(!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<GroundBehavior>().logId))
-            {
-                currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
-                string actMsg = "Player landed onto ground: " + currentlyStandingOn;
-                gameController.currentPlayerLogs.send_To_Server(actMsg);
-            }
-            if (initAssgmt)
-            {
-                initAssgmt = false;
-                currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
-            }
-        }
-        else if (collision.gameObject.name == "Platform(Clone)")
-        {
-            //Debug.Log(collision.gameObject.GetComponent<PlatformBehavior>().logId);
-            if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<PlatformBehavior>().logId))
-            {
-                currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
-                string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
-                gameController.currentPlayerLogs.send_To_Server(actMsg1);
-            }
-            if (initAssgmt)
-            {
-                initAssgmt = false;
-                currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
-            }
-        }
-
         // for setting onGround, make sure that the other block is below the player
         if (collision.collider.bounds.center.y < GetComponent<CircleCollider2D>().bounds.center.y)
-        // if (collision.collider.bounds.center.y < GetComponent<BoxCollider2D>().bounds.center.y)
+        {
+            onGround = true;
+            if (collision.gameObject.name == "GroundTop(Clone)")
             {
-
-                onGround = true;
+                //Debug.Log(collision.gameObject.GetComponent<GroundBehavior>().logId);
+                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<GroundBehavior>().logId))
+                {
+                    currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+                    string actMsg = "Player landed onto ground: " + currentlyStandingOn;
+                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    Debug.Log(actMsg);
+                }
+                if (initAssgmt)
+                {
+                    initAssgmt = false;
+                    currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+                    string actMsg = "Player started by standing on ground: " + currentlyStandingOn;
+                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    Debug.Log(actMsg);
+                }
+            }
+            else if (collision.gameObject.name == "Platform(Clone)")
+            {
+                //Debug.Log(collision.gameObject.GetComponent<PlatformBehavior>().logId);
+                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<PlatformBehavior>().logId))
+                {
+                    currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+                    string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
+                    gameController.currentPlayerLogs.send_To_Server(actMsg1);
+                    Debug.Log(actMsg1);
+                }
+                if (initAssgmt)
+                {
+                    initAssgmt = false;
+                    currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+                    string actMsg = "Player started by standing on platform: " + currentlyStandingOn;
+                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    Debug.Log(actMsg);
+                }
+            }
         }
         // else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<BoxCollider2D>().bounds.center.y)
         else if (collision.collider.bounds.center.y - collision.collider.bounds.extents.y > GetComponent<CircleCollider2D>().bounds.center.y)
