@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="48" height="20" tilewidth="64" tileheight="64" infinite="0" nextobjectid="157">
+ <properties>
+  <property name="WinCondition" value="None"/>
+ </properties>
+ <objectgroup color="#0041c5" name="Platforms">
+  <object id="43" type="Ground" x="0" y="448" width="576" height="448"/>
+  <object id="133" type="Ground" x="0" y="384" width="576" height="64"/>
+  <object id="138" type="Ground" x="2432" y="448" width="320" height="256"/>
+  <object id="139" type="Ground" x="768" y="384" width="320" height="64"/>
+  <object id="142" type="Ground" x="2432" y="384" width="320" height="64"/>
+  <object id="143" type="Ground" x="0" y="896" width="1088" height="320"/>
+  <object id="145" type="Ground" x="1088" y="64" width="192" height="448"/>
+  <object id="146" type="Ground" x="1088" y="0" width="192" height="64"/>
+  <object id="147" type="Ground" x="576" y="832" width="512" height="64"/>
+  <object id="149" type="Ground" x="1280" y="192" width="128" height="128"/>
+  <object id="150" type="Ground" x="1280" y="128" width="128" height="64"/>
+ </objectgroup>
+ <objectgroup color="#00aaff" name="Nodes">
+  <object id="135" name="A" type="SingleLLPlatform" x="576" y="384" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="5"/>
+   </properties>
+  </object>
+  <object id="140" name="B" type="SingleLLPlatform" x="1344" y="768" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="6"/>
+   </properties>
+  </object>
+  <object id="148" name="C" type="SingleLLPlatform" x="1728" y="640" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value="D"/>
+    <property name="Value" type="int" value="7"/>
+   </properties>
+  </object>
+  <object id="155" name="D" type="SingleLLPlatform" x="2048" y="512" width="192" height="64">
+   <properties>
+    <property name="ConnectTo" value=""/>
+    <property name="Value" type="int" value="7"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup color="#aa00ff" name="ImportantObjects">
+  <object id="3" name="Player" type="Player" x="128" y="256" width="64" height="64"/>
+  <object id="4" name="StartLinkBlock" type="StartLinkBlock" x="832" y="576" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="A"/>
+   </properties>
+  </object>
+  <object id="5" name="HelicopterRobot" type="HelicopterRobot" x="3008" y="1216" width="64" height="64"/>
+  <object id="8" name="Goal" type="Goal" x="2560" y="256" width="64" height="64"/>
+  <object id="144" name="LinkBlock" type="LinkBlock" x="1152" y="576" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="B"/>
+   </properties>
+  </object>
+  <object id="151" name="LinkBlock" type="LinkBlock" x="1600" y="448" width="64" height="64">
+   <properties>
+    <property name="ConnectTo" value="C"/>
+   </properties>
+  </object>
+  <object id="152" name="DeleteInstructions" type="InstructionViewBlock" x="896" y="256" width="64" height="128"/>
+  <object id="154" name="PlatformHiddenRevealInstructions" type="InstructionViewBlock" x="640" y="704" width="64" height="128"/>
+  <object id="156" name="GeneratedCodeInstruction" type="InstructionViewBlock" x="384" y="256" width="64" height="128"/>
+ </objectgroup>
+</map>

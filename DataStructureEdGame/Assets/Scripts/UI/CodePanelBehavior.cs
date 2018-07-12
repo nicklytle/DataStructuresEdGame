@@ -45,6 +45,6 @@ public class CodePanelBehavior : MonoBehaviour {
         lines = 0;
         codeTextUI.rectTransform.gameObject.SetActive(true);
         codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, ySize); // reset the size
-        Debug.Log("Cleared code text");
+        //Debug.Log("Cleared code text");
     }
 }

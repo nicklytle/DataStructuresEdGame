@@ -36,7 +36,7 @@ public class LoginPanelBehavior : MonoBehaviour {
 
     void skipLoginShortcut()
     {
-        Debug.Log("Skipping log in");
+        //Debug.Log("Skipping log in");
         gameCanvas.gameObject.SetActive(true);
         menuCanvas.gameObject.SetActive(false);
         gameController.currentPlayerLogs.currentPlayerID = -1;
@@ -51,12 +51,12 @@ public class LoginPanelBehavior : MonoBehaviour {
             if (loggingManager.loginAttemptResponse.Length > 0)
             {
                 // process the response.
-                Debug.Log(loggingManager.loginAttemptResponse);
+                //Debug.Log(loggingManager.loginAttemptResponse);
                 if (loggingManager.loginAttemptResponse.StartsWith("success"))
                 {
                     string playerIdExtracted = loggingManager.loginAttemptResponse.Substring(loggingManager.loginAttemptResponse.IndexOf(' ') + 1);
 
-                    Debug.Log("Login successful! " + playerIdExtracted);
+                    //Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
                     gameController.currentPlayerLogs.currentPlayerID = System.Convert.ToInt32(playerIdExtracted);
@@ -80,7 +80,7 @@ public class LoginPanelBehavior : MonoBehaviour {
     {
         if (!submitPressed) {
             submitPressed = true;
-            Debug.Log("Submit");
+            //Debug.Log("Submit");
             string playerId = playerIdInputField.text;
             string pw = passwordInputField.text;
             if (playerId.Length > 0 && pw.Length > 0) { 
