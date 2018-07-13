@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ViewInstructionPanelButton : MonoBehaviour {
 
-    public RectTransform containerPanel;
+    public PreviousInstructionsPanelBehavior previousPanel;
     public RectTransform panelToReveal;
     private Button btn;
 
@@ -16,7 +16,7 @@ public class ViewInstructionPanelButton : MonoBehaviour {
 	
 	void RevealPanel()
     {
-        containerPanel.gameObject.SetActive(false); // hide the containing panel
+        previousPanel.hideContainer();
         if (panelToReveal != null)
             panelToReveal.gameObject.SetActive(true);
     }

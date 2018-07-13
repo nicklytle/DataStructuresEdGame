@@ -11,15 +11,22 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
 
     private Vector2 previousPosition; // where the button that was last added is located.
     public RectTransform viewInstructionButtonPrefab;
+    private bool showingPanel;
 
-	void Start () {
-        previousInstructions = new List<RectTransform>();
-        previousPosition = new Vector2(5, -5);
+	void Start ()
+    {
         toggleButton.onClick.AddListener(TogglePanelView);
     }
 
     public void addInstructionPanelToHistory(RectTransform panel)
     {
+        if (previousInstructions == null)
+        {
+            previousPosition = new Vector2(5, -5);
+            showingPanel = false;
+            previousInstructions = new List<RectTransform>();
+        }
+
         if (!previousInstructions.Contains(panel))
         {
             Debug.Log("Adding panel to history");
@@ -31,7 +38,7 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
             newButton.SetParent(containerPanel); // add to the container.
             newButton.anchoredPosition = previousPosition; 
             newButton.GetComponent<ViewInstructionPanelButton>().panelToReveal = panel;
-            newButton.GetComponent<ViewInstructionPanelButton>().containerPanel = containerPanel;
+            newButton.GetComponent<ViewInstructionPanelButton>().previousPanel = this;
             // make the button text equal to the title inside of that instruction panel.
             Text textComp = newButton.Find("Text").GetComponent<Text>();
             textComp.text = panel.Find("TitleText").GetComponent<Text>().text;
@@ -41,6 +48,24 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
 
     void TogglePanelView()
     {
-        containerPanel.gameObject.SetActive(!containerPanel.gameObject.activeSelf);
+        if (showingPanel)
+        {
+            hideContainer();
+        } else
+        {
+            showContainer();
+        }
+    }
+
+    public void hideContainer()
+    {
+        showingPanel = false;
+        containerPanel.gameObject.SetActive(false);
+    }
+
+    public void showContainer()
+    {
+        showingPanel = true;
+        containerPanel.gameObject.SetActive(true);
     }
 }

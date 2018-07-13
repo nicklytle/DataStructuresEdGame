@@ -63,6 +63,8 @@ public class LoginPanelBehavior : MonoBehaviour {
                     int startingLevelIndex = System.Convert.ToInt32(tokens[2]);
                     gameController.currentPlayerLogs.currentPlayerID = playerId;
                     gameController.worldGenerator.levelFileIndex = startingLevelIndex;
+                    // populate the previous instruction panel based on the level you're in.
+                    gameController.instructionScreenBehavior.revealPlatformsForLevels(startingLevelIndex); 
                     gameController.worldGenerator.ManualStartGenerator();
                 }
                 else if (loggingManager.loginAttemptResponse.Equals("fail"))

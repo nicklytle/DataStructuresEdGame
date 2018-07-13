@@ -93,4 +93,29 @@ public class InstructionScreensBehavior : MonoBehaviour {
     {
         changeScreen(key, false);
     }
+
+    public void revealPlatformsForLevels(int lvlOn)
+    {
+        if (lvlOn >= 1)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(moveInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformAnalogyInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformStateInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(createInstructions);
+        }
+        if (lvlOn >= 2)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(generatedCodeInstruction);
+            previousPanelBehavior.addInstructionPanelToHistory(deleteInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformHiddenRevealInstructions);
+        }
+        if (lvlOn >= 3)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(robotInstructions);
+        }
+        if (lvlOn >= 5)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(addPlatformInstructions);
+        }
+    }
 }

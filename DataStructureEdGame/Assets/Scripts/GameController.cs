@@ -87,10 +87,7 @@ public class GameController : MonoBehaviour {
             startingLink.isStartingLink = true;
         }
         platformEntities = new List<PlatformBehavior>();
-        objectiveBlocks = new List<ObjectiveBlockBehavior>();
-        // initial world generation
-        // worldGenerator.ManualStartGenerator();
-
+        objectiveBlocks = new List<ObjectiveBlockBehavior>(); 
     }
 
     void Update()
