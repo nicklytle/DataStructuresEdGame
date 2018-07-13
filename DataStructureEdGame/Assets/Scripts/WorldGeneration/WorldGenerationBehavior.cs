@@ -103,6 +103,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 }
                 levelEntities.Add(obj);
             }
+
         }
         // create the player
         if (level.player != null)

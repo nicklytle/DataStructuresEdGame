@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
@@ -11,13 +12,18 @@ namespace Assets.Scripts.WorldGeneration
     {
         // type, x, and y from Block
 
-        // the ID that LinkBlocks will use to refer to this block
+        // the ID that LinkBlocks will use to refer to this block // DOES this replace logId?
         public string objId;
         // this platform's inner link
         public string childLinkBlockConnectId;
 
         public int value;
         public bool toAdd;
+
+        public string SaveString()
+        {
+            return JsonUtility.ToJson(this);
+        }
 
     }
 }

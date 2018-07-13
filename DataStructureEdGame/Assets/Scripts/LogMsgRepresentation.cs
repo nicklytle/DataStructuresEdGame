@@ -6,16 +6,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
-    /**
-     * A Basic Block in the World
-     */
     [Serializable]
-    class Block
+    class LogMsgRepresentation
     {
-        public string type;
-        public string logId; // the ID of the object when it is logged.
-        public double x;
-        public double y;
+        // has type, x, and y from Block
+
+        // what is the ID of the object this connects to?
+        public Block[] blockPart;
+        public LinkBlock[] linkBlockPart;
+        public SingleLinkedListPlatform[] platformPart;
 
         public string SaveString()
         {
