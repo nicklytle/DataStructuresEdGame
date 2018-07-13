@@ -12,27 +12,28 @@ if(mysqli_connect_errno()){
 else{
 	echo "connected successfully to mydb database \n";
 }
-//Querying..
-$logID = $_POST["logID"];
 
+// from: https://docs.unity3d.com/Manual/webgl-networking.html
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Headers: Accept, X-Access-Token, X-Application-Name, X-Request-Sent-Time");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Origin: *");
+
+// POST variables
+$logID = $_POST["logID"];
 $playerID = $_POST["playerID"];
-//$playerID = 13234;
 $levelFile = $_POST["levelFile"];
-//this is from the POST request sent from the Unity file
 $actionMessage = $_POST["actionMsg"];
 $timestamp = $_POST["timestamp"];
-//$timestamp = "12-23-2019";
 
 
-//$sql = "INSERT INTO actionTable (playerID, actionMessage, timestamp) VALUES (22222, 'connected linkB to platB', 'connection', '8.15.2018')";
-// this adds the ' --> .'\''
-//this is from the DB col name
+// values to insert
 $msg = $playerID .', ' .'\''.$levelFile .'\'' .', ' .'\'' .$actionMessage .'\'' .', ' .'\'' .$timestamp .'\'';
-echo $msg . "\n\n\n";
+//echo $msg . "\n\n\n";
 
 
 $sql = "INSERT INTO actiontable (playerID, levelFile, actionMessage, timestamp) VALUES (" .$msg . ")";
-echo $sql . "\n\n\n";
+//echo $sql . "\n\n\n";
 
 $query = mysqli_query($con, $sql);
 if(!$query){

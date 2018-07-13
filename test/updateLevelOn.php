@@ -20,8 +20,8 @@ header("Access-Control-Allow-Origin: *");
 
 
 $playerId = $_POST['playerID'];
-$pw = $_POST['pw'];
-$qry = "SELECT password, levelOn FROM users WHERE playerId = " . htmlspecialchars($playerId);
+$levelOn = $_POST['levelOn'];
+$qry = "UPDATE users SET levelOn=" . htmlspecialchars($levelOn) . " WHERE playerId = " . htmlspecialchars($playerId);
 
 $res = mysqli_query($con, $qry);
 if(!$res){
@@ -29,19 +29,8 @@ if(!$res){
 	mysqli_close($con);
 	exit(1);
 }
-if ($res->num_rows < 1) {
-	echo 'invalid playerId';
-	mysqli_close($con);
-	exit(1);
-}
-$res_arr = $res->fetch_assoc();
 
-# verify that the password matches the playerId
-if (isset($res_arr['password']) && $res_arr['password'] == $pw && isset($res_arr['levelOn'])) {
-	echo 'success ' . $playerId . ' ' . $res_arr['levelOn'];
-} else {
-	echo 'fail';
-}
+echo 'success';
 
 mysqli_close($con);
 
