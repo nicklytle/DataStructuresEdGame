@@ -50,12 +50,12 @@ public class LoggingManager : MonoBehaviour
     {
         List<Block> blockList;
         List<LinkBlock> linkyList;
-        List<SingleLinkedListPlatform> singleLLlist;
+        List<LLPlatformForLogging> singleLLlist;
         Block player = new Block();
 
         linkyList = new List<LinkBlock>();
         blockList = new List<Block>();
-        singleLLlist = new List<SingleLinkedListPlatform>();
+        singleLLlist = new List<LLPlatformForLogging>();
         foreach (Transform t in gameRef.worldGenerator.levelEntities)
         {
             if (t.GetComponent<LinkBlockBehavior>() != null)
@@ -92,7 +92,7 @@ public class LoggingManager : MonoBehaviour
             }
             else if(t.GetComponent<PlatformBehavior>() != null)
             {
-                SingleLinkedListPlatform platB = new SingleLinkedListPlatform();
+                LLPlatformForLogging platB = new LLPlatformForLogging();
                 platB.x = t.position.x;
                 platB.y = t.position.y;
                 platB.type = "LLplatform";
@@ -102,6 +102,15 @@ public class LoggingManager : MonoBehaviour
                 platB.value = t.GetComponent<PlatformBehavior>().getValue();
                 //platB.toAdd = t.GetComponent<PlatformBehavior>().toadd;
                 platB.toAdd = false;
+                for (int i = 0; i < gameRef.platformsToAdd.Count; i++)
+                {
+                    if (t.GetComponent<PlatformBehavior>().logId == platB.logId)
+                    {
+                        platB.toAdd = true;
+                    }
+                }
+                platB.isHidden = t.GetComponent<PlatformBehavior>().isHidden;
+                platB.isSolid = t.GetComponent<PlatformBehavior>().isPhasedOut;
                 singleLLlist.Add(platB);
                 //Debug.Log(singleLLlist.Count);
                 //Platform Behavior has fields to tell if the platform isHidden, isSolid. Include?
@@ -121,7 +130,7 @@ public class LoggingManager : MonoBehaviour
         current.platformPart = singleLLlist.ToArray();
         current.player = player;
         worldStateField = current.SaveString();
-        //Debug.Log(current.SaveString());
+        Debug.Log(current.SaveString());
 
         //it should be a list of all these types of 
 

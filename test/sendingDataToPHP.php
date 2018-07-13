@@ -20,19 +20,19 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 
 // POST variables
-$logID = $_POST["logID"];
 $playerID = $_POST["playerID"];
 $levelFile = $_POST["levelFile"];
 $actionMessage = $_POST["actionMsg"];
 $timestamp = $_POST["timestamp"];
+$worldState = $_POST["worldState"];
 
 
 // values to insert
-$msg = $playerID .', ' .'\''.$levelFile .'\'' .', ' .'\'' .$actionMessage .'\'' .', ' .'\'' .$timestamp .'\'';
+$msg = $playerID .', ' .'\''.$levelFile .'\'' .', ' .'\'' .$actionMessage .'\'' .', ' .'\'' .$timestamp . '\', \'' . $worldState .'\'';
 //echo $msg . "\n\n\n";
 
 
-$sql = "INSERT INTO actiontable (playerID, levelFile, actionMessage, timestamp) VALUES (" .$msg . ")";
+$sql = "INSERT INTO actiontable (playerID, levelFile, actionMessage, timestamp, worldState) VALUES (" .$msg . ")";
 //echo $sql . "\n\n\n";
 
 $query = mysqli_query($con, $sql);

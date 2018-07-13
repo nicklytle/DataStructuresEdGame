@@ -17,7 +17,7 @@ namespace Assets.Scripts.WorldGeneration
         public double x;
         public double y;
 
-        public string SaveString()
+        public virtual string SaveString()
         {
             return JsonUtility.ToJson(this);
         }

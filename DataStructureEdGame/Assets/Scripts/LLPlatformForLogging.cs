@@ -8,19 +8,17 @@ namespace Assets.Scripts.WorldGeneration
 {
     // A single linked list Platform for Single linked list levels
     [Serializable]
-    class SingleLinkedListPlatform : Block
+    class LLPlatformForLogging : SingleLinkedListPlatform
     {
         // type, x, and y from Block
 
-        // the ID that LinkBlocks will use to refer to this block // DOES this replace logId?
-        public string objId;
-        // this platform's inner link
-        public string childLinkBlockConnectId;
+        //whether platform is hidden, not revealed
+        public bool isHidden;
+        //whether platform is solid, not phased out
+        public bool isSolid;
 
-        public int value;
-        public bool toAdd;
 
-        public override string SaveString()
+        public string SaveString()
         {
             return JsonUtility.ToJson(this);
         }
