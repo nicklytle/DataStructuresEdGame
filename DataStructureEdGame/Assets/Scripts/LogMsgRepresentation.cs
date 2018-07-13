@@ -12,9 +12,10 @@ namespace Assets.Scripts.WorldGeneration
         // has type, x, and y from Block
 
         // what is the ID of the object this connects to?
-        public Block[] blockPart;
+        //public Block[] blockPart;
         public LinkBlock[] linkBlockPart;
         public SingleLinkedListPlatform[] platformPart;
+        public Block player;
 
         public string SaveString()
         {

@@ -118,7 +118,7 @@ public class PlayerBehavior : MonoBehaviour {
                     currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
                     string actMsg = "Player landed onto ground: " + currentlyStandingOn;
                     gameController.currentPlayerLogs.send_To_Server(actMsg);
-                    Debug.Log(actMsg);
+                    //Debug.Log(actMsg);
                 }
                 if (initAssgmt)
                 {
@@ -126,7 +126,7 @@ public class PlayerBehavior : MonoBehaviour {
                     currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
                     string actMsg = "Player started by standing on ground: " + currentlyStandingOn;
                     gameController.currentPlayerLogs.send_To_Server(actMsg);
-                    Debug.Log(actMsg);
+                    //Debug.Log(actMsg);
                 }
             }
             else if (collision.gameObject.name == "Platform(Clone)")
@@ -137,7 +137,7 @@ public class PlayerBehavior : MonoBehaviour {
                     currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
                     string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
                     gameController.currentPlayerLogs.send_To_Server(actMsg1);
-                    Debug.Log(actMsg1);
+                    //Debug.Log(actMsg1);
                 }
                 if (initAssgmt)
                 {
@@ -145,7 +145,7 @@ public class PlayerBehavior : MonoBehaviour {
                     currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
                     string actMsg = "Player started by standing on platform: " + currentlyStandingOn;
                     gameController.currentPlayerLogs.send_To_Server(actMsg);
-                    Debug.Log(actMsg);
+                    //Debug.Log(actMsg);
                 }
             }
         }

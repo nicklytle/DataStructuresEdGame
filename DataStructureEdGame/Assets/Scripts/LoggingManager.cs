@@ -30,15 +30,18 @@ public class LoggingManager : MonoBehaviour
         logForm.AddField("levelFile", levelFileName);
         logForm.AddField("actionMsg", actionMsg);
         logForm.AddField("timestamp", timestamp);
-        logForm.AddField("worldState", "cattttt");
-
+        logForm.AddField("worldState", worldStateField);
+        //Debug.Log("About to send");
         using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
         {
             yield return www.Send();
             if (www.isError)
             {
                 Debug.Log("Error with sending the log message");
-            } 
+            } else
+            {
+                //Debug.Log(www.downloadHandler.text);
+            }
         }
     }
 
@@ -48,6 +51,7 @@ public class LoggingManager : MonoBehaviour
         List<Block> blockList;
         List<LinkBlock> linkyList;
         List<SingleLinkedListPlatform> singleLLlist;
+        Block player = new Block();
 
         linkyList = new List<LinkBlock>();
         blockList = new List<Block>();
@@ -76,12 +80,14 @@ public class LoggingManager : MonoBehaviour
 
             else if (t.GetComponent<GroundBehavior>() != null)
             {
+                /**
                 Block groundB = new Block();
                 groundB.x = t.position.x;
                 groundB.y = t.position.y;
                 groundB.type = "ground";
                 groundB.logId = t.GetComponent<GroundBehavior>().logId;
                 blockList.Add(groundB);
+                */
 
             }
             else if(t.GetComponent<PlatformBehavior>() != null)
@@ -97,15 +103,23 @@ public class LoggingManager : MonoBehaviour
                 //platB.toAdd = t.GetComponent<PlatformBehavior>().toadd;
                 platB.toAdd = false;
                 singleLLlist.Add(platB);
-                Debug.Log(singleLLlist.Count);
+                //Debug.Log(singleLLlist.Count);
                 //Platform Behavior has fields to tell if the platform isHidden, isSolid. Include?
+            }
+            else if(t.GetComponent<PlayerBehavior>() != null)
+            {
+                player.x = t.position.x;
+                player.y = t.position.y;
+                player.type = "player";
+                player.logId = t.GetComponent<PlayerBehavior>().logId;
             }
         }
 
         LogMsgRepresentation current = new LogMsgRepresentation();
-        current.blockPart = blockList.ToArray();
+        //current.blockPart = blockList.ToArray();
         current.linkBlockPart = linkyList.ToArray();
         current.platformPart = singleLLlist.ToArray();
+        current.player = player;
         worldStateField = current.SaveString();
         //Debug.Log(current.SaveString());
 
