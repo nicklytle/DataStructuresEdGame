@@ -141,4 +141,26 @@ public class LoggingManager : MonoBehaviour
         StartCoroutine(attemptLogin(playerId, pw));
     }
 
+
+    private IEnumerator updatePlayerLevelOn()
+    {
+        string logUrl = "http://localhost/test/updateLevelOn.php";
+        WWWForm logForm = new WWWForm();
+        logForm.AddField("playerID", currentPlayerID);
+        logForm.AddField("levelOn", gameRef.worldGenerator.levelFileIndex);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
+        {
+            yield return www.Send();
+            if (www.isError)
+            {
+                Debug.Log("Error with updating the level on.");
+            }
+        }
+    }
+
+    public void beginUpdateLastLevelOn()
+    {
+        StartCoroutine(updatePlayerLevelOn());
+    }
 }

@@ -172,6 +172,7 @@ public class PlayerBehavior : MonoBehaviour {
             gameController.currentPlayerLogs.send_To_Server(actMsg);
 
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
+            gameController.currentPlayerLogs.beginUpdateLastLevelOn(); // update what level the player is on
             gameController.worldGenerator.resetLevel();
         }
         else if (c2d.tag == "InstructionViewBlock")

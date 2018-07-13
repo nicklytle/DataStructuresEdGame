@@ -54,12 +54,17 @@ public class LoginPanelBehavior : MonoBehaviour {
                 //Debug.Log(loggingManager.loginAttemptResponse);
                 if (loggingManager.loginAttemptResponse.StartsWith("success"))
                 {
-                    string playerIdExtracted = loggingManager.loginAttemptResponse.Substring(loggingManager.loginAttemptResponse.IndexOf(' ') + 1);
+                    string[] tokens = loggingManager.loginAttemptResponse.Split(' ');
 
                     //Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
-                    gameController.currentPlayerLogs.currentPlayerID = System.Convert.ToInt32(playerIdExtracted);
+                    int playerId = System.Convert.ToInt32(tokens[1]);
+                    int startingLevelIndex = System.Convert.ToInt32(tokens[2]);
+                    gameController.currentPlayerLogs.currentPlayerID = playerId;
+                    gameController.worldGenerator.levelFileIndex = startingLevelIndex;
+                    // populate the previous instruction panel based on the level you're in.
+                    gameController.instructionScreenBehavior.revealPlatformsForLevels(startingLevelIndex); 
                     gameController.worldGenerator.ManualStartGenerator();
                 }
                 else if (loggingManager.loginAttemptResponse.Equals("fail"))

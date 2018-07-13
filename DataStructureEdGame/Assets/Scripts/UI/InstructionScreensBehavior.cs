@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InstructionScreensBehavior : MonoBehaviour {
 
+    public PreviousInstructionsPanelBehavior previousPanelBehavior;
+
     // this class is used to keep a global reference of instruction screens
     [Header("Instruction UI Panels")]
     public RectTransform moveInstructions;
@@ -17,47 +19,68 @@ public class InstructionScreensBehavior : MonoBehaviour {
     public RectTransform platformAnalogyInstructions;
     public RectTransform generatedCodeInstruction;
 
+
     private void changeScreen(string key, bool b)
     {
         if (key.Equals("MoveInstructions"))
         {
             moveInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(moveInstructions);
         }
         else if (key.Equals("PlatformStatesInstructions"))
         {
             platformStateInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(platformStateInstructions);
         }
         else if (key.Equals("PlatformHiddenRevealInstructions"))
         {
             platformHiddenRevealInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(platformHiddenRevealInstructions);
         }
         else if (key.Equals("AddPlatformInstructions"))
         {
             addPlatformInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(addPlatformInstructions);
         }
         else if(key.Equals("DeleteInstructions"))
         {
             deleteInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(deleteInstructions);
         }
         else if (key.Equals("CreateInstructions"))
         {
             createInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(createInstructions);
         }
         else if (key.Equals("GoalInstructions"))
         {
             goalInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(goalInstructions);
         }
         else if(key.Equals("HelicopterRobotInstructions"))
         {
             robotInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(robotInstructions);
         }
         else if (key.Equals("PlatformAnalogyInstructions"))
         {
             platformAnalogyInstructions.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(platformAnalogyInstructions);
         }
         else if (key.Equals("GeneratedCodeInstruction"))
         {
             generatedCodeInstruction.gameObject.SetActive(b);
+            if (b)
+                previousPanelBehavior.addInstructionPanelToHistory(generatedCodeInstruction);
         }
     }
     
@@ -69,5 +92,30 @@ public class InstructionScreensBehavior : MonoBehaviour {
     public void hideScreen(string key)
     {
         changeScreen(key, false);
+    }
+
+    public void revealPlatformsForLevels(int lvlOn)
+    {
+        if (lvlOn >= 1)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(moveInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformAnalogyInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformStateInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(createInstructions);
+        }
+        if (lvlOn >= 2)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(generatedCodeInstruction);
+            previousPanelBehavior.addInstructionPanelToHistory(deleteInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(platformHiddenRevealInstructions);
+        }
+        if (lvlOn >= 3)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(robotInstructions);
+        }
+        if (lvlOn >= 5)
+        {
+            previousPanelBehavior.addInstructionPanelToHistory(addPlatformInstructions);
+        }
     }
 }
