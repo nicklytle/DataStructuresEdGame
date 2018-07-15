@@ -14,8 +14,9 @@ namespace Assets.Scripts.WorldGeneration
         // what is the ID of the object this connects to?
         //public Block[] blockPart;
         public LinkBlock[] linkBlockPart;
-        public SingleLinkedListPlatform[] platformPart;
+        public LLPlatformForLogging[] platformPart;
         public Block player;
+        public Block helicopter;
 
         public string SaveString()
         {

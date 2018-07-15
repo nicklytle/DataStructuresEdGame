@@ -17,8 +17,8 @@ namespace Assets.Scripts.WorldGeneration
         //whether platform is solid, not phased out
         public bool isSolid;
 
-
-        public string SaveString()
+        
+        public override string SaveString()
         {
             return JsonUtility.ToJson(this);
         }
