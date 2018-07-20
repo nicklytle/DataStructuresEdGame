@@ -297,9 +297,8 @@ public class GameController : MonoBehaviour {
                     if (hoverLinkRef.connectingPlatform != null) { 
                         hoverLinkRef.removeLinkConnection();
 
-                        string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it's deleted";
-                        currentPlayerLogs.send_To_Server(actMsg);
-
+                        string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it is deleted";
+                        currentPlayerLogs.send_To_Server(actMsg); 
                     }
                 }
                 setSelectedLink(null);

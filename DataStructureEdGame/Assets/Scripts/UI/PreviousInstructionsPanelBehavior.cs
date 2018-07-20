@@ -9,7 +9,7 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
     public RectTransform containerPanel;
     public Button toggleButton;
 
-    private Vector2 previousPosition; // where the button that was last added is located.
+    //private Vector2 previousPosition; // where the button that was last added is located.
     public RectTransform viewInstructionButtonPrefab;
     private bool showingPanel;
 
@@ -22,27 +22,21 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
     {
         if (previousInstructions == null)
         {
-            previousPosition = new Vector2(5, -5);
             showingPanel = false;
             previousInstructions = new List<RectTransform>();
         }
-
         if (!previousInstructions.Contains(panel))
         {
-            Debug.Log("Adding panel to history");
+            // Debug.Log("Adding panel to history");
             previousInstructions.Add(panel); // add to the end of the list.
 
-            // make a panel and insert it
-            RectTransform newButton = Instantiate<RectTransform>(viewInstructionButtonPrefab, new Vector3(), Quaternion.identity);
-            newButton.gameObject.SetActive(true);
-            newButton.SetParent(containerPanel); // add to the container.
-            newButton.anchoredPosition = previousPosition; 
-            newButton.GetComponent<ViewInstructionPanelButton>().panelToReveal = panel;
-            newButton.GetComponent<ViewInstructionPanelButton>().previousPanel = this;
-            // make the button text equal to the title inside of that instruction panel.
-            Text textComp = newButton.Find("Text").GetComponent<Text>();
-            textComp.text = panel.Find("TitleText").GetComponent<Text>().text;
-            previousPosition += new Vector2(0, -30);
+            // find the button in the container
+            foreach (ViewInstructionPanelButton viewBtn in containerPanel.GetComponentsInChildren<ViewInstructionPanelButton>(true))
+            {
+                if (viewBtn.panelToReveal == panel) {
+                    viewBtn.gameObject.SetActive(true);
+                }
+            }
         }
     }
 

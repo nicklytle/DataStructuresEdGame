@@ -77,21 +77,7 @@ public class LoggingManager : MonoBehaviour
                     newB.objIDConnectingTo = "";
                 }
                 linkyList.Add(newB);
-            }
-
-            else if (t.GetComponent<GroundBehavior>() != null)
-            {
-                /**
-                Block groundB = new Block();
-                groundB.x = t.position.x;
-                groundB.y = t.position.y;
-                groundB.type = "ground";
-                groundB.logId = t.GetComponent<GroundBehavior>().logId;
-                blockList.Add(groundB);
-                */
-
-            }
-            else if(t.GetComponent<PlatformBehavior>() != null)
+            } else if(t.GetComponent<PlatformBehavior>() != null)
             {
                 Debug.Log("I made it here");
                 LLPlatformForLogging platB = new LLPlatformForLogging();
@@ -102,24 +88,11 @@ public class LoggingManager : MonoBehaviour
                 platB.objId = t.GetComponent<PlatformBehavior>().logId;
                 platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>().logId;
                 platB.value = t.GetComponent<PlatformBehavior>().getValue();
-                //platB.toAdd = t.GetComponent<PlatformBehavior>().toadd;
                 platB.toAdd = gameRef.platformsToAdd.Contains(t.GetComponent<PlatformBehavior>());
-                //for (int i = 0; i < gameRef.platformsToAdd.Count; i++)
-                //{
-                //    Debug.Log("I made it to counting platforms to add" + gameRef.platformsToAdd.Count);
-                //    if (t.GetComponent<PlatformBehavior>().logId == platB.logId)
-                //    {
-                //        platB.toAdd = true;
-                //        Debug.Log("I set it to true");
-                //    }
-                //}
+
                 platB.isHidden = t.GetComponent<PlatformBehavior>().isHidden;
-                //Debug.Log("Hidden: "  + platB.isHidden + platB.logId);
                 platB.isSolid = !(t.GetComponent<PlatformBehavior>().isPhasedOut);
-                //Debug.Log("Solid: " + platB.isSolid + platB.logId);
                 singleLLlist.Add(platB);
-                //Debug.Log(singleLLlist.Count);
-                //Platform Behavior has fields to tell if the platform isHidden, isSolid. Include?
             }
             else if(t.GetComponent<PlayerBehavior>() != null)
             {
@@ -139,15 +112,12 @@ public class LoggingManager : MonoBehaviour
         }
 
         LogMsgRepresentation current = new LogMsgRepresentation();
-        //current.blockPart = blockList.ToArray();
         current.linkBlockPart = linkyList.ToArray();
         current.platformPart = singleLLlist.ToArray();
         current.player = player;
         current.helicopter = helicopter;
         worldStateField = current.SaveString();
         Debug.Log(current.SaveString());
-
-        //it should be a list of all these types of 
 
         if (enableLogging) { 
             String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");

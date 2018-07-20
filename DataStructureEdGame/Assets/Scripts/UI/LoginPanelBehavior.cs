@@ -36,7 +36,6 @@ public class LoginPanelBehavior : MonoBehaviour {
 
     void skipLoginShortcut()
     {
-        //Debug.Log("Skipping log in");
         gameCanvas.gameObject.SetActive(true);
         menuCanvas.gameObject.SetActive(false);
         gameController.currentPlayerLogs.currentPlayerID = -1;
@@ -51,7 +50,6 @@ public class LoginPanelBehavior : MonoBehaviour {
             if (loggingManager.loginAttemptResponse.Length > 0)
             {
                 // process the response.
-                //Debug.Log(loggingManager.loginAttemptResponse);
                 if (loggingManager.loginAttemptResponse.StartsWith("success"))
                 {
                     string[] tokens = loggingManager.loginAttemptResponse.Split(' ');
