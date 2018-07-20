@@ -6,41 +6,44 @@ using UnityEngine.UI;
 
 public class HUDBehavior : MonoBehaviour {
 
-    public GameController gameController;
+    private GameController gameController;
+    private LoggingManager loggingManager;
 
-    [Header("References to Important UI Elements")]
-    public Button addPlatformButton;
-    public Button resetButton;
-    public Image addPlatformPanel;
+    private Button addPlatformButton;
+    private Button resetButton;
+    private Image addPlatformPanel;
 
-    [Header("Internal variables")]
-    public PlatformBehavior oneToAdd; 
-    private float debounce; 
-    public bool selected;
-    private int countPlatformsToAdd;
+    private RectTransform objectivePanel;
+    private Text objectiveText;
+    private Text levelOnText;
+    private Text addPlatformButtonTextUI;
 
-
-    public LoggingManager currentPlayerLogs;
-
+    private float debounce;
+    
     void Start()
     {
-        selected = false;
-        debounce = 0;
+        // get internal references
+        addPlatformPanel = transform.Find("HUDPanelAddPlatform").GetComponent<Image>();
+        addPlatformButton = addPlatformPanel.transform.Find("AddPlatformButton").GetComponent<Button>();
+        resetButton = transform.Find("HUDPanelReset/ResetButton").GetComponent<Button>();
+        ensureReferences();
+
         resetButton.onClick.AddListener(OnResetButtonClick);  
-
         addPlatformButton.onClick.AddListener(OnControlAddPlatform);
-        countPlatformsToAdd = -1;
-
+        debounce = 0;
     }
 
     void Update()
     {
         debounce += Time.fixedDeltaTime; 
-        if (gameController.platformsToAdd.Count != countPlatformsToAdd)
+        if (gameController.platformsToAdd.Count == 0 && addPlatformPanel.enabled)
         {
-            countPlatformsToAdd = gameController.platformsToAdd.Count; 
-            addPlatformPanel.gameObject.SetActive(countPlatformsToAdd != 0); // only activate if there are platforms to add
+            addPlatformPanel.gameObject.SetActive(false); 
+        } else if (gameController.platformsToAdd.Count != 0 && !addPlatformPanel.enabled)
+        {
+            addPlatformPanel.gameObject.SetActive(true);
         }
+
         if (debounce > 1.0f && Input.GetKeyDown(KeyCode.P))
         {
             OnResetButtonClick();
@@ -53,7 +56,7 @@ public class HUDBehavior : MonoBehaviour {
         if (debounce > 1.0f) {
 
             string actMsg = "Level was reset";
-            currentPlayerLogs.send_To_Server(actMsg);
+            loggingManager.send_To_Server(actMsg);
 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 
@@ -63,6 +66,62 @@ public class HUDBehavior : MonoBehaviour {
     void OnControlAddPlatform()
     {
         gameController.addingPlatforms = true;
+    }
 
+    public void setObjectiveHUD(string txt, bool show, bool isWinSatisfied)
+    {
+        ensureReferences();
+        if (show)
+        {
+            Color col = isWinSatisfied ? new Color(0, 1, 0, (160.0f / 255.0f)) : new Color(1, 0.02f, 0.02f, (160.0f / 255.0f));
+            objectivePanel.gameObject.SetActive(true);
+            objectiveText.text = txt;
+        } else
+        {
+            objectivePanel.gameObject.SetActive(false);
+        }
+    }
+
+    public void setLevelOnText(int levelOn)
+    {
+        ensureReferences();
+        levelOnText.text = "Level " + levelOn;
+    }
+
+    public void setPlatformsToAddText(int count)
+    {
+        ensureReferences(); 
+        addPlatformButtonTextUI.text = "Add Platform (" + count  + ")";
+    }
+
+    
+    private void ensureReferences()
+    {
+        if (objectivePanel == null)
+        {
+            objectivePanel = transform.Find("HUDPanelObjective").GetComponent<RectTransform>();
+        }
+        if (objectiveText == null)
+        {
+            objectiveText = transform.Find("HUDPanelObjective/ObjectiveText").GetComponent<Text>();
+        }
+        if (levelOnText == null)
+        {
+            levelOnText = transform.Find("HUDLevelOn/LevelOnText").GetComponent<Text>();
+        }
+        if (addPlatformButtonTextUI == null)
+        {
+            addPlatformButtonTextUI = transform.Find("HUDPanelAddPlatform/AddPlatformButton/AddPlatformButtonText").GetComponent<Text>();
+        }
+    }
+
+    public void setGameController(GameController gc)
+    {
+        gameController = gc;
+    }
+
+    public void setLoggingManager(LoggingManager lm)
+    {
+        loggingManager = lm;
     }
 }

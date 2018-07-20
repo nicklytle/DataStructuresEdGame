@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class LoginPanelBehavior : MonoBehaviour {
 
-    // temporary
-    public Button debugSkipLoginButton;
+    // for debugging
+    private Button debugSkipLoginButton;
 
     public LoggingManager loggingManager;
     public GameController gameController;
@@ -15,30 +15,36 @@ public class LoginPanelBehavior : MonoBehaviour {
     public Canvas gameCanvas;
     public Canvas menuCanvas;
     
-    [Header("Important UI References")]
-    public Text statusText;
-    public Button submitButton;
-    public InputField playerIdInputField;
-    public InputField passwordInputField;
-    private bool submitPressed;
+    private Text statusText;
+    private Button submitButton;
+    private InputField playerIdInputField;
+    private InputField passwordInputField;
+    private bool submitPressed; // flag for if the submit button has been pressed 
 
 	// Use this for initialization
 	void Start () {
-        submitPressed = false;
-        submitButton.onClick.AddListener(onSubmitButtonPressed);
+        debugSkipLoginButton = transform.Find("DebugSkipButton").GetComponent<Button>();
+        statusText = transform.Find("StatusText").GetComponent<Text>();
+        submitButton = transform.Find("SubmitButton").GetComponent<Button>();
+        playerIdInputField = transform.Find("PlayerIDInputField").GetComponent<InputField>();
+        passwordInputField = transform.Find("PasswordInputField").GetComponent<InputField>();
 
-        // TEMPORARY
+        // for debugging only.
         debugSkipLoginButton.onClick.AddListener(skipLoginShortcut);
 
+        submitButton.onClick.AddListener(onSubmitButtonPressed);
         playerIdInputField.ActivateInputField();
         passwordInputField.ActivateInputField();
+        submitPressed = false;
     }
 
     void skipLoginShortcut()
     {
         gameCanvas.gameObject.SetActive(true);
         menuCanvas.gameObject.SetActive(false);
-        gameController.currentPlayerLogs.currentPlayerID = -1;
+        gameController.loggingManager.currentPlayerID = -1;
+        gameController.instructionScreenBehavior.ensureInstructionPanelReferences();
+        gameController.instructionScreenBehavior.revealPlatformsForLevels(gameController.worldGenerator.levelFileIndex);
         gameController.worldGenerator.ManualStartGenerator(); 
     }
 
@@ -47,25 +53,25 @@ public class LoginPanelBehavior : MonoBehaviour {
         // if there was a response sent out, wait for the response to come back.
         if (submitPressed)
         {
-            if (loggingManager.loginAttemptResponse.Length > 0)
+            if (loggingManager.getLoginAttemptResponse().Length > 0)
             {
                 // process the response.
-                if (loggingManager.loginAttemptResponse.StartsWith("success"))
+                if (loggingManager.getLoginAttemptResponse().StartsWith("success"))
                 {
-                    string[] tokens = loggingManager.loginAttemptResponse.Split(' ');
+                    string[] tokens = loggingManager.getLoginAttemptResponse().Split(' ');
 
                     //Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
                     int playerId = System.Convert.ToInt32(tokens[1]);
                     int startingLevelIndex = System.Convert.ToInt32(tokens[2]);
-                    gameController.currentPlayerLogs.currentPlayerID = playerId;
+                    gameController.loggingManager.currentPlayerID = playerId;
                     gameController.worldGenerator.levelFileIndex = startingLevelIndex;
                     // populate the previous instruction panel based on the level you're in.
                     gameController.instructionScreenBehavior.revealPlatformsForLevels(startingLevelIndex); 
                     gameController.worldGenerator.ManualStartGenerator();
                 }
-                else if (loggingManager.loginAttemptResponse.Equals("fail"))
+                else if (loggingManager.getLoginAttemptResponse().Equals("fail"))
                 {
                     statusText.text = "Login failed. Please try again.";
                 }

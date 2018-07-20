@@ -8,20 +8,20 @@ using UnityEngine.UI;
 
 public class WorldGenerationBehavior : MonoBehaviour {
 
-    public GameController gameController;
+    private GameController gameController;
 
     [Header("World generation files and options")]
     public int levelFileIndex;
     public TextAsset[] levelDescriptionJsonFiles;
-    public bool generateWorld;
+    public bool generateWorld; // whether to generate the world or not
 
     [Header("Internal references to game objects")]
     public List<Transform> levelEntities; // all of the entities that were generated for the level.
-    public List<LinkBlockBehavior> levelLinkBlocks;
+    private List<LinkBlockBehavior> levelLinkBlocks; // reference to link blocks used during world generation
     // references to Sprite
     public Sprite startLinkBlockSprite;
     public Sprite nullStartLinkBlockSprite;
-    public BackgroundBehavior background;
+    public Transform backgroundRef;
 
     [Header("PreFabs used in World Generation")]
     public Transform groundPreFab;
@@ -33,14 +33,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
     public Transform helicopterRobotPreFab;    
-    
 
     public void ManualStartGenerator()
     {
         if (generateWorld)
         {
             CreateWorldFromLevelDescription();
-            //Debug.Log("CREATED WORLD");
         }
     }
 
@@ -114,8 +112,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
             levelEntities.Add(gameController.playerRef);
             // move the backdrop right behind the player initially.
-            background.initialPosition = gameController.playerRef.position + new Vector3(0, 0, -10);
-            background.transform.position = background.initialPosition;
+            backgroundRef.position = gameController.playerRef.position + new Vector3(0, 0, -10);
         }
         if (level.goalPortal != null)
         {
@@ -231,7 +228,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 newLLPlatform.gameObject.SetActive(false);
                 newPlat.isInLevel = false;
                 gameController.platformsToAdd.Add(newPlat);
-                gameController.addPlatformButtonTextUI.text = "Add Platform (" + gameController.platformsToAdd.Count + ")";
+                gameController.hudBehavior.setPlatformsToAddText(gameController.platformsToAdd.Count);
             } else
             {
                 newPlat.isInLevel = true;
@@ -281,7 +278,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
 
         gameController.codePanelBehavior.clearCodeText();
-        gameController.levelOnTextUI.text = "Level " + (levelFileIndex + 1);
+        gameController.hudBehavior.setLevelOnText(levelFileIndex + 1); 
     }
 
 
@@ -312,14 +309,19 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             CreateWorldFromLevelDescription();
             string actMsg = "level " + (levelFileIndex + 1) + " was created";
-            gameController.currentPlayerLogs.send_To_Server(actMsg);
+            gameController.loggingManager.send_To_Server(actMsg);
         } else
         { 
             string actMsg = "Game is won!";
-            gameController.currentPlayerLogs.send_To_Server(actMsg);
-            gameController.gameCanvas.gameObject.SetActive(false);
+            gameController.loggingManager.send_To_Server(actMsg);
+            gameController.hudBehavior.gameObject.SetActive(false);
             gameController.winGameCanvas.gameObject.SetActive(true);
         }
     }
 
+
+    public void setGameController(GameController gc)
+    {
+        gameController = gc;
+    }
 }

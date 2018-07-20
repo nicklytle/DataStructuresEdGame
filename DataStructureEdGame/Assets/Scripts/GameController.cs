@@ -15,8 +15,9 @@ public class GameController : MonoBehaviour {
         SortListDuplicatesNotAllBlocks,
     }
 
-    public LoggingManager currentPlayerLogs;
+    public LoggingManager loggingManager;
     public WorldGenerationBehavior worldGenerator;
+    public HUDBehavior hudBehavior;
 
     [Header("Debugging")]
     public int debugLinkControlVersion;
@@ -28,8 +29,7 @@ public class GameController : MonoBehaviour {
     [Header("PreFabs and Game Objects")]
     // the Prefab for line renderer stuff.
     public Transform linePreFab;
-    // Reference to the Red X block
-    public GameObject redXSprite;
+    public Transform deleteXPreFab;
 
     [Header("Cursor")]
     public Texture2D cursorPointingTexture;
@@ -41,30 +41,25 @@ public class GameController : MonoBehaviour {
     [Header("Level specific Properties")]
     public WinCondition winConditon;
 
-    [Header("UI Element References")]
-    public Image objectiveHudPanelUI;
-    public Text objectiveTextUI;
-    public Text levelOnTextUI;
-    public Text addPlatformButtonTextUI;
-
     [Header("UI Element Scripts")]
     public CodePanelBehavior codePanelBehavior;
     public InstructionScreensBehavior instructionScreenBehavior;
 
     [Header("Canvas References")]
     public Canvas winGameCanvas;
-    public Canvas gameCanvas;
+    private Canvas gameCanvas;
 
     [Header("Internal references")]
     public Transform playerRef;
     public Transform helicopterRobotRef;
+    private Transform deleteSpriteRef;
     public LinkBlockBehavior startingLink; // what is this level's starting link block?
     public LinkBlockBehavior selectedLink; // what Link block the player is adding a connection to, if any
     public LinkBlockBehavior hoverLinkRef; // the link block the mouse is hovering over. 
-    public LinkBlockBehavior previousNotNullHoverLinkRef;
-    public List<LinkBlockBehavior> mouseOverLinkRefs; // the link block the mouse is hovering over. 
-    public Transform hoverArrowLine;
-    public Transform hoverArrowHead;
+    private LinkBlockBehavior previousNotNullHoverLinkRef;
+    private List<LinkBlockBehavior> mouseOverLinkRefs; // the link block the mouse is hovering over. 
+    private Transform hoverArrowLine;
+    private Transform hoverArrowHead;
     public DateTime lastTimeClickedMillis;// a queue of platforms that may be added in this level
     public List<PlatformBehavior> platformsToAdd;
     // whether the player is currently in an the Add Platform mode.
@@ -78,8 +73,7 @@ public class GameController : MonoBehaviour {
     void Start()
     {
         debugFrameCount = 0;
-
-
+        
         selectedLink = null;
         // ensure the starting link has the proper property
         if (startingLink != null)
@@ -87,7 +81,12 @@ public class GameController : MonoBehaviour {
             startingLink.isStartingLink = true;
         }
         platformEntities = new List<PlatformBehavior>();
-        objectiveBlocks = new List<ObjectiveBlockBehavior>(); 
+        objectiveBlocks = new List<ObjectiveBlockBehavior>();
+        mouseOverLinkRefs = new List<LinkBlockBehavior>();
+        loggingManager.setGameController(this);
+        worldGenerator.setGameController(this);
+        hudBehavior.setGameController(this);
+        gameCanvas = hudBehavior.GetComponent<Canvas>();
     }
 
     void Update()
@@ -173,10 +172,9 @@ public class GameController : MonoBehaviour {
 
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
-                        currentPlayerLogs.send_To_Server(actMsg);
+                        loggingManager.send_To_Server(actMsg);
 
-                        addPlatformButtonTextUI.text = "Add Platform (" + platformsToAdd.Count + ")";
-                       
+                        hudBehavior.setPlatformsToAddText(platformsToAdd.Count);
 
                         updateObjectiveHUDAndBlocks();
                         updatePlatformEntities();
@@ -192,7 +190,7 @@ public class GameController : MonoBehaviour {
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
                 string actMsg = "Clicked without clicking on a hover link and a select link";
-                currentPlayerLogs.send_To_Server(actMsg);
+                loggingManager.send_To_Server(actMsg);
 
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
@@ -298,7 +296,7 @@ public class GameController : MonoBehaviour {
                         hoverLinkRef.removeLinkConnection();
 
                         string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it is deleted";
-                        currentPlayerLogs.send_To_Server(actMsg); 
+                        loggingManager.send_To_Server(actMsg); 
                     }
                 }
                 setSelectedLink(null);
@@ -309,7 +307,7 @@ public class GameController : MonoBehaviour {
             else if (selectedLink != null && hoverLinkRef == null)
             {
                 string actMsg = "the link block " + selectedLink.logId + " was deselected";
-                currentPlayerLogs.send_To_Server(actMsg);
+                loggingManager.send_To_Server(actMsg);
 
                 deselectSelectedLink();
                 setCursorToDefault(); 
@@ -339,7 +337,7 @@ public class GameController : MonoBehaviour {
                     setCursorToDefault();
                     //setStatusText("Established a connection.");
                     string actMsg = "Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null");
-                    currentPlayerLogs.send_To_Server(actMsg);
+                    loggingManager.send_To_Server(actMsg);
 
                 }
                 previousNotNullHoverLinkRef = null; // no longer needed to track
@@ -497,7 +495,7 @@ public class GameController : MonoBehaviour {
         { 
             selectedLink.setDisplayMarker(true, true);
             //Debug.Log("The player has selected the link: " + selectedLink.logId);
-            currentPlayerLogs.send_To_Server("The player has selected the link: " + selectedLink.logId);
+            loggingManager.send_To_Server("The player has selected the link: " + selectedLink.logId);
         }
     }
 
@@ -505,7 +503,7 @@ public class GameController : MonoBehaviour {
     {
         string actMsg = "The player deselected the link: " + selectedLink.logId;
         //Debug.Log("The player deselected the link: " + selectedLink.logId);
-        currentPlayerLogs.send_To_Server(actMsg);
+        loggingManager.send_To_Server(actMsg);
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
         //setStatusText("Deselected link block"); 
@@ -516,8 +514,11 @@ public class GameController : MonoBehaviour {
     // remove the current hover link and set the "bridge" collider to default again. 
     public void removeHoverLink()
     {
-        redXSprite.SetActive(false);
         removeHoverArrow();
+        if (deleteSpriteRef != null)
+        {
+            Destroy(deleteSpriteRef.gameObject);
+        }
         if (hoverLinkRef != null) {  // only remove it if we actually need to remove it.
             if (hoverLinkRef != selectedLink)
             { // don't remove the marker on the selected link, but remove it otherwise.
@@ -556,7 +557,7 @@ public class GameController : MonoBehaviour {
     public void setHoverLink(ref LinkBlockBehavior lb)
     {
         //Debug.Log("The user has hovered over link block " + lb.getLogID());
-        currentPlayerLogs.send_To_Server("The user has hovered over link block " + lb.getLogID());
+        loggingManager.send_To_Server("The user has hovered over link block " + lb.getLogID());
         removeHoverLink(); 
         hoverLinkRef = lb; 
 
@@ -570,15 +571,13 @@ public class GameController : MonoBehaviour {
             // if the connection establishing action is complete.
             if (selectedLink != null && selectedLink.connectingPlatform != null && (hoverLinkRef.connectingPlatform == null || selectedLink.connectingPlatform != hoverLinkRef.connectingPlatform))
             {
-                /*Bounds linkBounds = selectedLink.GetComponent<SpriteRenderer>().bounds;
-                Bounds platBounds = selectedLink.connectingPlatform.GetComponent<SpriteRenderer>().bounds;
-
-                // find the closest points on both bounding boxes to the center point to make the arrow.
-                Vector3 betweenPoint = new Vector3((linkBounds.center.x + platBounds.center.x) / 2,
-                    (linkBounds.center.y + platBounds.center.y) / 2, 0); */
-
-                redXSprite.SetActive(true);
-                redXSprite.transform.position = selectedLink.GetComponent<SpriteRenderer>().bounds.center + new Vector3(0, 0, -18);
+                if (deleteSpriteRef != null)
+                {
+                    Destroy(deleteSpriteRef.gameObject);
+                }
+                Vector3 deleteXLocation = selectedLink.GetComponent<SpriteRenderer>().bounds.center + new Vector3(0, 0, -18);
+                deleteSpriteRef = Instantiate(deleteXPreFab, deleteXLocation, Quaternion.identity);
+                Debug.Log("RED X SPRITE WAS MADE!!!!"); 
             }
 
             // conditions for "bridging": there is a select link and a hover link, and they are not equal
@@ -647,39 +646,26 @@ public class GameController : MonoBehaviour {
     {
         if (winConditon != WinCondition.None)
         {
-            objectiveHudPanelUI.gameObject.SetActive(true);
-            objectiveTextUI.gameObject.SetActive(true);
-
-            bool isWinSatisfied = isWinConditonSatisfied();
-            // update the hud
-            if (isWinSatisfied)
-            {
-                objectiveHudPanelUI.color = new Color(0, 1, 0, (160.0f / 255.0f));
-            }
-            else
-            {
-                objectiveHudPanelUI.color = new Color(1f, 0.02f, 0.02f, (160.0f / 255.0f));
-            }
-
+            bool isWinSatisfied = isWinConditonSatisfied(); 
             if (winConditon == WinCondition.SortListAscending)
             {
-                if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in increasing order while including all Platforms.\nThe List is sorted!";
+                if (isWinSatisfied) 
+                    hudBehavior.setObjectiveHUD("Sort the list in increasing order while including all Platforms.\nThe List is sorted!", true, isWinSatisfied);
                 else
-                    objectiveTextUI.text = "Sort the list in increasing order while including all Platforms.\nThe List is not sorted.";
+                    hudBehavior.setObjectiveHUD("Sort the list in increasing order while including all Platforms.\nThe List is not sorted.", true, isWinSatisfied);
             } else if (winConditon == WinCondition.SortListDescending)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Sort the list in decreasing order while including all Platforms.\nThe List is sorted!";
+                    hudBehavior.setObjectiveHUD("Sort the list in decreasing order while including all Platforms.\nThe List is sorted!", true, isWinSatisfied);
                 else
-                    objectiveTextUI.text = "Sort the list in decreasing order while including all Platforms.\nThe List is not sorted.";
+                    hudBehavior.setObjectiveHUD("Sort the list in decreasing order while including all Platforms.\nThe List is not sorted.", true, isWinSatisfied);
             }
             else if (winConditon == WinCondition.SortListDuplicatesNotAllBlocks)
             {
                 if (isWinSatisfied)
-                    objectiveTextUI.text = "Delete all duplicate blocks\nThe List has no duplicates!";
+                    hudBehavior.setObjectiveHUD("Delete all duplicate blocks\nThe List has no duplicates!", true, isWinSatisfied);
                 else
-                    objectiveTextUI.text = "Delete all duplicate blocks\nThe List contains duplicates.";
+                    hudBehavior.setObjectiveHUD("Delete all duplicate blocks\nThe List contains duplicates.", true, isWinSatisfied);
             }
 
             // update the blocks
@@ -689,8 +675,7 @@ public class GameController : MonoBehaviour {
             }
         } else
         {
-            objectiveHudPanelUI.gameObject.SetActive(false);
-            objectiveTextUI.gameObject.SetActive(false);
+            hudBehavior.setObjectiveHUD("", false, false); 
         }
     }
 

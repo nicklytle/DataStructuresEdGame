@@ -5,14 +5,15 @@ using UnityEngine.UI;
 
 public class CodePanelBehavior : MonoBehaviour {
 
-    public Text codeTextUI;
-    public Scrollbar scrollBar;
+    private Text codeTextUI;
+    private Scrollbar scrollBar;
     private int lines;
     private float ySize;
 
     void Start()
     {
-        ySize = 72; // codeTextUI.rectTransform.sizeDelta.y;
+        scrollBar = transform.Find("Scrollbar").GetComponent<Scrollbar>();
+        ensureReferences();
     }
 
     public void appendCodeText(string line)
@@ -41,10 +42,21 @@ public class CodePanelBehavior : MonoBehaviour {
 
     public void clearCodeText()
     {
+        ensureReferences();
         codeTextUI.text = "";
         lines = 0;
         codeTextUI.rectTransform.gameObject.SetActive(true);
         codeTextUI.rectTransform.sizeDelta = new Vector2(codeTextUI.rectTransform.sizeDelta.x, ySize); // reset the size
         //Debug.Log("Cleared code text");
+    }
+
+    private void ensureReferences()
+    {
+        if (codeTextUI == null)
+        {
+            codeTextUI = transform.Find("ScrollView/ViewportContainer/CodeText").GetComponent<Text>();
+            // make sure to record the correct initial size.
+            ySize = transform.Find("ScrollView").GetComponent<RectTransform>().sizeDelta.y;
+        }
     }
 }

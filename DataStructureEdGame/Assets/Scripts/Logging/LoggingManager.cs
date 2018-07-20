@@ -10,11 +10,10 @@ using Assets.Scripts.WorldGeneration;
 
 public class LoggingManager : MonoBehaviour
 {
-
-    public GameController gameRef;
+    private GameController gameController;
     public int currentPlayerID;
     public bool enableLogging;
-    public string loginAttemptResponse;  // store the response from the login attempt.
+    private string loginAttemptResponse;  // store the response from the login attempt.
     private string worldStateField;
 
     private IEnumerator sendLogToServer(string actionMsg, string timestamp)
@@ -23,25 +22,22 @@ public class LoggingManager : MonoBehaviour
         WWWForm logForm = new WWWForm();
         logForm.AddField("playerID", currentPlayerID);
         string levelFileName = "NO LEVEL";
-        if (gameRef.worldGenerator.levelFileIndex < gameRef.worldGenerator.levelDescriptionJsonFiles.Length)
+        if (gameController.worldGenerator.levelFileIndex < gameController.worldGenerator.levelDescriptionJsonFiles.Length)
         {
-            levelFileName = gameRef.worldGenerator.levelDescriptionJsonFiles[gameRef.worldGenerator.levelFileIndex].name;
+            levelFileName = gameController.worldGenerator.levelDescriptionJsonFiles[gameController.worldGenerator.levelFileIndex].name;
         }
         logForm.AddField("levelFile", levelFileName);
         logForm.AddField("actionMsg", actionMsg);
         logForm.AddField("timestamp", timestamp);
         logForm.AddField("worldState", worldStateField);
-        //Debug.Log("About to send");
+
         using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
         {
             yield return www.Send();
             if (www.isError)
             {
                 Debug.Log("Error with sending the log message");
-            } else
-            {
-                //Debug.Log(www.downloadHandler.text);
-            }
+            }  
         }
     }
 
@@ -57,7 +53,7 @@ public class LoggingManager : MonoBehaviour
         linkyList = new List<LinkBlock>();
         blockList = new List<Block>();
         singleLLlist = new List<LLPlatformForLogging>();
-        foreach (Transform t in gameRef.worldGenerator.levelEntities)
+        foreach (Transform t in gameController.worldGenerator.levelEntities)
         {
             if (t.GetComponent<LinkBlockBehavior>() != null)
             {
@@ -88,7 +84,7 @@ public class LoggingManager : MonoBehaviour
                 platB.objId = t.GetComponent<PlatformBehavior>().logId;
                 platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>().logId;
                 platB.value = t.GetComponent<PlatformBehavior>().getValue();
-                platB.toAdd = gameRef.platformsToAdd.Contains(t.GetComponent<PlatformBehavior>());
+                platB.toAdd = gameController.platformsToAdd.Contains(t.GetComponent<PlatformBehavior>());
 
                 platB.isHidden = t.GetComponent<PlatformBehavior>().isHidden;
                 platB.isSolid = !(t.GetComponent<PlatformBehavior>().isPhasedOut);
@@ -155,7 +151,7 @@ public class LoggingManager : MonoBehaviour
         string logUrl = "http://localhost/test/updateLevelOn.php";
         WWWForm logForm = new WWWForm();
         logForm.AddField("playerID", currentPlayerID);
-        logForm.AddField("levelOn", gameRef.worldGenerator.levelFileIndex);
+        logForm.AddField("levelOn", gameController.worldGenerator.levelFileIndex);
 
         using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
         {
@@ -170,5 +166,15 @@ public class LoggingManager : MonoBehaviour
     public void beginUpdateLastLevelOn()
     {
         StartCoroutine(updatePlayerLevelOn());
+    }
+
+    public string getLoginAttemptResponse()
+    {
+        return loginAttemptResponse;
+    }
+
+    public void setGameController(GameController gc)
+    {
+        gameController = gc;
     }
 }

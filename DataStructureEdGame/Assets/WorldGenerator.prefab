@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameController: {fileID: 0}
-  levelFileIndex: 7
+  levelFileIndex: 1
   levelDescriptionJsonFiles:
   - {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
   - {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
@@ -65,6 +65,11 @@ MonoBehaviour:
   generateWorld: 1
   levelEntities: []
   levelLinkBlocks: []
+  startLinkBlockSprite: {fileID: 21300000, guid: 6276121a12819c842a592772ed4604e4,
+    type: 3}
+  nullStartLinkBlockSprite: {fileID: 21300000, guid: aafdf6e86cda78f44b13f697dfabe43b,
+    type: 3}
+  background: {fileID: 0}
   groundPreFab: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b,
     type: 2}
   groundTopPreFab: {fileID: 4829979505292052, guid: 26a26d8687254544ea0ab35a9b358f20,
@@ -83,8 +88,3 @@ MonoBehaviour:
     type: 2}
   helicopterRobotPreFab: {fileID: 4542530472994684, guid: 3bd505a3c7392d3429694b15adac81e2,
     type: 2}
-  startLinkBlockSprite: {fileID: 21300000, guid: 6276121a12819c842a592772ed4604e4,
-    type: 3}
-  nullStartLinkBlockSprite: {fileID: 21300000, guid: aafdf6e86cda78f44b13f697dfabe43b,
-    type: 3}
-  background: {fileID: 0}

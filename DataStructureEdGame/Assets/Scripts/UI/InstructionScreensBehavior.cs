@@ -5,82 +5,23 @@ using UnityEngine;
 public class InstructionScreensBehavior : MonoBehaviour {
 
     public PreviousInstructionsPanelBehavior previousPanelBehavior;
+    // internal reference of all of the instruction panels
+    private Dictionary<string, RectTransform> instructionPanels;
 
-    // this class is used to keep a global reference of instruction screens
-    [Header("Instruction UI Panels")]
-    public RectTransform moveInstructions;
-    public RectTransform platformStateInstructions;
-    public RectTransform platformHiddenRevealInstructions;
-    public RectTransform addPlatformInstructions;
-    public RectTransform deleteInstructions;
-    public RectTransform createInstructions;
-    public RectTransform goalInstructions;
-    public RectTransform robotInstructions;
-    public RectTransform platformAnalogyInstructions;
-    public RectTransform generatedCodeInstruction;
-
+    void Start()
+    {
+        ensureInstructionPanelReferences();
+    }
 
     private void changeScreen(string key, bool b)
     {
-        if (key.Equals("MoveInstructions"))
+        if (instructionPanels.ContainsKey(key))
         {
-            moveInstructions.gameObject.SetActive(b);
+            instructionPanels[key].gameObject.SetActive(b);
             if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(moveInstructions);
-        }
-        else if (key.Equals("PlatformStatesInstructions"))
-        {
-            platformStateInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(platformStateInstructions);
-        }
-        else if (key.Equals("PlatformHiddenRevealInstructions"))
-        {
-            platformHiddenRevealInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(platformHiddenRevealInstructions);
-        }
-        else if (key.Equals("AddPlatformInstructions"))
-        {
-            addPlatformInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(addPlatformInstructions);
-        }
-        else if(key.Equals("DeleteInstructions"))
-        {
-            deleteInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(deleteInstructions);
-        }
-        else if (key.Equals("CreateInstructions"))
-        {
-            createInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(createInstructions);
-        }
-        else if (key.Equals("GoalInstructions"))
-        {
-            goalInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(goalInstructions);
-        }
-        else if(key.Equals("HelicopterRobotInstructions"))
-        {
-            robotInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(robotInstructions);
-        }
-        else if (key.Equals("PlatformAnalogyInstructions"))
-        {
-            platformAnalogyInstructions.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(platformAnalogyInstructions);
-        }
-        else if (key.Equals("GeneratedCodeInstruction"))
-        {
-            generatedCodeInstruction.gameObject.SetActive(b);
-            if (b)
-                previousPanelBehavior.addInstructionPanelToHistory(generatedCodeInstruction);
+            {
+                previousPanelBehavior.addInstructionPanelToHistory(instructionPanels[key]);
+            }
         }
     }
     
@@ -96,26 +37,43 @@ public class InstructionScreensBehavior : MonoBehaviour {
 
     public void revealPlatformsForLevels(int lvlOn)
     {
+        previousPanelBehavior.ensureReferences();
         if (lvlOn >= 1)
         {
-            previousPanelBehavior.addInstructionPanelToHistory(moveInstructions);
-            previousPanelBehavior.addInstructionPanelToHistory(platformAnalogyInstructions);
-            previousPanelBehavior.addInstructionPanelToHistory(platformStateInstructions);
-            previousPanelBehavior.addInstructionPanelToHistory(createInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["MoveInstructions"]);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["PlatformAnalogyInstructions"]);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["PlatformStatesInstructions"]);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["CreateInstructions"]); 
         }
         if (lvlOn >= 2)
         {
-            previousPanelBehavior.addInstructionPanelToHistory(generatedCodeInstruction);
-            previousPanelBehavior.addInstructionPanelToHistory(deleteInstructions);
-            previousPanelBehavior.addInstructionPanelToHistory(platformHiddenRevealInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["GeneratedCodeInstruction"]);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["DeleteInstructions"]);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["PlatformHiddenRevealInstructions"]);
         }
         if (lvlOn >= 3)
-        {
-            previousPanelBehavior.addInstructionPanelToHistory(robotInstructions);
+        { 
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["HelicopterRobotInstructions"]);
         }
         if (lvlOn >= 5)
         {
-            previousPanelBehavior.addInstructionPanelToHistory(addPlatformInstructions);
+            previousPanelBehavior.addInstructionPanelToHistory(instructionPanels["AddPlatformInstructions"]);
+        }
+    }
+
+    public void ensureInstructionPanelReferences()
+    {
+        if (instructionPanels == null)
+        {
+            instructionPanels = new Dictionary<string, RectTransform>();
+        }
+        if (instructionPanels.Count == 0)
+        { 
+            instructionPanels = new Dictionary<string, RectTransform>();
+            foreach (Transform child in transform)
+            {
+                instructionPanels.Add(child.gameObject.name, child.gameObject.GetComponent<RectTransform>());
+            }
         }
     }
 }

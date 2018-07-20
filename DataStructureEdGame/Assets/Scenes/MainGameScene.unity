@@ -890,7 +890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &129705159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,13 +984,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4867eb26462ed44582c58002f8ab655, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 1909570818}
-  addPlatformButton: {fileID: 1881759260}
-  resetButton: {fileID: 462850116}
-  addPlatformPanel: {fileID: 1090070145}
-  oneToAdd: {fileID: 0}
-  selected: 0
-  currentPlayerLogs: {fileID: 319232011}
 --- !u!1001 &132998251
 Prefab:
   m_ObjectHideFlags: 0
@@ -1498,8 +1491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8985119bc9adb8f4cb699aa5fabb9ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  containerPanel: {fileID: 40353134}
-  toggleButton: {fileID: 325462917}
   viewInstructionButtonPrefab: {fileID: 224112791572375922, guid: 8e198a82a42edc54aa6eb59d9835dda4,
     type: 2}
 --- !u!1 &252550284
@@ -1534,7 +1525,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000015258789, y: -36.000023}
+  m_AnchoredPosition: {x: -0.000015258789, y: -35.999992}
   m_SizeDelta: {x: 0, y: 72}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &252550286
@@ -1927,19 +1918,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
-      propertyPath: gameController
-      value: 
-      objectReference: {fileID: 1909570818}
-    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
-        type: 2}
       propertyPath: background
       value: 
-      objectReference: {fileID: 663304323}
+      objectReference: {fileID: 0}
     - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
         type: 2}
       propertyPath: levelFileIndex
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114215466071239032, guid: d800d9ff1973ba345a524e1199292274,
+        type: 2}
+      propertyPath: backgroundRef
+      value: 
+      objectReference: {fileID: 663304322}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d800d9ff1973ba345a524e1199292274, type: 2}
   m_IsPrefabParent: 0
@@ -3574,7 +3565,6 @@ GameObject:
   m_Component:
   - component: {fileID: 663304322}
   - component: {fileID: 663304321}
-  - component: {fileID: 663304323}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -3635,18 +3625,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &663304323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 663304320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13481a30d2ab406479706e1da76e3ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &690119864
 Prefab:
   m_ObjectHideFlags: 0
@@ -4064,7 +4042,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &812549615
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4282,16 +4260,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previousPanelBehavior: {fileID: 231891319}
-  moveInstructions: {fileID: 1235214922}
-  platformStateInstructions: {fileID: 2091717259}
-  platformHiddenRevealInstructions: {fileID: 1594837752}
-  addPlatformInstructions: {fileID: 1758670383}
-  deleteInstructions: {fileID: 1211805612}
-  createInstructions: {fileID: 1010410644}
-  goalInstructions: {fileID: 1420447962}
-  robotInstructions: {fileID: 1215620907}
-  platformAnalogyInstructions: {fileID: 879943232}
-  generatedCodeInstruction: {fileID: 134227892}
 --- !u!1 &879943231
 GameObject:
   m_ObjectHideFlags: 0
@@ -5591,15 +5559,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffade98209b055d4ab3b2ef2cf97f28a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugSkipLoginButton: {fileID: 812549616}
   loggingManager: {fileID: 319232011}
   gameController: {fileID: 1909570818}
   gameCanvas: {fileID: 129705161}
   menuCanvas: {fileID: 1682594725}
-  statusText: {fileID: 1352112569}
-  submitButton: {fileID: 60285213}
-  playerIdInputField: {fileID: 1142284254}
-  passwordInputField: {fileID: 1998822170}
 --- !u!1 &1090070143
 GameObject:
   m_ObjectHideFlags: 0
@@ -5812,75 +5775,6 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224112791572375922, guid: 8e198a82a42edc54aa6eb59d9835dda4,
     type: 2}
   m_PrefabInternal: {fileID: 1098291954}
---- !u!1 &1106459776
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1106459778}
-  - component: {fileID: 1106459777}
-  m_Layer: 0
-  m_Name: RedX
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!212 &1106459777
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1106459776}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 1d522cded28b514428bb77307d9e8118, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 0.64, y: 0.64}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
---- !u!4 &1106459778
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1106459776}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -18}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1108884327
 GameObject:
   m_ObjectHideFlags: 0
@@ -9071,7 +8965,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1515042632}
   m_Layer: 5
-  m_Name: ViewportContaner
+  m_Name: ViewportContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9179,8 +9073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a375d5e741d9a842a4f3e54bae925e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  codeTextUI: {fileID: 252550286}
-  scrollBar: {fileID: 2145080869}
 --- !u!1 &1534543219
 GameObject:
   m_ObjectHideFlags: 0
@@ -10567,7 +10459,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11474,13 +11366,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbebfd51a36f4b046af7bcdf9fb82250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentPlayerLogs: {fileID: 319232011}
+  loggingManager: {fileID: 319232011}
   worldGenerator: {fileID: 111316952}
+  hudBehavior: {fileID: 129705163}
   debugLinkControlVersion: 1
   debugFrameCount: 0
   enableLinkChaining: 0
   linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
-  redXSprite: {fileID: 1106459776}
+  deleteXPreFab: {fileID: 4069570937706396, guid: 66483aa0a70b9c545b902222856f00aa,
+    type: 2}
   cursorPointingTexture: {fileID: 2800000, guid: cb6a2c50bbac6d24c84b8fccff928faf,
     type: 3}
   cursorDraggingTexture: {fileID: 2800000, guid: 5d37af810ade4aa4bb41791a2f4c4add,
@@ -11488,23 +11382,14 @@ MonoBehaviour:
   cursorMode: 0
   doubleClickDelay: 180
   winConditon: 0
-  objectiveHudPanelUI: {fileID: 1060193297}
-  objectiveTextUI: {fileID: 455446035}
-  levelOnTextUI: {fileID: 1662282398}
-  addPlatformButtonTextUI: {fileID: 358409625}
   codePanelBehavior: {fileID: 1534049699}
   instructionScreenBehavior: {fileID: 874829294}
   winGameCanvas: {fileID: 1394945826}
-  gameCanvas: {fileID: 129705161}
   playerRef: {fileID: 0}
   helicopterRobotRef: {fileID: 0}
   startingLink: {fileID: 0}
   selectedLink: {fileID: 0}
   hoverLinkRef: {fileID: 0}
-  previousNotNullHoverLinkRef: {fileID: 0}
-  mouseOverLinkRefs: []
-  hoverArrowLine: {fileID: 0}
-  hoverArrowHead: {fileID: 0}
   platformsToAdd: []
   addingPlatforms: 0
 --- !u!1 &1912144207

@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 public class PreviousInstructionsPanelBehavior : MonoBehaviour {
 
-    private List<RectTransform> previousInstructions;
-    public RectTransform containerPanel;
-    public Button toggleButton;
-
-    //private Vector2 previousPosition; // where the button that was last added is located.
     public RectTransform viewInstructionButtonPrefab;
+
+    private List<RectTransform> previousInstructions;
+    private RectTransform containerPanel;
+    private Button toggleButton;
     private bool showingPanel;
 
 	void Start ()
     {
+        toggleButton = transform.Find("PreviousInstructionsButton").GetComponent<Button>();
         toggleButton.onClick.AddListener(TogglePanelView);
+        ensureReferences();
     }
 
     public void addInstructionPanelToHistory(RectTransform panel)
@@ -61,5 +62,13 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
     {
         showingPanel = true;
         containerPanel.gameObject.SetActive(true);
+    }
+
+    public void ensureReferences()
+    {
+        if (containerPanel == null)
+        {
+            containerPanel = transform.FindChild("ContainerPanel").GetComponent<RectTransform>();
+        }
     }
 }

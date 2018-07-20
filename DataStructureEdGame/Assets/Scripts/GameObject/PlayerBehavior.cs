@@ -50,7 +50,7 @@ public class PlayerBehavior : MonoBehaviour {
         if((((horz != 0) && (vert == 0)) || ((vert != 0) && (horz == 0))) && (!startOfMove))
         {
             string actMsg = "Player started moving from: (" + Math.Round(oldX, 1) + ", " + Math.Round(oldY, 1) + ")";
-            gameController.currentPlayerLogs.send_To_Server(actMsg);
+            gameController.loggingManager.send_To_Server(actMsg);
             startOfMove = true;
 
         }
@@ -58,7 +58,7 @@ public class PlayerBehavior : MonoBehaviour {
         {
             startOfMove = false;
             string actMsg2 = "Player landed at : (" + Math.Round(rb2.position.x, 1) + ", " + Math.Round(rb2.position.y, 1) + ")";
-            gameController.currentPlayerLogs.send_To_Server(actMsg2);
+            gameController.loggingManager.send_To_Server(actMsg2);
         }
 
 
@@ -98,7 +98,7 @@ public class PlayerBehavior : MonoBehaviour {
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
             string actMsg3 = "Player: " + logId + " jumped.";
-            gameController.currentPlayerLogs.send_To_Server(actMsg3);
+            gameController.loggingManager.send_To_Server(actMsg3);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
         }
@@ -117,7 +117,7 @@ public class PlayerBehavior : MonoBehaviour {
                 {
                     currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
                     string actMsg = "Player landed onto ground: " + currentlyStandingOn;
-                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    gameController.loggingManager.send_To_Server(actMsg);
                     //Debug.Log(actMsg);
                 }
                 if (initAssgmt)
@@ -125,7 +125,7 @@ public class PlayerBehavior : MonoBehaviour {
                     initAssgmt = false;
                     currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
                     string actMsg = "Player started by standing on ground: " + currentlyStandingOn;
-                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    gameController.loggingManager.send_To_Server(actMsg);
                     //Debug.Log(actMsg);
                 }
             }
@@ -136,7 +136,7 @@ public class PlayerBehavior : MonoBehaviour {
                 {
                     currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
                     string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
-                    gameController.currentPlayerLogs.send_To_Server(actMsg1);
+                    gameController.loggingManager.send_To_Server(actMsg1);
                     //Debug.Log(actMsg1);
                 }
                 if (initAssgmt)
@@ -144,7 +144,7 @@ public class PlayerBehavior : MonoBehaviour {
                     initAssgmt = false;
                     currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
                     string actMsg = "Player started by standing on platform: " + currentlyStandingOn;
-                    gameController.currentPlayerLogs.send_To_Server(actMsg);
+                    gameController.loggingManager.send_To_Server(actMsg);
                     //Debug.Log(actMsg);
                 }
             }
@@ -162,17 +162,17 @@ public class PlayerBehavior : MonoBehaviour {
         if (c2d.tag == "BottomOfWorld")
         {
             string actMsg = "Player fell off and died, level was reset";
-            gameController.currentPlayerLogs.send_To_Server(actMsg);
+            gameController.loggingManager.send_To_Server(actMsg);
             gameController.worldGenerator.resetLevel();
 
         }
         else if (c2d.tag == "GoalPortal")
         {
             string actMsg = "Level " + (gameController.worldGenerator.levelFileIndex + 1) + " won at time";
-            gameController.currentPlayerLogs.send_To_Server(actMsg);
+            gameController.loggingManager.send_To_Server(actMsg);
 
             gameController.worldGenerator.levelFileIndex = gameController.worldGenerator.levelFileIndex + 1;
-            gameController.currentPlayerLogs.beginUpdateLastLevelOn(); // update what level the player is on
+            gameController.loggingManager.beginUpdateLastLevelOn(); // update what level the player is on
             gameController.worldGenerator.resetLevel();
         }
         else if (c2d.tag == "InstructionViewBlock")
