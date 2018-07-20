@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.GameObject.Interfaces;
+using System;
 
-public class PlatformBehavior : MonoBehaviour {
+public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity {
 
     public string logId; // the ID of this object when it is logged
 
@@ -29,7 +31,7 @@ public class PlatformBehavior : MonoBehaviour {
     public void removeIncomingConnectingLink(LinkBlockBehavior link)
     {
         incomingConnectionLinkBlocks.Remove(link); // remove this reference to the link
-        link.connectingPlatform = null; // remove the reference to this platform in the link 
+        link.connectingEntity = null; // remove the reference to this platform in the link 
         gameController.updatePlatformEntities(); //  updatePlatformValuesAndSprite();
     }
 
@@ -104,7 +106,7 @@ public class PlatformBehavior : MonoBehaviour {
     public bool isPlatformConnectingToStart()
     {
         List<PlatformBehavior> alreadySearchedPlatforms = new List<PlatformBehavior>();
-        PlatformBehavior temp = gameController.startingLink.connectingPlatform;
+        PlatformBehavior temp = (PlatformBehavior)gameController.startingLink.connectingEntity;
         while (temp != null)
         {
             if (temp == this)
@@ -114,7 +116,7 @@ public class PlatformBehavior : MonoBehaviour {
             if (temp.childLink != null)
             {
                 alreadySearchedPlatforms.Add(temp);
-                temp = temp.childLink.GetComponent<LinkBlockBehavior>().connectingPlatform;
+                temp = (PlatformBehavior)temp.childLink.GetComponent<LinkBlockBehavior>().connectingEntity;
                 if (alreadySearchedPlatforms.Contains(temp)) // you have reached the end of the list or there is an infinite loop
                     return false;
             }
@@ -211,5 +213,20 @@ public class PlatformBehavior : MonoBehaviour {
     public string getLogID()
     {
         return logId;
+    }
+
+    bool ConnectableEntity.isPhasedOut()
+    {
+        return isPhasedOut;
+    }
+
+    bool ConnectableEntity.isHidden()
+    {
+        return isHidden;
+    }
+
+    float ValueEntity.getValue()
+    {
+        return value;
     }
 }

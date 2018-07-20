@@ -64,9 +64,9 @@ public class LoggingManager : MonoBehaviour
                 newB.y = t.position.y;
                 newB.type = "linkBlock";
                 newB.logId = t.GetComponent<LinkBlockBehavior>().logId;
-                if(t.GetComponent<LinkBlockBehavior>().connectingPlatform != null)
+                if(t.GetComponent<LinkBlockBehavior>().connectingEntity != null)
                 {
-                    newB.objIDConnectingTo = t.GetComponent<LinkBlockBehavior>().connectingPlatform.logId;
+                    newB.objIDConnectingTo = t.GetComponent<LinkBlockBehavior>().connectingEntity.getLogID();
                 }
                 else
                 {

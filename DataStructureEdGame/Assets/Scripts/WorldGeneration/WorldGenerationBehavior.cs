@@ -246,8 +246,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
                     if (listPlatformMap[platformId].isInLevel == true)
                     {
                         // establish the connection
-                        levelLinkBlocks[i].connectingPlatform = listPlatformMap[platformId];
-                        levelLinkBlocks[i].connectingPlatform.addIncomingConnectingLink(levelLinkBlocks[i]);
+                        levelLinkBlocks[i].connectingEntity = listPlatformMap[platformId];
+                        levelLinkBlocks[i].connectingEntity.addIncomingConnectingLink(levelLinkBlocks[i]);
                         levelLinkBlocks[i].renderArrow = true;
                     }
                 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.GameObject.Interfaces;
 
 public class LinkBlockBehavior : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class LinkBlockBehavior : MonoBehaviour
     public GameController gameController;
 
     public PlatformBehavior containerPlatform; // if this link block is in a platform, then this is the parent 
-    public PlatformBehavior connectingPlatform; // this is the platform object this link is pointing to.
+    public ConnectableEntity connectingEntity; // this is the platform object this link is pointing to.
 
     // references to the arrow instances
     public Transform linkArrow; // this is the current arrow that is instantiated 
@@ -54,7 +55,7 @@ public class LinkBlockBehavior : MonoBehaviour
     {
         removeArrowBetween();
 
-        if (connectingPlatform == null) // only update the sprite if there is no connection
+        if (connectingEntity == null) // only update the sprite if there is no connection
         {
             if (GetComponent<SpriteRenderer>().sprite != nullLinkSprite)
             {
@@ -67,11 +68,11 @@ public class LinkBlockBehavior : MonoBehaviour
             }
         }
 
-        if (renderArrow && connectingPlatform != null)
+        if (renderArrow && connectingEntity != null)
         { 
             // set the arrow color
             Color color = Color.red;
-            if ((containerPlatform != null && containerPlatform.isPhasedOut) || (isHelicopterLink && connectingPlatform.isPhasedOut))
+            if ((containerPlatform != null && containerPlatform.isPhasedOut) || (isHelicopterLink && connectingEntity.isPhasedOut()))
             {
                 color = Color.gray;  // arrowPreFab = linkArrowFadedPreFab;
             }
@@ -80,7 +81,7 @@ public class LinkBlockBehavior : MonoBehaviour
                 color = Color.yellow; // arrowPreFab = linkArrowHelicopterPreFab;
             }
             // create the arrow and save references to the new instances.
-            Transform[] linkArrowParts = gameController.createArrowInstanceBetweenLinkPlatform(this, connectingPlatform, color);
+            Transform[] linkArrowParts = gameController.createArrowInstanceBetweenLinkPlatform(this, connectingEntity, color);
             linkArrow = linkArrowParts[0];
             linkArrowHead = linkArrowParts[1];
         } // end render arrow
@@ -107,7 +108,7 @@ public class LinkBlockBehavior : MonoBehaviour
      */
     public bool isConnectedToPlatform()
     {
-        return connectingPlatform != null;
+        return connectingEntity != null;
     }
 
     /**
@@ -115,20 +116,20 @@ public class LinkBlockBehavior : MonoBehaviour
      */
     public void removeLinkConnection()
     {
-        connectingPlatform.removeIncomingConnectingLink(this); // set connect platform null to make render update correctly
-        connectingPlatform = null;
+        connectingEntity.removeIncomingConnectingLink(this); // set connect platform null to make render update correctly
+        connectingEntity = null;
         UpdateLinkArrow();
     }
 
     /**
      *  Set the playform this is going to be linking to.
      */
-    public void setConnectingPlatform(PlatformBehavior platform)
+    public void setConnectingEntity(ConnectableEntity entity)
     { 
-        if (platform != null)
+        if (entity != null)
         {
-            connectingPlatform = platform;
-            connectingPlatform.addIncomingConnectingLink(this);
+            connectingEntity = entity;
+            connectingEntity.addIncomingConnectingLink(this);
             if (isHelicopterLink) // if the link belongs to the helicopter robot...
             {
                 gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().MoveAboveLinkedPlatform();

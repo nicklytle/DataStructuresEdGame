@@ -25,7 +25,7 @@ public class HelicopterRobotBehavior : MonoBehaviour {
             Vector3 moveDir = (targetLocation - transform.position).normalized;
             // move, lerping based on the distance away
             transform.Translate(Vector3.Lerp(new Vector3(), (moveDir * flySpeed * Time.deltaTime), distAway / 12f));
-            if (childLink != null && childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null)
+            if (childLink != null && childLink.GetComponent<LinkBlockBehavior>().connectingEntity != null)
             {
                 childLink.GetComponent<LinkBlockBehavior>().setRenderArrow(false);
                 // childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow(); // refresh its position as it moves
@@ -38,10 +38,10 @@ public class HelicopterRobotBehavior : MonoBehaviour {
 
     public void MoveAboveLinkedPlatform()
     {
-        if (childLink.GetComponent<LinkBlockBehavior>().connectingPlatform != null)
+        if (childLink.GetComponent<LinkBlockBehavior>().connectingEntity != null)
         {
             // move above the platform 
-            targetLocation = childLink.GetComponent<LinkBlockBehavior>().connectingPlatform.transform.position + (new Vector3(0, 3, 0));
+            targetLocation = ((MonoBehaviour)childLink.GetComponent<LinkBlockBehavior>().connectingEntity).transform.position + (new Vector3(0, 3, 0));
         }
     }
 
