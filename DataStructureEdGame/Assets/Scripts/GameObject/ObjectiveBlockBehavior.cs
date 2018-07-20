@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectiveBlockBehavior : MonoBehaviour {
+public class ObjectiveBlockBehavior : MonoBehaviour, Loggable
+{
 
     public string logId;
 

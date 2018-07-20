@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalBehavior : MonoBehaviour {
+public class GoalBehavior : MonoBehaviour, Loggable
+{
 
     public string logId;
 

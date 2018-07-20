@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using Assets.Scripts.GameObject.Interfaces;
 using System;
 
-public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity {
+public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, Loggable
+{
 
     public string logId; // the ID of this object when it is logged
 
@@ -23,7 +24,7 @@ public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity {
     // game specific values
     public bool isHidden; // if not Hidden, then Revealed.
     public bool isPhasedOut; // if not Phased Out, then Solid. 
-    public bool isInLevel;
+    public bool isInLevel; // whether this platform has been placed in the level yet or not
 
     /**
      * Remove an incoming link reference to this platform. 

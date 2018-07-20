@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.GameObject.Interfaces;
 
-public class LinkBlockBehavior : MonoBehaviour
+public class LinkBlockBehavior : MonoBehaviour, Loggable
 {
     public string logId; // the ID of this object when it is logged
 

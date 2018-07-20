@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HelicopterRobotBehavior : MonoBehaviour {
+public class HelicopterRobotBehavior : MonoBehaviour, Loggable
+{
 
     public string logId;
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundBehavior : MonoBehaviour {
+public class GroundBehavior : MonoBehaviour, Loggable
+{
 
     public string logId;
 

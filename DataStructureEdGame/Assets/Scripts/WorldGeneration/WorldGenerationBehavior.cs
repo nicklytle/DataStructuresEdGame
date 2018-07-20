@@ -11,17 +11,17 @@ public class WorldGenerationBehavior : MonoBehaviour {
     private GameController gameController;
 
     [Header("World generation files and options")]
-    public int levelFileIndex;
-    public TextAsset[] levelDescriptionJsonFiles;
+    public int levelFileIndex;  // which level you are currently playing. This starts from 0 and 
+                                // goes until the size of the level description files array minus one.
+    public TextAsset[] levelDescriptionJsonFiles; // an array of level files. The order of this array determines the order of levels.
     public bool generateWorld; // whether to generate the world or not
 
     [Header("Internal references to game objects")]
     public List<Transform> levelEntities; // all of the entities that were generated for the level.
     private List<LinkBlockBehavior> levelLinkBlocks; // reference to link blocks used during world generation
-    // references to Sprite
-    public Sprite startLinkBlockSprite;
+    public Sprite startLinkBlockSprite;  // references to Sprites
     public Sprite nullStartLinkBlockSprite;
-    public Transform backgroundRef;
+    public Transform backgroundRef; // reference to the background game object
 
     [Header("PreFabs used in World Generation")]
     public Transform groundPreFab;
@@ -275,8 +275,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
         }
-
-
+        
         gameController.codePanelBehavior.clearCodeText();
         gameController.hudBehavior.setLevelOnText(levelFileIndex + 1); 
     }

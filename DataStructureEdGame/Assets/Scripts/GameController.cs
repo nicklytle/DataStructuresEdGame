@@ -16,9 +16,9 @@ public class GameController : MonoBehaviour {
         SortListDuplicatesNotAllBlocks,
     }
 
-    public LoggingManager loggingManager;
-    public WorldGenerationBehavior worldGenerator;
-    public HUDBehavior hudBehavior;
+    public LoggingManager loggingManager; // set in unity editor
+    public WorldGenerationBehavior worldGenerator; // set in unity editor
+    public HUDBehavior hudBehavior; // set in unity editor
 
     [Header("Debugging")]
     public int debugLinkControlVersion;
@@ -27,8 +27,7 @@ public class GameController : MonoBehaviour {
     [Header("Gameplay options")]
     public bool enableLinkChaining = false;
 
-    [Header("PreFabs and Game Objects")]
-    // the Prefab for line renderer stuff.
+    [Header("PreFabs and Game Objects")] 
     public Transform linePreFab;
     public Transform deleteXPreFab;
     public Transform cameraRef;
@@ -203,12 +202,11 @@ public class GameController : MonoBehaviour {
         } // end addingPlatforms block
 
 
-        // testing to see if you can see if there are more than one link blocks over the mouse
+        // Create a list of all of the link blocks that the mouse is over. With link chaining, it is possible to have more than 1 at once.
         mouseOverLinkRefs.Clear();
         Vector3 mousePointInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         foreach (Transform t in worldGenerator.levelEntities)
-        {  
-
+        {   
             // look at all elements which have link blocks
             if (t.GetComponent<LinkBlockBehavior>() != null) { 
                 if (t.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) || t.GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
@@ -232,7 +230,9 @@ public class GameController : MonoBehaviour {
             }
         } // end populating mouseOverLinkRefs.
 
-
+        // If there are more than 1 link blocks that the mouse is over, 
+        // then one of these link blocks have to be chosen as the priority link block
+        // the priority link block becomes the hover link for this frame.
         if (mouseOverLinkRefs.Count > 0)
         { 
             // this block is tryin to decide which link block the mouse is over should be the hover link.
@@ -265,11 +265,11 @@ public class GameController : MonoBehaviour {
                 {
                     previousNotNullHoverLinkRef.containerPlatform.updatePlatformValuesAndSprite(); // it should be returned to its "natural" state.
                 }
-            } 
-
+            }  
         }
-        else if (hoverLinkRef != null) // only set null if needed
+        else if (hoverLinkRef != null) // if there are no link blocks under the mouse and if there is a hover link...
         {
+            // remove any visuals for that hover link.
             removeHoverLink();
             previousNotNullHoverLinkRef = null; // does this fall apart?
             if (!Input.GetMouseButton(0)) { 
@@ -277,30 +277,32 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        // handle just clicking the mouse button
+
+        // handle just clicking the mouse button once
         if (Input.GetMouseButtonDown(0))
         {
-            // if you don't have any link selected and you're hovering over a link
+            // if you don't have any link selected and you're hovering over a link while clicking
             if (selectedLink == null && hoverLinkRef != null)
             {
+                // start dragging...
                 setSelectedLink(hoverLinkRef);
-                //Debug.Log("The user has selected link block: " + selectedLink.logId);
-                //currentPlayerLogs.send_To_Server("The user has selected link block: " + selectedLink.logId);
                 setCursorToDragging();
-
-            }  // if you're selecting a link and also hovering over the select link and clicking
+            }  // if you're selecting a link and also hovering over the selected link and clicking
             else if (selectedLink != null && hoverLinkRef != null && selectedLink == hoverLinkRef)
             {
-                //Debug.Log("millisecond diff: " + (DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond));
-                if ((DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay) { 
+                // see if the click was fast enough to be a double click
+                if ((DateTime.Now.Millisecond - lastTimeClickedMillis.Millisecond) < doubleClickDelay)
+                {
                     codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = null;"); // still counds as setting it as null if it is already null;
-                    if (hoverLinkRef.connectingEntity != null) { 
+                    if (hoverLinkRef.connectingEntity != null)
+                    {
+                        // if the link had a link connection, then remove it.
                         hoverLinkRef.removeLinkConnection();
-
                         string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it is deleted";
-                        loggingManager.send_To_Server(actMsg); 
+                        loggingManager.send_To_Server(actMsg);
                     }
                 }
+                // deselect after clicking on the same selected link.
                 setSelectedLink(null);
                 updateObjectiveHUDAndBlocks(); // update any objective blocks
                 updatePlatformEntities();
@@ -308,28 +310,31 @@ public class GameController : MonoBehaviour {
             } // if you just clicked and you have a link selected and you're not hovering over anything.
             else if (selectedLink != null && hoverLinkRef == null)
             {
+                // then you deselect the link block that is selected.
                 string actMsg = "the link block " + selectedLink.logId + " was deselected";
                 loggingManager.send_To_Server(actMsg);
-
                 deselectSelectedLink();
-                setCursorToDefault(); 
+                setCursorToDefault();
             }
-        } // if you are not clicking and not holding down the mouse button
+        }
+
 
         if (!Input.GetMouseButton(0)) // if the mouse button is NOT being held down.
         {
+            // if you're not holding the mouse and there is a select link and a hover link...
             if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
             {
-                // establish connection  
+                // verify that the connection is valid.
                 if (hoverLinkRef.containerPlatform == null || selectedLink.containerPlatform != hoverLinkRef.containerPlatform)
                 {
-                    // this means there is a valid connection!
                     // before establishing the connection for the addingLink, remove any links current there.
                     codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = " + hoverLinkRef.getCodeVariableString() + ";");
                     if (selectedLink.isConnectedToPlatform())
                     {
                         selectedLink.removeLinkConnection();
                     }
+                    // establish a connection, making the selected link connect to the same entity as the hover link.
+                    // verify that the hover link has a connection in the first place.
                     if (hoverLinkRef.connectingEntity != null && (PlatformBehavior)hoverLinkRef.connectingEntity != selectedLink.containerPlatform)
                     {
                         selectedLink.setConnectingEntity(hoverLinkRef.connectingEntity);
@@ -337,27 +342,30 @@ public class GameController : MonoBehaviour {
                     removeHoverArrow();
                     removeHoverLink();
                     setCursorToDefault();
-                    //setStatusText("Established a connection.");
                     string actMsg = "Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null");
-                    loggingManager.send_To_Server(actMsg);
-
+                    loggingManager.send_To_Server(actMsg); 
                 }
-                previousNotNullHoverLinkRef = null; // no longer needed to track
+                previousNotNullHoverLinkRef = null; // no longer needed to track the previous after making a connection
                 deselectSelectedLink();
-            } else if (selectedLink != null && hoverLinkRef != selectedLink)
+            } // if you are not clicking and there is a selected link, but the 
+              // hover link is null, then deselect the select link.
+            else if (selectedLink != null && hoverLinkRef == null)
             {
-                previousNotNullHoverLinkRef = null; // no longer needed to track
+                previousNotNullHoverLinkRef = null; 
                 deselectSelectedLink();
-            } else if (selectedLink == null && hoverLinkRef != null)
+            } // if you are not selecting any link butt here is a link that the mouse is hovering over.
+            else if (selectedLink == null && hoverLinkRef != null)
             {
-                // you can click on the hover link, so change the cursor to show that.
+                // indicate that the hover link can be clicked and selected
                 setCursorToPointer();
-            } else if (selectedLink != null && hoverLinkRef == selectedLink)
+            } // if you have a link selected and the hover link is the same as the selected link/
+            else if (selectedLink != null && hoverLinkRef == selectedLink)
             {
-                setCursorToPointer(); // click to delete
+                setCursorToPointer(); // indicate that you can click to delete
             }
         } 
-         
+        
+        // record the last time that the mouse clicked for double clicking
         if (Input.GetMouseButton(0))
         {
             lastTimeClickedMillis = System.DateTime.Now;
@@ -389,8 +397,6 @@ public class GameController : MonoBehaviour {
                         numberOfTotalPlatformsInLevel++;
                     }
                 }
-                //Debug.Log(debugFrameCount + " | WIN CONDITION: Number of platforms in the level: " + numberOfTotalPlatformsInLevel);
-
                 if (startingLink.connectingEntity == null)
                 {
                     return (numberOfTotalPlatformsInLevel == 0); // if there are no platforms in the level
@@ -420,7 +426,6 @@ public class GameController : MonoBehaviour {
                     temp = next;
                     sizeOfList++;
                 }
-                //Debug.Log(debugFrameCount + " | WIN CONDITION: Size of the list: " + sizeOfList);
                 return (sizeOfList == numberOfTotalPlatformsInLevel); // the list is sorted if all platforms in the level are in the list.
 
             case WinCondition.SortListDuplicatesNotAllBlocks:
@@ -498,7 +503,6 @@ public class GameController : MonoBehaviour {
         if (selectedLink != null)
         { 
             selectedLink.setDisplayMarker(true, true);
-            //Debug.Log("The player has selected the link: " + selectedLink.logId);
             loggingManager.send_To_Server("The player has selected the link: " + selectedLink.logId);
         }
     }
@@ -506,11 +510,9 @@ public class GameController : MonoBehaviour {
     public void deselectSelectedLink()
     {
         string actMsg = "The player deselected the link: " + selectedLink.logId;
-        //Debug.Log("The player deselected the link: " + selectedLink.logId);
         loggingManager.send_To_Server(actMsg);
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
-        //setStatusText("Deselected link block"); 
         updateObjectiveHUDAndBlocks(); // update any objective blocks
         updatePlatformEntities();
     }
@@ -571,7 +573,7 @@ public class GameController : MonoBehaviour {
             // make that hover link block be displayed as selected. 
             hoverLinkRef.setDisplayMarker(true);
 
-            // Make a red X appear over the arrow of the selected link connection if the selected link connection will be removed 
+            // Make a sprite appear over the link block of the selected link connection if the selected link connection will be removed 
             // if the connection establishing action is complete.
             if (selectedLink != null && selectedLink.connectingEntity != null && (hoverLinkRef.connectingEntity == null || selectedLink.connectingEntity != hoverLinkRef.connectingEntity))
             {
@@ -619,12 +621,9 @@ public class GameController : MonoBehaviour {
                         bridgePoints[3] = p1 + (scalePerpScale * perpDiff);
 
                         Vector3 md = new Vector3(0, 0, 40);
-
                         Vector3[] linePositions = new Vector3[2];
                         linePositions[0] = p0 + md;
                         linePositions[1] = p1 + md;
-
-                        // TODO: Transform the collider to go from world space to local space;
                         hoverLinkRef.GetComponent<PolygonCollider2D>().points = bridgePoints;
                         hoverLinkRef.GetComponent<LineRenderer>().startColor = Color.cyan;
                         hoverLinkRef.GetComponent<LineRenderer>().endColor = Color.cyan;
@@ -632,7 +631,6 @@ public class GameController : MonoBehaviour {
                         hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
                         hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale - 0.2f; // make the path look a little smaller than it really is
                         hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale - 0.2f; 
-                    
                         if (hoverLinkRef.connectingEntity is PlatformBehavior) { 
                             ((PlatformBehavior)hoverLinkRef.connectingEntity).updatePlatformValuesAndSprite();
                         }
@@ -791,19 +789,16 @@ public class GameController : MonoBehaviour {
 
     private void setCursorToDefault()
     {
-        //Debug.Log("SET CURSOR TO DEFAULT");
         Cursor.SetCursor(null, new Vector2(), cursorMode);
     }
 
     private void setCursorToPointer()
     {
-        //Debug.Log("SET CURSOR TO POINTER");
         Cursor.SetCursor(cursorPointingTexture, new Vector2(12, 0), cursorMode);
     }
 
     private void setCursorToDragging()
     {
-        //Debug.Log("SET CURSOR TO DRAGGING");
         Cursor.SetCursor(cursorDraggingTexture, new Vector2(18, 8), cursorMode);
     }
 
