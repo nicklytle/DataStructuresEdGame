@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour {
     // the Prefab for line renderer stuff.
     public Transform linePreFab;
     public Transform deleteXPreFab;
+    public Transform cameraRef;
 
     [Header("Cursor")]
     public Texture2D cursorPointingTexture;
@@ -96,7 +97,7 @@ public class GameController : MonoBehaviour {
         if (playerRef != null)
         {
             // always set the camera on top of the player.
-            transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z);
+            cameraRef.transform.position = new Vector3(playerRef.position.x, playerRef.position.y, transform.position.z - 50);
         } 
 
         // add platform system 

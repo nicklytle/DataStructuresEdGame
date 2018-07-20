@@ -34,7 +34,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1371151059048822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.3742075, y: 5.9120245, z: -50}
+  m_LocalPosition: {x: 0, y: 0, z: -50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -51,8 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e04f4e246eff7bf42977e86b1126b457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 0}
-  levelFileIndex: 1
+  levelFileIndex: 4
   levelDescriptionJsonFiles:
   - {fileID: 4900000, guid: b894994d3ba434b41a8883c83bc132a3, type: 3}
   - {fileID: 4900000, guid: 6a3b4326b41f8454aadd9490166752c6, type: 3}
@@ -64,12 +63,11 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 3bf39b502b7047745ad4f86ff0e200f6, type: 3}
   generateWorld: 1
   levelEntities: []
-  levelLinkBlocks: []
   startLinkBlockSprite: {fileID: 21300000, guid: 6276121a12819c842a592772ed4604e4,
     type: 3}
   nullStartLinkBlockSprite: {fileID: 21300000, guid: aafdf6e86cda78f44b13f697dfabe43b,
     type: 3}
-  background: {fileID: 0}
+  backgroundRef: {fileID: 0}
   groundPreFab: {fileID: 4161480330475208, guid: 5c2b03a6447ca25459d3942a84ced93b,
     type: 2}
   groundTopPreFab: {fileID: 4829979505292052, guid: 26a26d8687254544ea0ab35a9b358f20,
