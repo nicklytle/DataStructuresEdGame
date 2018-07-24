@@ -1,10 +1,11 @@
 <?php
+# return success of an error message based on if the log message was successfully submitted
+###
 
-//header('Content-Type: text/plain');
 $host = 'localhost';
-$user = 'root';
+$user = 'USER';
 $pass = '';
-$db = 'edgamedb';
+$db = 'DB_NAME';
 $con = mysqli_connect($host, $user, $pass, $db);
 if(mysqli_connect_errno()){
 	echo 'Failed to connect to MySQL: ' .mysqli_connect_error();
@@ -20,20 +21,16 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Origin: *");
 
 // POST variables
-$playerID = $_POST["playerID"];
-$levelFile = $_POST["levelFile"];
-$actionMessage = $_POST["actionMsg"];
-$timestamp = $_POST["timestamp"];
-$worldState = $_POST["worldState"];
-
+$playerID = mysqli_real_escape_string($_POST["playerID"]);
+$levelFile = mysqli_real_escape_string($_POST["levelFile"]);
+$actionMessage = mysqli_real_escape_string($_POST["actionMsg"]);
+$timestamp = mysqli_real_escape_string($_POST["timestamp"]);
+$worldState = mysqli_real_escape_string($_POST["worldState"]);
 
 // values to insert
 $msg = $playerID .', ' .'\''.$levelFile .'\'' .', ' .'\'' .$actionMessage .'\'' .', ' .'\'' .$timestamp . '\', \'' . $worldState .'\'';
-//echo $msg . "\n\n\n";
-
 
 $sql = "INSERT INTO actiontable (playerID, levelFile, actionMessage, timestamp, worldState) VALUES (" .$msg . ")";
-//echo $sql . "\n\n\n";
 
 $query = mysqli_query($con, $sql);
 if(!$query){
