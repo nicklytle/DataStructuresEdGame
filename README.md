@@ -27,11 +27,11 @@ The game is made with Unity version 5.6.0. You can download it [here](https://un
 
 Once the project is open, clicking the Play will start the game at its log-on screen. In educational studies, this is used for participants to log on with a unique Player ID so log data can be associated with each participant. You can bypass the log-in screen by clicking the “Debug Login” button. If you are unable to run the game, try right clicking on the Project window and select “Reimport all”.
 
-![alt text]( https://github.com/nicklytle/DataStructuresEdGame/images/game_screenshot0.PNG  "Log-in screen")
+![login screen]( https://raw.githubusercontent.com/nicklytle/DataStructuresEdGame/master/images/game_screenshot0.PNG  "Log-in screen")
 
 Once you’re logged in, the world generator will generate the current level and the camera will focus on the player. Below is a screenshot with a few labels for the interface
 
-![alt text]( https://github.com/nicklytle/DataStructuresEdGame/images/game_screenshot1.PNG  "Screenshot of the game")
+![game screenshot](https://raw.githubusercontent.com/nicklytle/DataStructuresEdGame/master/images/game_screenshot1.PNG  "Screenshot of the game")
 
 For more details about the project structure, see the [Project Structure](https://github.com/nicklytle/DataStructuresEdGame/wiki/Project-Structure) wiki page. 
 
