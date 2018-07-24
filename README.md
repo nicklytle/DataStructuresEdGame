@@ -33,7 +33,7 @@ Once you’re logged in, the world generator will generate the current level and
 
 ![alt text]( https://github.com/nicklytle/DataStructuresEdGame/images/game_screenshot1.PNG  "Screenshot of the game")
 
-For more details about the project structure and how it works, see the Project Structure wiki page. 
+For more details about the project structure, see the [Project Structure](https://github.com/nicklytle/DataStructuresEdGame/wiki/Project-Structure) wiki page. 
 
 
 ### Contributing
@@ -45,7 +45,7 @@ If you have any suggestions, please leave an Issue with a Suggestion tag.
 
 ### Roadmap
 
-The vision is for this project is to develop a comprehensive game to help CS students learn a wide variety of data structures. Currently, it only implements Linked Lists. Please view the Roadmap wiki page for more future goals. 
+The vision is for this project is to develop a comprehensive game to help CS students learn a wide variety of data structures. Currently, it only implements Linked Lists. Please view the [Roadmap](https://github.com/nicklytle/DataStructuresEdGame/wiki/Roadmap) wiki page for more future goals. 
 
 
 ### Research
