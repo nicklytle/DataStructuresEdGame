@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    /**
+     * A basic block with extra size information for when the size can vary.
+     * This class is for level file serialization.
+     */
     [Serializable]
     class SizedBlock : Block
     {

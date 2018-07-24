@@ -6,6 +6,9 @@ using Assets.Scripts.WorldGeneration;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * Handles all world and level generation from given level description files.
+ */
 public class WorldGenerationBehavior : MonoBehaviour {
 
     private GameController gameController;
@@ -308,11 +311,11 @@ public class WorldGenerationBehavior : MonoBehaviour {
         {
             CreateWorldFromLevelDescription();
             string actMsg = "level " + (levelFileIndex + 1) + " was created";
-            gameController.loggingManager.send_To_Server(actMsg);
+            gameController.loggingManager.sendLogToServer(actMsg);
         } else
         { 
             string actMsg = "Game is won!";
-            gameController.loggingManager.send_To_Server(actMsg);
+            gameController.loggingManager.sendLogToServer(actMsg);
             gameController.hudBehavior.gameObject.SetActive(false);
             gameController.winGameCanvas.gameObject.SetActive(true);
         }

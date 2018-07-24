@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * A script for buttons showing up in the previous instruction view panel.
+ */
 public class ViewInstructionPanelButton : MonoBehaviour {
 
     public PreviousInstructionsPanelBehavior previousPanel;

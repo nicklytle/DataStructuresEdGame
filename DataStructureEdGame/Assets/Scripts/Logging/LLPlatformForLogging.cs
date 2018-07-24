@@ -6,7 +6,11 @@ using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
-    // A single linked list Platform for Single linked list levels
+    /**
+     * A single linked list Platform for Single linked list levels, but
+     * includes additional information for logging.
+     * This class is for log message serialization.
+     */
     [Serializable]
     class LLPlatformForLogging : SingleLinkedListPlatform
     {

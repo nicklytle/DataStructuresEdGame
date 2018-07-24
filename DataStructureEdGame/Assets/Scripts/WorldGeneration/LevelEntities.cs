@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    /**
+     * The main class with all objects to describe an entire level.
+     * This class is for level file serialization.
+     */
     [Serializable]
     class LevelEntities
     {

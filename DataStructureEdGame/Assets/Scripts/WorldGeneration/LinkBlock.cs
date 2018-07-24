@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    /**
+     * A link game link block. This may be a stand alone or as a child to another object.
+     * This class is for level file serialization.
+     */
     [Serializable]
     class LinkBlock : Block
     {

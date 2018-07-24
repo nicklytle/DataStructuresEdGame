@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * Enemy behavior scrit where the enemy moves from right to left until they 
+ * reach the edge of the block they are standing on.
+ */ 
 public class EnemyBehaviorSideToSide : MonoBehaviour {
 
     public bool movingLeft;

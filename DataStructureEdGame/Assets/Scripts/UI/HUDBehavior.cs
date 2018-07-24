@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * The main class for the game canvas which holds all important game related HUD interfaces.
+ */
 public class HUDBehavior : MonoBehaviour {
 
     private GameController gameController;
@@ -56,7 +59,7 @@ public class HUDBehavior : MonoBehaviour {
         if (debounce > 1.0f) {
 
             string actMsg = "Level was reset";
-            loggingManager.send_To_Server(actMsg);
+            loggingManager.sendLogToServer(actMsg);
 
             gameController.worldGenerator.resetLevel();
             debounce = 0; 

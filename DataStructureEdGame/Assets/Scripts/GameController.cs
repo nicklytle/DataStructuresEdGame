@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.GameObject.Interfaces;
 
+/**
+ * Where all global references and important game logic is.
+ */ 
 public class GameController : MonoBehaviour {
 
-    // different win conditions for the level.
     public enum WinCondition
     {
         None,
@@ -21,11 +23,22 @@ public class GameController : MonoBehaviour {
     public HUDBehavior hudBehavior; // set in unity editor
 
     [Header("Debugging")]
-    public int debugLinkControlVersion;
-    public long debugFrameCount;
+    public long debugFrameCount; // so log messages can be unique by appending what frame the game is on.
 
     [Header("Gameplay options")]
     public bool enableLinkChaining = false;
+
+    [Header("Level specific Properties")]
+    public WinCondition winConditon;
+
+    [Header("Canvas References")]
+    public Canvas winGameCanvas;
+    public Canvas menuCanvas;
+    private Canvas gameCanvas;
+
+    [Header("UI Element Scripts")]
+    public CodePanelBehavior codePanelBehavior;
+    public InstructionScreensBehavior instructionScreenBehavior;
 
     [Header("PreFabs and Game Objects")] 
     public Transform linePreFab;
@@ -39,17 +52,6 @@ public class GameController : MonoBehaviour {
     [Tooltip("How many milliseconds the user has to click twice to double click.")]
     public int doubleClickDelay;
 
-    [Header("Level specific Properties")]
-    public WinCondition winConditon;
-
-    [Header("UI Element Scripts")]
-    public CodePanelBehavior codePanelBehavior;
-    public InstructionScreensBehavior instructionScreenBehavior;
-
-    [Header("Canvas References")]
-    public Canvas winGameCanvas;
-    private Canvas gameCanvas;
-
     [Header("Internal references")]
     public Transform playerRef;
     public Transform helicopterRobotRef;
@@ -62,14 +64,12 @@ public class GameController : MonoBehaviour {
     private Transform hoverArrowLine;
     private Transform hoverArrowHead;
     public DateTime lastTimeClickedMillis;// a queue of platforms that may be added in this level
-    public List<PlatformBehavior> platformsToAdd;
-    // whether the player is currently in an the Add Platform mode.
-    public bool addingPlatforms = false;
+    public List<PlatformBehavior> platformsToAdd; 
+    public bool addingPlatforms = false; // whether the player is currently in an the Add Platform mode.
 
-    // a referernce to all objective entities in the level
-    private List<ObjectiveBlockBehavior> objectiveBlocks;
-    // a reference to all platform entities in the level.
-    private List<PlatformBehavior> platformEntities;
+    private List<ObjectiveBlockBehavior> objectiveBlocks; // a referernce to all objective entities in the level
+    private List<PlatformBehavior> platformEntities; // a reference to all platform entities in the level.
+
 
     void Start()
     {
@@ -89,6 +89,11 @@ public class GameController : MonoBehaviour {
         hudBehavior.setGameController(this);
         hudBehavior.setLoggingManager(loggingManager);
         gameCanvas = hudBehavior.GetComponent<Canvas>();
+
+        // set the game to its initial state
+        gameCanvas.gameObject.SetActive(false);
+        winGameCanvas.gameObject.SetActive(false);
+        menuCanvas.gameObject.SetActive(true);
     }
 
     void Update()
@@ -174,7 +179,7 @@ public class GameController : MonoBehaviour {
 
                         //Debug.Log("Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ") at time :" + timestamp1);
                         string actMsg = "Platform is added from link " + selectedLink.logId + " at (" + positionMcPosition.x + ", " + positionMcPosition.y + ")";
-                        loggingManager.send_To_Server(actMsg);
+                        loggingManager.sendLogToServer(actMsg);
 
                         hudBehavior.setPlatformsToAddText(platformsToAdd.Count);
 
@@ -192,7 +197,7 @@ public class GameController : MonoBehaviour {
             } else if (hoverLinkRef == null && selectedLink == null && Input.GetMouseButtonDown(0))
             {
                 string actMsg = "Clicked without clicking on a hover link and a select link";
-                loggingManager.send_To_Server(actMsg);
+                loggingManager.sendLogToServer(actMsg);
 
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
@@ -300,7 +305,7 @@ public class GameController : MonoBehaviour {
                         // if the link had a link connection, then remove it.
                         hoverLinkRef.removeLinkConnection();
                         string actMsg = "the link block " + selectedLink.logId + " that was double clicked had an existing link so now it is deleted";
-                        loggingManager.send_To_Server(actMsg);
+                        loggingManager.sendLogToServer(actMsg);
                     }
                 }
                 // deselect after clicking on the same selected link.
@@ -313,7 +318,7 @@ public class GameController : MonoBehaviour {
             {
                 // then you deselect the link block that is selected.
                 string actMsg = "the link block " + selectedLink.logId + " was deselected";
-                loggingManager.send_To_Server(actMsg);
+                loggingManager.sendLogToServer(actMsg);
                 deselectSelectedLink();
                 setCursorToDefault();
             }
@@ -344,7 +349,7 @@ public class GameController : MonoBehaviour {
                     removeHoverLink();
                     setCursorToDefault();
                     string actMsg = "Connection made: " + selectedLink.logId + " was clicked and dragged to " + (hoverLinkRef != null ? hoverLinkRef.logId : "null");
-                    loggingManager.send_To_Server(actMsg); 
+                    loggingManager.sendLogToServer(actMsg); 
                 }
                 previousNotNullHoverLinkRef = null; // no longer needed to track the previous after making a connection
                 deselectSelectedLink();
@@ -373,7 +378,10 @@ public class GameController : MonoBehaviour {
         }
     }
 
-
+    /**
+     * Returns whether or not this level's win condition has been
+     * satisfied based on the current world state.
+     */ 
     bool isWinConditonSatisfied()
     {
         if (winConditon == WinCondition.None)
@@ -504,21 +512,26 @@ public class GameController : MonoBehaviour {
         if (selectedLink != null)
         { 
             selectedLink.setDisplayMarker(true, true);
-            loggingManager.send_To_Server("The player has selected the link: " + selectedLink.logId);
+            loggingManager.sendLogToServer("The player has selected the link: " + selectedLink.logId);
         }
     }
 
+    /**
+     * Deselect the current selected link
+     */ 
     public void deselectSelectedLink()
     {
         string actMsg = "The player deselected the link: " + selectedLink.logId;
-        loggingManager.send_To_Server(actMsg);
+        loggingManager.sendLogToServer(actMsg);
         setCursorToDefault();
         setSelectedLink(null); // deselect adding link to deselect
         updateObjectiveHUDAndBlocks(); // update any objective blocks
         updatePlatformEntities();
     }
 
-    // remove the current hover link and set the "bridge" collider to default again. 
+    /**
+     * Remove the current hover link and set the "bridge" collider to default again.
+     */ 
     public void removeHoverLink()
     {
         removeHoverArrow();
@@ -560,11 +573,14 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    // this value being passed in CAN'T be null.
+    /**
+     * Set what link block is the link which the player's mouse
+     * is currently hovering over. Update the rendering for that block.
+     */ 
     public void setHoverLink(ref LinkBlockBehavior lb)
     {
         //Debug.Log("The user has hovered over link block " + lb.getLogID());
-        loggingManager.send_To_Server("The user has hovered over link block " + lb.getLogID());
+        loggingManager.sendLogToServer("The user has hovered over link block " + lb.getLogID());
         removeHoverLink(); 
         hoverLinkRef = lb; 
 
@@ -639,8 +655,7 @@ public class GameController : MonoBehaviour {
                 } // end creating the "bridge"
             }
         }
-
-    } // end set hover link
+    }
 
 
     /**
@@ -684,6 +699,9 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    /**
+     * Update the rendering and state information of all platforms.
+     */ 
     public void updatePlatformEntities()
     {
         for (int i = 0; i < platformEntities.Count; i++)
@@ -712,23 +730,6 @@ public class GameController : MonoBehaviour {
             hoverArrowLine = null;
             hoverArrowHead = null;
         }
-    }
-
-
-    public void setLevelPlatformEntitiesList(List<PlatformBehavior> plist)
-    {
-        platformEntities.AddRange(plist);
-    }
-
-    public void setLevelObjectiveBlocksList(List<ObjectiveBlockBehavior> oblist)
-    {
-        objectiveBlocks.AddRange(oblist);
-    }
-
-    public void clearReferenceLists()
-    {
-        objectiveBlocks.Clear();
-        platformEntities.Clear();
     }
 
     /**
@@ -788,29 +789,70 @@ public class GameController : MonoBehaviour {
         return arrowParts;
     }
 
+    /**
+     * Set the cursor to its default icon.
+     */ 
     private void setCursorToDefault()
     {
         Cursor.SetCursor(null, new Vector2(), cursorMode);
     }
 
+    /**
+     * Set the cursor to a pointer icon.
+     */
     private void setCursorToPointer()
     {
         Cursor.SetCursor(cursorPointingTexture, new Vector2(12, 0), cursorMode);
     }
 
+    /**
+     * Set the cursor to a dragging icon.
+     */ 
     private void setCursorToDragging()
     {
         Cursor.SetCursor(cursorDraggingTexture, new Vector2(18, 8), cursorMode);
     }
 
+    /**
+     * Show the given instruction screen.
+     */
     public void showInstructionScreen(string key)
     {
         instructionScreenBehavior.showScreen(key);
     }
 
+    /**
+     * Hide the given instruction screen.
+     */
     public void hideInstructionScreen(string key)
     {
         instructionScreenBehavior.hideScreen(key);
+    }
+
+
+    /**
+     * Internal function
+     */
+    public void setLevelPlatformEntitiesList(List<PlatformBehavior> plist)
+    {
+        platformEntities.AddRange(plist);
+    }
+
+    /**
+     * Internal function
+     */
+    public void setLevelObjectiveBlocksList(List<ObjectiveBlockBehavior> oblist)
+    {
+        objectiveBlocks.AddRange(oblist);
+    }
+
+    /**
+     * Internal function
+     */
+    public void clearReferenceLists()
+    {
+        objectiveBlocks.Clear();
+        platformEntities.Clear();
     }
 }
 

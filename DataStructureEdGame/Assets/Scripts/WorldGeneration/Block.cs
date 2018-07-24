@@ -8,6 +8,7 @@ namespace Assets.Scripts.WorldGeneration
 {
     /**
      * A Basic Block in the World
+     * This class is for level file serialization.
      */
     [Serializable]
     class Block

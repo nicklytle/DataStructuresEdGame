@@ -52,4 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayerID: 0
-  enableLogging: 1
+  enableLogging: 0
+  loginAuthenticationUrl: path/to/script/
+  updateLevelOnUrl: path/to/script/
+  sendLogDataUrl: path/to/script/

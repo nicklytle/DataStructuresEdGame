@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * The panel which displays code which was generated. When the 
+ * code is longer than 5 lines, the generated code box can be scrolled.
+ */ 
 public class CodePanelBehavior : MonoBehaviour {
 
     private Text codeTextUI;

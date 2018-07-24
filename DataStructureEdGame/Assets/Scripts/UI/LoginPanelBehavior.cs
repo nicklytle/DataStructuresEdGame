@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * The panel for the initial login panel.
+ */
 public class LoginPanelBehavior : MonoBehaviour {
 
     // for debugging
@@ -88,12 +91,11 @@ public class LoginPanelBehavior : MonoBehaviour {
     void onSubmitButtonPressed()
     {
         if (!submitPressed) {
-            submitPressed = true;
-            //Debug.Log("Submit");
+            submitPressed = true; 
             string playerId = playerIdInputField.text;
             string pw = passwordInputField.text;
             if (playerId.Length > 0 && pw.Length > 0) { 
-                loggingManager.beginAttemptLogin(playerId, pw); 
+                loggingManager.beginAttemptLogin(playerId, pw);  // there may be a delay since it is making a request to the server.
             }
             else
             {

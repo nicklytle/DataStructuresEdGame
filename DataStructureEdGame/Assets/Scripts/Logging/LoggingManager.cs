@@ -11,14 +11,29 @@ using Assets.Scripts.WorldGeneration;
 public class LoggingManager : MonoBehaviour
 {
     private GameController gameController;
-    public int currentPlayerID;
-    public bool enableLogging;
     private string loginAttemptResponse;  // store the response from the login attempt.
     private string worldStateField;
 
+    public int currentPlayerID; // to identify players in log data.
+
+    [Header("Logging configuration")]
+    public bool enableLogging;
+    public string loginAuthenticationUrl;
+    public string updateLevelOnUrl;
+    public string sendLogDataUrl;
+
+    void Start()
+    {
+        if (!loginAuthenticationUrl.EndsWith("/"))
+            loginAuthenticationUrl = loginAuthenticationUrl + "/";
+        if (!updateLevelOnUrl.EndsWith("/"))
+            updateLevelOnUrl = updateLevelOnUrl + "/";
+        if (!sendLogDataUrl.EndsWith("/"))
+            sendLogDataUrl = sendLogDataUrl + "/";
+    }
+
     private IEnumerator sendLogToServer(string actionMsg, string timestamp)
     {
-        string logUrl = "http://localhost/test/sendingDataToPHP.php";
         WWWForm logForm = new WWWForm();
         logForm.AddField("playerID", currentPlayerID);
         string levelFileName = "NO LEVEL";
@@ -31,7 +46,7 @@ public class LoggingManager : MonoBehaviour
         logForm.AddField("timestamp", timestamp);
         logForm.AddField("worldState", worldStateField);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
+        using (UnityWebRequest www = UnityWebRequest.Post(sendLogDataUrl + "SendLogData.php", logForm))
         {
             yield return www.Send();
             if (www.isError)
@@ -42,7 +57,7 @@ public class LoggingManager : MonoBehaviour
     }
 
 
-    public void send_To_Server(string actionMsg)
+    public void sendLogToServer(string actionMsg)
     {
         List<Block> blockList;
         List<LinkBlock> linkyList;
@@ -124,12 +139,10 @@ public class LoggingManager : MonoBehaviour
 
     private IEnumerator attemptLogin(string playerId, string pw)
     {
-        string loginUrl = "http://localhost/test/loginAuthentication.php";
         WWWForm loginForm = new WWWForm();
         loginForm.AddField("playerID", playerId);
         loginForm.AddField("pw", pw);
-
-        using (UnityWebRequest www = UnityWebRequest.Post(loginUrl, loginForm))
+        using (UnityWebRequest www = UnityWebRequest.Post(loginAuthenticationUrl + "LoginAuthentication.php", loginForm))
         {
             yield return www.Send();
             if (!www.isError)
@@ -148,12 +161,11 @@ public class LoggingManager : MonoBehaviour
 
     private IEnumerator updatePlayerLevelOn()
     {
-        string logUrl = "http://localhost/test/updateLevelOn.php";
         WWWForm logForm = new WWWForm();
         logForm.AddField("playerID", currentPlayerID);
         logForm.AddField("levelOn", gameController.worldGenerator.levelFileIndex);
 
-        using (UnityWebRequest www = UnityWebRequest.Post(logUrl, logForm))
+        using (UnityWebRequest www = UnityWebRequest.Post(updateLevelOnUrl + "UpdateLevelOn.php", logForm))
         {
             yield return www.Send();
             if (www.isError)

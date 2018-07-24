@@ -4,40 +4,40 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts.GameObject.Interfaces;
 
+/**
+ * The behavior for link blocks, which the player can use
+ * to connect link blocks to connectable entities. 
+ */ 
 public class LinkBlockBehavior : MonoBehaviour, Loggable
 {
     public string logId; // the ID of this object when it is logged
 
     public GameController gameController;
 
-    public PlatformBehavior containerPlatform; // if this link block is in a platform, then this is the parent 
     public ConnectableEntity connectingEntity; // this is the platform object this link is pointing to.
+    public PlatformBehavior containerPlatform; // if this link block is in a platform, then this is
+                                               // the parent (this should be more generalized)
 
-    // references to the arrow instances
-    public Transform linkArrow; // this is the current arrow that is instantiated 
-    public Transform linkArrowHead; 
+    [Header("Special link flags")]
+    public bool isStartingLink; // special flag for the starting link
+    public bool isHelicopterLink; // special flag for the helicopter link.
 
-    // Prefabs (old version of arrows)
-    //public Transform linkArrowPreFab;
-    //public Transform linkArrowFadedPreFab;
-    //public Transform linkArrowHelicopterPreFab;
-
-    // sprites for the different states of the link block
+    [Header("Sprites")]
     public Sprite nullLinkSprite; // what to show when it is null.
     public Sprite defaultSprite; // what to show when it is NOT null (default to what it starts as).
     public Sprite defaultSelectMarkerSprite;  // what the sprite of the selected marker is by default
     public Sprite highlightSelectMarkerSprite; // the sprite of the selected marker when it is highlighted.
 
-    // for displaying the code variable name of this link block
-    public Image variableNamePanel;
-    public Text variableNameText;
+    [Header("References to internal UI elements")]
+    public Image variableNamePanel; // the panel which shows the variable name
+    public Text variableNameText; // the text component showing the variable name
     public string variableName; // the string representing the variable name of this link
+    
+    [Header("Internal render options")]
+    public bool renderArrow; // whether to render this arrow or not.
 
-    // special flags for the type of link block.
-    public bool isStartingLink;
-    public bool isHelicopterLink;
-    // whether to render this arrow or not.
-    public bool renderArrow;
+    private Transform linkArrow; // this is the current arrow that is instantiated 
+    private Transform linkArrowHead; // the head of the current arrow
 
     void Start()
     {

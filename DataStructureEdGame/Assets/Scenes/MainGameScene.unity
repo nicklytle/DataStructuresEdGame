@@ -890,7 +890,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &129705159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2591,6 +2591,11 @@ Prefab:
       propertyPath: winGameCanvas
       value: 
       objectReference: {fileID: 1394945826}
+    - target: {fileID: 114824972013762554, guid: 987a6e20e27c92a428bf94609c0b1c17,
+        type: 2}
+      propertyPath: menuCanvas
+      value: 
+      objectReference: {fileID: 1682594725}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 987a6e20e27c92a428bf94609c0b1c17, type: 2}
   m_IsPrefabParent: 0
@@ -3479,7 +3484,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Contratulations, You Win!
+  m_Text: Congratulations, You Win!
 --- !u!222 &615392329
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10531,7 +10536,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10748,11 +10753,6 @@ Prefab:
     - target: {fileID: 4897439668416734, guid: 5f076701a9cd36d47b0822dced38539e, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114069162880272158, guid: 5f076701a9cd36d47b0822dced38539e,
-        type: 2}
-      propertyPath: enableLogging
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5f076701a9cd36d47b0822dced38539e, type: 2}

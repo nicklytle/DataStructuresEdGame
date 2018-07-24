@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/**
+ * For the interface to open a menu with buttons to open previously encountered instruction panels.
+ */
 public class PreviousInstructionsPanelBehavior : MonoBehaviour {
 
     public RectTransform viewInstructionButtonPrefab;

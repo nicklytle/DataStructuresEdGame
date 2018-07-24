@@ -6,6 +6,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
+    /**
+     * All of the information for the world state log messge.
+     * This class is for log message serialization.
+     */
     [Serializable]
     class LogMsgRepresentation
     {

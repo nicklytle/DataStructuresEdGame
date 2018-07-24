@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * The script for the instruction panels container.
+ * When colliding with an instruction block, this object will 
+ * reveal the instruction panel whose name in the editor is
+ * equal to the stringId property of that instruction block.
+ */
 public class InstructionScreensBehavior : MonoBehaviour {
 
     public PreviousInstructionsPanelBehavior previousPanelBehavior;
@@ -35,6 +41,12 @@ public class InstructionScreensBehavior : MonoBehaviour {
         changeScreen(key, false);
     }
 
+    /**
+     * When the game is initially started, this function is called to 
+     * reveal all instruction blocks that were encountered in previous levels.
+     * This is because a user can login and start the game on a different 
+     * level other than the first level. 
+     */
     public void revealPlatformsForLevels(int lvlOn)
     {
         previousPanelBehavior.ensureReferences();

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/**
+ * The special helicopter link block
+ */ 
 public class HelicopterRobotBehavior : MonoBehaviour, Loggable
 {
-
     public string logId;
 
     public GameController gameController;

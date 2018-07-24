@@ -6,7 +6,10 @@ using UnityEngine;
 
 namespace Assets.Scripts.WorldGeneration
 {
-    // A single linked list Platform for Single linked list levels
+    /**
+     * A single linked list Platform for Single linked list levels.
+     * This class is for level file serialization.
+     */
     [Serializable]
     class SingleLinkedListPlatform : Block
     {
