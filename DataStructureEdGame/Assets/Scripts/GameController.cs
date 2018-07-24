@@ -87,6 +87,7 @@ public class GameController : MonoBehaviour {
         loggingManager.setGameController(this);
         worldGenerator.setGameController(this);
         hudBehavior.setGameController(this);
+        hudBehavior.setLoggingManager(loggingManager);
         gameCanvas = hudBehavior.GetComponent<Canvas>();
     }
 
