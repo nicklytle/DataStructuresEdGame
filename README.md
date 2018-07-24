@@ -22,18 +22,18 @@ The game also features Tiled level editor support and logging for future educati
 
 ### Installation
 
-The game is made with Unity version 5.6.0. You can download the version here https://unity3d.com/get-unity/download/archive by looking under the Unity 5.x tab. Clone the repository and open the project with Unity. The game is called DataStructureEdGame.
+The game is made with Unity version 5.6.0. You can download it [here](https://unity3d.com/get-unity/download/archive) by looking under the Unity 5.x tab. Clone the repository and open the project with Unity. The game is called DataStructureEdGame.
 
 
 ### Usage
 
 Once the project is open, clicking the Play will start the game at its log-on screen. In educational studies, this is used for participants to log on with a unique Player ID so log data can be associated with each participant. You can bypass the log-in screen by clicking the “Debug Login” button. If you are unable to run the game, try rich clicking on the Project window and select “Reimport all”.
 
-![alt text](https://raw.githubusercontent.com/nicklytle/DataStructuresEdGame/raw/master/images/game_screenshot0.png "Log-in screen")
+![alt text]( https://github.com/nicklytle/DataStructuresEdGame/images/game_screenshot0.PNG  "Log-in screen")
 
 Once you’re logged in, the world generator will generate the current level and the camera will focus on the player. Below is a screenshot with a few labels for the interface
 
-![alt text](https://raw.githubusercontent.com/nicklytle/DataStructuresEdGame/raw/master/images/game_screenshot1.png "Screenshot of the game")
+![alt text]( https://github.com/nicklytle/DataStructuresEdGame/images/game_screenshot1.PNG  "Screenshot of the game")
 
 For more details about the project structure and how it works, see the Project Structure wiki page. 
 
