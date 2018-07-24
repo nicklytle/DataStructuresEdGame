@@ -1,7 +1,5 @@
 # Big Owen's Data Dash
 
-### Description
-
 Big Owen’s Data Dash is a platformer game meant to help students visualize and understand data structures. Entities in the game are visual representations of data structures and should have the same structure and possible operations as them.
 
 The goal is that when students play and interact with the game and complete levels, they will experiment with and observe the changes on these game entities and gain a deeper understanding of them. Since the game entities are analogous to data structures, students learning how the game entities work also means they learn how the data structure works.
