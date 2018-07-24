@@ -6,6 +6,7 @@ The goal is that when students play and interact with the game and complete leve
 
 The game also features Tiled level editor support and logging for future educational studies and log data analysis.
 
+[Try the game now!](http://stemc.csc.ncsu.edu/owenedgame/)
 
 ### Table of Contents
 
