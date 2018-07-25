@@ -59,14 +59,14 @@ public class LoggingManager : MonoBehaviour
 
     public void sendLogToServer(string actionMsg)
     {
-        List<Block> blockList;
-        List<LinkBlock> linkyList;
+        List<BlockJSON> blockList;
+        List<LinkBlockJSON> linkyList;
         List<LLPlatformForLogging> singleLLlist;
-        Block player = new Block();
-        Block helicopter = new Block();
+        BlockJSON player = new BlockJSON();
+        BlockJSON helicopter = new BlockJSON();
 
-        linkyList = new List<LinkBlock>();
-        blockList = new List<Block>();
+        linkyList = new List<LinkBlockJSON>();
+        blockList = new List<BlockJSON>();
         singleLLlist = new List<LLPlatformForLogging>();
         foreach (Transform t in gameController.worldGenerator.levelEntities)
         {
@@ -74,7 +74,7 @@ public class LoggingManager : MonoBehaviour
             {
                 //then this is of type LinkedBlock
 
-                LinkBlock newB = new LinkBlock();
+                LinkBlockJSON newB = new LinkBlockJSON();
                 newB.x = t.position.x;
                 newB.y = t.position.y;
                 newB.type = "linkBlock";
@@ -97,12 +97,12 @@ public class LoggingManager : MonoBehaviour
                 platB.type = "LLplatform";
                 platB.logId = t.GetComponent<PlatformBehavior>().logId;
                 platB.objId = t.GetComponent<PlatformBehavior>().logId;
-                platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>().logId;
-                platB.value = t.GetComponent<PlatformBehavior>().getValue();
+                platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().getChildLink().logId;
+                platB.value = ((ValueEntity)t.GetComponent<PlatformBehavior>()).getValue();
                 platB.toAdd = gameController.platformsToAdd.Contains(t.GetComponent<PlatformBehavior>());
 
-                platB.isHidden = t.GetComponent<PlatformBehavior>().isHidden;
-                platB.isSolid = !(t.GetComponent<PlatformBehavior>().isPhasedOut);
+                platB.isHidden = ((ContainerEntity) t.GetComponent<PlatformBehavior>() ).isHidden();
+                platB.isSolid = !((ContainerEntity)t.GetComponent<PlatformBehavior>()).isPhasedOut();
                 singleLLlist.Add(platB);
             }
             else if(t.GetComponent<PlayerBehavior>() != null)

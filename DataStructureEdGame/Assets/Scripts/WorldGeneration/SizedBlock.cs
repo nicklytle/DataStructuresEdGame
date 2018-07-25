@@ -10,7 +10,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class SizedBlock : Block
+    class SizedBlockJSON : BlockJSON
     {
         public double width;
         public double height;

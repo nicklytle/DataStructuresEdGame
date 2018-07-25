@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.GameObject.Interfaces;
 
 /**
  * Where all global references and important game logic is.
@@ -116,13 +115,10 @@ public class GameController : MonoBehaviour {
                 {
                     // show a faded preview of the platform
                     PlatformBehavior platToDisplayAndAdd = platformsToAdd[0];
-                    platToDisplayAndAdd.GetComponent<SpriteRenderer>().sprite = platToDisplayAndAdd.phasedOutSprite;
+                    platToDisplayAndAdd.renderAsFadedPreview();
 
-                    platToDisplayAndAdd.childLink.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
-                    platToDisplayAndAdd.childValueBlock.GetComponent<SpriteRenderer>().material = platToDisplayAndAdd.fadedChildMaterial;
-
-                    int val = platformsToAdd[0].getValue();
-                    platToDisplayAndAdd.setValueBlockText("" + val + ""); // can't see the value
+                    int val = (int)((ValueEntity)platformsToAdd[0]).getValue();
+                    platToDisplayAndAdd.setValueBlockText("" + val + ""); // see the value in the preview.
 
                     Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     pos.z = 0;
@@ -228,10 +224,10 @@ public class GameController : MonoBehaviour {
                 }
             } else if (t.GetComponent<PlatformBehavior>() != null)
             {
-                if (t.GetComponent<PlatformBehavior>().childLink.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
-                       t.GetComponent<PlatformBehavior>().childLink.GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
+                if (t.GetComponent<PlatformBehavior>().getChildLink().GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
+                       t.GetComponent<PlatformBehavior>().getChildLink().GetComponent<PolygonCollider2D>().OverlapPoint(mousePointInWorld))
                 {
-                    mouseOverLinkRefs.Add(t.GetComponent<PlatformBehavior>().childLink.GetComponent<LinkBlockBehavior>());
+                    mouseOverLinkRefs.Add(t.GetComponent<PlatformBehavior>().getChildLink().GetComponent<LinkBlockBehavior>());
                 }
             }
         } // end populating mouseOverLinkRefs.
@@ -253,7 +249,7 @@ public class GameController : MonoBehaviour {
                 foreach (LinkBlockBehavior lb in mouseOverLinkRefs)
                 {
                     if (lb.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld) ||
-                        (lb.containerPlatform != null && lb.containerPlatform.GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld)))
+                        (lb.containerEntity != null && ((MonoBehaviour)lb.containerEntity).GetComponent<BoxCollider2D>().OverlapPoint(mousePointInWorld)))
                     {
                         minLb = lb;
                     }
@@ -262,14 +258,14 @@ public class GameController : MonoBehaviour {
             }
 
             // 
-            if (hoverLinkRef != priorityLink && (priorityLink.containerPlatform == null || 
-                (priorityLink.containerPlatform != null && !priorityLink.containerPlatform.isPlatHidden())))
+            if (hoverLinkRef != priorityLink && (priorityLink.containerEntity == null || 
+                (priorityLink.containerEntity != null && !priorityLink.containerEntity.isHidden()) ))
             {
                 setHoverLink(ref priorityLink);
                 string hoverTag = hoverLinkRef != null ? hoverLinkRef.getLogID() : ""; 
-                if (priorityLink != null && previousNotNullHoverLinkRef != null && previousNotNullHoverLinkRef.containerPlatform != null)
+                if (priorityLink != null && previousNotNullHoverLinkRef != null && previousNotNullHoverLinkRef.containerEntity != null)
                 {
-                    previousNotNullHoverLinkRef.containerPlatform.updatePlatformValuesAndSprite(); // it should be returned to its "natural" state.
+                    previousNotNullHoverLinkRef.containerEntity.updateRenderAndState(); // it should be returned to its "natural" state.
                 }
             }  
         }
@@ -331,7 +327,7 @@ public class GameController : MonoBehaviour {
             if (selectedLink != null && hoverLinkRef != null && hoverLinkRef != selectedLink)
             {
                 // verify that the connection is valid.
-                if (hoverLinkRef.containerPlatform == null || selectedLink.containerPlatform != hoverLinkRef.containerPlatform)
+                if (hoverLinkRef.containerEntity == null || selectedLink.containerEntity != hoverLinkRef.containerEntity)
                 {
                     // before establishing the connection for the addingLink, remove any links current there.
                     codePanelBehavior.appendCodeText(selectedLink.getCodeVariableString() + " = " + hoverLinkRef.getCodeVariableString() + ";");
@@ -341,7 +337,7 @@ public class GameController : MonoBehaviour {
                     }
                     // establish a connection, making the selected link connect to the same entity as the hover link.
                     // verify that the hover link has a connection in the first place.
-                    if (hoverLinkRef.connectingEntity != null && (PlatformBehavior)hoverLinkRef.connectingEntity != selectedLink.containerPlatform)
+                    if (hoverLinkRef.connectingEntity != null && (PlatformBehavior)hoverLinkRef.connectingEntity != selectedLink.containerEntity)
                     {
                         selectedLink.setConnectingEntity(hoverLinkRef.connectingEntity);
                     } 
@@ -410,8 +406,7 @@ public class GameController : MonoBehaviour {
                 {
                     return (numberOfTotalPlatformsInLevel == 0); // if there are no platforms in the level
                 }
-                else if (startingLink.connectingEntity is PlatformBehavior &&
-                        ((PlatformBehavior)startingLink.connectingEntity).childLink.GetComponent<LinkBlockBehavior>().connectingEntity == null)
+                else if (startingLink.connectingEntity is LinkContainerEntity && ((LinkContainerEntity)startingLink.connectingEntity).getChildLink().connectingEntity == null)
                 {
                     return (numberOfTotalPlatformsInLevel == 1); // if there is only one platform in the level
                 }
@@ -419,7 +414,7 @@ public class GameController : MonoBehaviour {
                 ValueEntity temp = ((MonoBehaviour)startingLink.connectingEntity).GetComponent<PlatformBehavior>();
                 while (temp != null)
                 {
-                    ValueEntity next = (ValueEntity)((PlatformBehavior)temp).childLink.GetComponent<LinkBlockBehavior>().connectingEntity;
+                    ValueEntity next = (ValueEntity)((LinkContainerEntity)temp).getChildLink().GetComponent<LinkBlockBehavior>().connectingEntity;
                     if (next == null)
                     {
                         break; 
@@ -443,9 +438,9 @@ public class GameController : MonoBehaviour {
                 //this dictionary of all the levels at the start isn't helpful
                 foreach (PlatformBehavior pb in platformEntities)
                 {
-                    if(!unique.ContainsKey(pb.getValue()))
+                    if(!unique.ContainsKey(((ValueEntity)pb).getValue()))
                     {
-                        unique.Add(pb.getValue(), 1);
+                        unique.Add(((ValueEntity)pb).getValue(), 1);
                     }
                     
                     if (pb.isPlatformConnectingToStart())
@@ -458,8 +453,7 @@ public class GameController : MonoBehaviour {
                 {
                     return (listSize == 0); // if there are no platforms in the level
                 }
-                else if (startingLink.connectingEntity is PlatformBehavior && 
-                        ((PlatformBehavior)startingLink.connectingEntity).childLink.GetComponent<LinkBlockBehavior>().connectingEntity == null)
+                else if (startingLink.connectingEntity is LinkContainerEntity && ((LinkContainerEntity)startingLink.connectingEntity).getChildLink().connectingEntity == null)
                 {
                     return (listSize == 1); // if there is only one platform in the level
                 }
@@ -481,7 +475,7 @@ public class GameController : MonoBehaviour {
                             return true;
                         }
                     }
-                    ValueEntity next = (ValueEntity)((PlatformBehavior)tempDupl).childLink.GetComponent<LinkBlockBehavior>().connectingEntity;
+                    ValueEntity next = (ValueEntity)((LinkContainerEntity)tempDupl).getChildLink().connectingEntity;
                     if(next != null)
                     {
                         if(next.getValue() < tempDupl.getValue())
@@ -562,12 +556,12 @@ public class GameController : MonoBehaviour {
             // update the sprite of the connecting platform that we used to be revealing by the bridge
             /// but only if you are no longer mousing over any other links
             if (mouseOverLinkRefs.Count == 0) {
-                if (previousNotNullHoverLinkRef.containerPlatform != null)
+                if (previousNotNullHoverLinkRef.containerEntity != null)
                 {
-                    previousNotNullHoverLinkRef.containerPlatform.updatePlatformValuesAndSprite(); 
+                    previousNotNullHoverLinkRef.containerEntity.updateRenderAndState(); 
                 }
-                if (previousNotNullHoverLinkRef.connectingEntity != null && previousNotNullHoverLinkRef.connectingEntity is PlatformBehavior) { 
-                    ((PlatformBehavior)previousNotNullHoverLinkRef.connectingEntity).updatePlatformValuesAndSprite();
+                if (previousNotNullHoverLinkRef.connectingEntity != null && previousNotNullHoverLinkRef.connectingEntity is LinkContainerEntity) { 
+                    ((LinkContainerEntity)previousNotNullHoverLinkRef.connectingEntity).updateRenderAndState();
                 }
             }
         }
@@ -616,11 +610,11 @@ public class GameController : MonoBehaviour {
 
                 // This is when the mouse is hovering over a link for establishing a link.
                 // update and create a "bridge" from this link to the next for next->next->.. option.
-                if (hoverLinkRef.connectingEntity != null && hoverLinkRef.connectingEntity is PlatformBehavior)
+                if (hoverLinkRef.connectingEntity != null && hoverLinkRef.connectingEntity is LinkContainerEntity)
                 {
                     if (enableLinkChaining) { 
                         // Create a "bridge" from this link to the next link
-                        Bounds otherBounds = ((PlatformBehavior)hoverLinkRef.connectingEntity).childLink.GetComponent<SpriteRenderer>().bounds;
+                        Bounds otherBounds = ((LinkContainerEntity)hoverLinkRef.connectingEntity).getChildLink().GetComponent<SpriteRenderer>().bounds;
                         Bounds hoverBounds = hoverLinkRef.GetComponent<SpriteRenderer>().bounds;
                         Vector3 worldDiffNorm = (otherBounds.center - hoverBounds.center).normalized;
 
@@ -648,8 +642,8 @@ public class GameController : MonoBehaviour {
                         hoverLinkRef.GetComponent<LineRenderer>().SetPositions(linePositions);
                         hoverLinkRef.GetComponent<LineRenderer>().startWidth = scalePerpScale - 0.2f; // make the path look a little smaller than it really is
                         hoverLinkRef.GetComponent<LineRenderer>().endWidth = scalePerpScale - 0.2f; 
-                        if (hoverLinkRef.connectingEntity is PlatformBehavior) { 
-                            ((PlatformBehavior)hoverLinkRef.connectingEntity).updatePlatformValuesAndSprite();
+                        if (hoverLinkRef.connectingEntity is LinkContainerEntity) { 
+                            ((LinkContainerEntity)hoverLinkRef.connectingEntity).updateRenderAndState();
                         }
                     }
                 } // end creating the "bridge"
@@ -706,15 +700,12 @@ public class GameController : MonoBehaviour {
     {
         for (int i = 0; i < platformEntities.Count; i++)
         {
-            platformEntities[i].updatePlatformValuesAndSprite();
+            ((LinkContainerEntity)platformEntities[i]).updateRenderAndState();
         }
         // update the links after updating the states of the platform
         for (int i = 0; i < platformEntities.Count; i++)
         {
-            bool old_state = platformEntities[i].childLink.activeSelf;
-            platformEntities[i].childLink.SetActive(true);
-            platformEntities[i].childLink.GetComponent<LinkBlockBehavior>().UpdateLinkArrow();
-            platformEntities[i].childLink.SetActive(old_state);
+            platformEntities[i].UpdateChildLinkArrow();
         }
     }
 

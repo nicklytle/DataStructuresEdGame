@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.GameObject.Interfaces;
 
 /**
  * The behavior for link blocks, which the player can use
@@ -15,7 +14,7 @@ public class LinkBlockBehavior : MonoBehaviour, Loggable
     public GameController gameController;
 
     public ConnectableEntity connectingEntity; // this is the platform object this link is pointing to.
-    public PlatformBehavior containerPlatform; // if this link block is in a platform, then this is
+    public LinkContainerEntity containerEntity; // if this link block is in a platform, then this is
                                                // the parent (this should be more generalized)
 
     [Header("Special link flags")]
@@ -41,7 +40,7 @@ public class LinkBlockBehavior : MonoBehaviour, Loggable
 
     void Start()
     {
-        if (containerPlatform == null)
+        if (containerEntity == null)
         {
             UpdateLinkArrow();
         }
@@ -72,7 +71,7 @@ public class LinkBlockBehavior : MonoBehaviour, Loggable
         { 
             // set the arrow color
             Color color = Color.red;
-            if ((containerPlatform != null && containerPlatform.isPhasedOut) || (isHelicopterLink && connectingEntity.isPhasedOut()))
+            if ((containerEntity != null && containerEntity.isPhasedOut()) || (isHelicopterLink && connectingEntity is ContainerEntity && ((ContainerEntity)connectingEntity).isPhasedOut()))
             {
                 color = Color.gray;  // arrowPreFab = linkArrowFadedPreFab;
             }
@@ -193,12 +192,10 @@ public class LinkBlockBehavior : MonoBehaviour, Loggable
         {
             str = "temp";
         }
-        else if (containerPlatform != null)
+        else if (containerEntity != null && containerEntity is ConnectableEntity)
         {
-            // simulate accessing the next field from a variable.
-            Debug.Log(containerPlatform);
-            Debug.Log(containerPlatform.getMostRecentlyConnectedLink());
-            str = containerPlatform.getMostRecentlyConnectedLink().getCodeVariableString() + ".next";
+            // simulate accessing the next field from a variable. 
+            str = ((ConnectableEntity)containerEntity).getMostRecentlyConnectedLink().getCodeVariableString() + ".next";
         }
         return str;
     }

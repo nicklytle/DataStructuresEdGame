@@ -12,7 +12,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for log message serialization.
      */
     [Serializable]
-    class LLPlatformForLogging : SingleLinkedListPlatform
+    class LLPlatformForLogging : SingleLinkedListPlatformJSON
     {
         // type, x, and y from Block
 

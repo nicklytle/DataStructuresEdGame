@@ -10,7 +10,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class InstructionBlock : Block
+    class InstructionBlockJSON : BlockJSON
     {
         public string screenId;
     }

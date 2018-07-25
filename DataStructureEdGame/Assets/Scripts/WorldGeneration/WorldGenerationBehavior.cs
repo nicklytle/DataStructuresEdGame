@@ -80,7 +80,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void CreateWorldFromLevelDescription()
     {
-        LevelEntities level = JsonUtility.FromJson<LevelEntities>(levelDescriptionJsonFiles[levelFileIndex].text);
+        LevelEntitiesJSON level = JsonUtility.FromJson<LevelEntitiesJSON>(levelDescriptionJsonFiles[levelFileIndex].text);
         gameController.winConditon = GetWinConditionFromString(level.winCondition); 
         // while generating the level, add things to levelEntities list so it can be destroyed for the next level generated.
         for (int i = 0; i < level.blocks.Length; i++)
@@ -134,7 +134,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             robotBehavior.logId = level.helicopterRobot.logId;
 
             gameController.helicopterRobotRef = robot;
-            robotBehavior.childLink = robot.Find("LinkBlock").gameObject;
+            robotBehavior.setChildLink(robot.Find("LinkBlock").gameObject.GetComponent<LinkBlockBehavior>());
             robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
 
             levelEntities.Add(robot);
@@ -213,12 +213,12 @@ public class WorldGenerationBehavior : MonoBehaviour {
             PlatformBehavior newPlat = newLLPlatform.GetComponent<PlatformBehavior>();
             LinkBlockBehavior innerLink = newLLPlatform.Find("LinkBlock").GetComponent<LinkBlockBehavior>();
             innerLink.gameController = gameController;
-            innerLink.containerPlatform = newPlat;
+            innerLink.containerEntity = newPlat;
             innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
             newPlat.gameController = gameController;
-            newPlat.childLink = innerLink.gameObject;
-            newPlat.childValueBlock = newLLPlatform.Find("ValueBlock").gameObject;
-            newPlat.setValue(level.singleLinkedListPlatforms[i].value);
+            ((LinkContainerEntity)newPlat).setChildLink(innerLink);
+            newPlat.setChildValueBlock(newLLPlatform.Find("ValueBlock").gameObject);
+            ((ValueEntity)newPlat).setValue(level.singleLinkedListPlatforms[i].value);
             newPlat.logId = level.singleLinkedListPlatforms[i].logId;
 
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
@@ -276,7 +276,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
         // also do this for the robot
         if (gameController.helicopterRobotRef != null)
         {
-            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().setDisplayMarker(false);
+            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().getChildLink().setDisplayMarker(false);
         }
         
         gameController.codePanelBehavior.clearCodeText();
@@ -298,9 +298,9 @@ public class WorldGenerationBehavior : MonoBehaviour {
         foreach (Transform t in levelEntities)
         {
             // delete any arrows associated with link blocks.
-            if (t.GetComponent<HelicopterRobotBehavior>() != null && t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>() != null)
+            if (t.GetComponent<HelicopterRobotBehavior>() != null && t.GetComponent<HelicopterRobotBehavior>().getChildLink() != null)
             {
-                t.GetComponent<HelicopterRobotBehavior>().childLink.GetComponent<LinkBlockBehavior>().removeArrowBetween();
+                t.GetComponent<HelicopterRobotBehavior>().getChildLink().removeArrowBetween();
             } 
             Destroy(t.gameObject);
         }

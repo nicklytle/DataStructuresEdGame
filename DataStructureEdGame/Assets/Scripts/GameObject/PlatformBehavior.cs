@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.GameObject.Interfaces;
 using System;
 
-public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, Loggable
-{
-
+public class PlatformBehavior : MonoBehaviour, ConnectableEntity, LinkContainerEntity, ValueEntity, Loggable
+{ 
     public string logId; // the ID of this object when it is logged
 
     public GameController gameController; // reference to the very important game controller.
     public List<LinkBlockBehavior> incomingConnectionLinkBlocks; // the link block that connects to this platform, or null if not being connected to. 
-    public GameObject childLink; // reference to the child link object.
-    public GameObject childValueBlock; // reference to the child link object.
+    private LinkBlockBehavior childLink; // reference to the child link object.
+    private GameObject childValueBlock; // reference to the child link object.
     private int value;
 
     public Material defaultChildMaterial; // the material for when the children objects are revealed.
@@ -22,14 +20,20 @@ public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, L
     public Sprite phasedOutSprite; // sprite to display when phased out.
 
     // game specific values
-    public bool isHidden; // if not Hidden, then Revealed.
-    public bool isPhasedOut; // if not Phased Out, then Solid. 
+    private bool hidden; // if not Hidden, then Revealed.
+    private bool phasedOut; // if not Phased Out, then Solid. 
     public bool isInLevel; // whether this platform has been placed in the level yet or not
+
+    void Start()
+    {
+        childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
+        childLink.GetComponent<LinkBlockBehavior>().containerEntity = this; 
+    }
 
     /**
      * Remove an incoming link reference to this platform. 
      */
-    public void removeIncomingConnectingLink(LinkBlockBehavior link)
+    void ConnectableEntity.removeIncomingConnectingLink(LinkBlockBehavior link)
     {
         incomingConnectionLinkBlocks.Remove(link); // remove this reference to the link
         link.connectingEntity = null; // remove the reference to this platform in the link 
@@ -39,67 +43,12 @@ public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, L
     /**
      * Set what Link block this platform is being connected by. Also updates Platform state and render information.
      */
-    public void addIncomingConnectingLink(LinkBlockBehavior link)
+    void ConnectableEntity.addIncomingConnectingLink(LinkBlockBehavior link)
     {
         incomingConnectionLinkBlocks.Add(link);
         gameController.updatePlatformEntities(); // updatePlatformValuesAndSprite();
     }
 
-    /**
-     * Update the sprite based on the isHidden, isPhasedOut values. 
-     */
-    public void updatePlatformValuesAndSprite()
-    {
-        isPhasedOut = !isPlatformConnectingToStart();
-        if (isPhasedOut)
-        {
-            if (GetComponent<SpriteRenderer>().sprite != phasedOutSprite)
-            {
-                GetComponent<SpriteRenderer>().sprite = phasedOutSprite;
-            }
-            GetComponent<BoxCollider2D>().isTrigger = true; // so player can pass through it.   
-        } else // solid
-        {
-            if (GetComponent<SpriteRenderer>().sprite != defaultSprite) // default sprite for solid platform.
-            {
-                GetComponent<SpriteRenderer>().sprite = defaultSprite;
-            }
-            GetComponent<BoxCollider2D>().isTrigger = false; 
-        }
-        
-        // see if you are connected to a helicopter link. If so then make block Revealed
-        isHidden = true;
-        foreach (LinkBlockBehavior lnk in incomingConnectionLinkBlocks)
-        {
-            // if the link going to it is the helicopter or an external link then it is revealed.
-            // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
-            if (lnk.isHelicopterLink || lnk.containerPlatform == null ||
-                  (lnk == gameController.hoverLinkRef && gameController.selectedLink != null) ||
-                  (gameController.hoverLinkRef == childLink) )
-            {
-                isHidden = false; // Reveal block.
-                if ((gameController.hoverLinkRef == childLink))
-                    Debug.Log("Revealed for being a hover block");
-                break;
-            }
-        }
-        
-        // set the material of the children based on if its hidden or not.
-        if (isPlatHidden() && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
-        {
-            childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
-            childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
-            setValueBlockText("?"); // can't see the value
-            childLink.GetComponent<BoxCollider2D>().enabled = false;
-        } else if (!isPlatHidden() && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
-        {
-            childLink.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
-            childValueBlock.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
-            setValueBlockText("" + value); // can see the value
-            childLink.GetComponent<BoxCollider2D>().enabled = true;
-        }
-        
-    }
 
     /**
      * Check if this platform is connected by the special starting link
@@ -124,77 +73,44 @@ public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, L
         }
         return false;
     }
-
-    void OnMouseEnter()
-    {
-
-    }
-
-    void OnMouseExit()
-    {
-
-    }
-
+    
     public void setDisplaySelected(bool b)
     { 
         transform.Find("SelectMarker").gameObject.SetActive(b);
     }
 
-    public void setValue(int s)
+    /**
+     * Make this platform look faded for the add platform mechanic
+     */ 
+    public void renderAsFadedPreview()
     {
-        if (childValueBlock != null) { 
-            value = s;
-            setValueBlockText("" + value);
-        }
+        GetComponent<SpriteRenderer>().sprite = phasedOutSprite;
+        childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
+        childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
     }
-    
-    public void setValueBlockText(string s)
+
+    /**
+     * Update the link arrow of this platform's child
+     */ 
+    public void UpdateChildLinkArrow()
     {
-        if (childValueBlock != null)
-        {
-            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = s;
-        }
+        bool old_state = childLink.gameObject.activeSelf;
+        childLink.gameObject.SetActive(true);
+        childLink.UpdateLinkArrow();
+        childLink.gameObject.SetActive(old_state);
     }
 
-    // evaluate if the platform is hidden or not. 
-    public bool isPlatHidden()
-    {
-        return isHidden;
-    }
-
-    public int getValue()
-    {
-        return value;
-    }
-    
-    // Use this for initialization
-    void Start () {
-        // defaultSprite = GetComponent<SpriteRenderer>().sprite;
-        // establish child link connections
-        childLink = transform.Find("LinkBlock").gameObject;
-        childValueBlock = transform.Find("ValueBlock").gameObject;
-        childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
-        childLink.GetComponent<LinkBlockBehavior>().containerPlatform = this;
-        // updatePlatformValuesAndSprite();
-    }
-
-    // Update is called once per frame
-    void Update () {
-
-    }
-
-    public LinkBlockBehavior getMostRecentlyConnectedLink()
+    /**
+     * Get the LinkBlock which most recently connected to this platform.
+     */
+    LinkBlockBehavior ConnectableEntity.getMostRecentlyConnectedLink()
     {
         if (incomingConnectionLinkBlocks.Count > 0)
         {
-            // if a helicopter/temp points to it, return that first.
-            // if the start link points to it, return that.
-            // if a direct link block points to it, return that first.
-            // otherwise, do additional chaining?
             LinkBlockBehavior linkToReturn = null;
             foreach (LinkBlockBehavior lb in incomingConnectionLinkBlocks)
             {
-                if (lb.isHelicopterLink || lb.isStartingLink || lb.containerPlatform == null)
+                if (lb.isHelicopterLink || lb.isStartingLink || lb.containerEntity == null)
                 {
                     linkToReturn = lb;
                     break;
@@ -203,31 +119,119 @@ public class PlatformBehavior : MonoBehaviour, ConnectableEntity, ValueEntity, L
             if (linkToReturn != null) { 
                 return linkToReturn;  
             }
-            // by default, just return the most recent one.
             return incomingConnectionLinkBlocks[incomingConnectionLinkBlocks.Count - 1]; ;
-        } else
-        {    // this shouldn't ever be called though.
+        } else { 
             return null;
         }
     }
 
-    public string getLogID()
+    /**
+     * Update the sprite based on the isHidden, isPhasedOut values. 
+     */
+    void LinkContainerEntity.updateRenderAndState()
+    {
+        phasedOut = !isPlatformConnectingToStart();
+        if (phasedOut)
+        {
+            if (GetComponent<SpriteRenderer>().sprite != phasedOutSprite)
+            {
+                GetComponent<SpriteRenderer>().sprite = phasedOutSprite;
+            }
+            GetComponent<BoxCollider2D>().isTrigger = true; // so player can pass through it.   
+        }
+        else // solid
+        {
+            if (GetComponent<SpriteRenderer>().sprite != defaultSprite) // default sprite for solid platform.
+            {
+                GetComponent<SpriteRenderer>().sprite = defaultSprite;
+            }
+            GetComponent<BoxCollider2D>().isTrigger = false;
+        }
+
+        // see if you are connected to a helicopter link. If so then make block Revealed
+        hidden = true;
+        foreach (LinkBlockBehavior lnk in incomingConnectionLinkBlocks)
+        {
+            // if the link going to it is the helicopter or an external link then it is revealed.
+            // also reveal this platform if the previous connecting link is the hover link whiel selecting a link
+            if (lnk.isHelicopterLink || lnk.containerEntity == null ||
+                  (lnk == gameController.hoverLinkRef && gameController.selectedLink != null) ||
+                  (gameController.hoverLinkRef == childLink))
+            {
+                hidden = false; // Reveal block.
+                if ((gameController.hoverLinkRef == childLink))
+                    Debug.Log("Revealed for being a hover block");
+                break;
+            }
+        }
+
+        // set the material of the children based on if its hidden or not.
+        if (hidden && childLink.GetComponent<SpriteRenderer>().material != fadedChildMaterial)
+        {
+            childLink.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
+            childValueBlock.GetComponent<SpriteRenderer>().material = fadedChildMaterial;
+            setValueBlockText("?"); // can't see the value
+            childLink.GetComponent<BoxCollider2D>().enabled = false;
+        }
+        else if (!hidden && childLink.GetComponent<SpriteRenderer>().material != defaultChildMaterial)
+        {
+            childLink.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
+            childValueBlock.GetComponent<SpriteRenderer>().material = defaultChildMaterial;
+            setValueBlockText("" + value); // can see the value
+            childLink.GetComponent<BoxCollider2D>().enabled = true;
+        }
+
+    }
+
+    bool ContainerEntity.isPhasedOut()
+    {
+        return phasedOut;
+    }
+
+    bool ContainerEntity.isHidden()
+    {
+        return hidden;
+    }
+    
+    void ValueEntity.setValue(int i)
+    {
+        if (childValueBlock != null)
+        {
+            value = i;
+            setValueBlockText("" + value);
+        }
+    }
+
+    int ValueEntity.getValue()
+    {
+        return value;
+    }
+
+    public LinkBlockBehavior getChildLink()
+    {
+        return childLink;
+    }
+
+    void LinkContainerEntity.setChildLink(LinkBlockBehavior lb)
+    {
+        childLink = lb;
+    }
+    
+    string Loggable.getLogID()
     {
         return logId;
     }
 
-    bool ConnectableEntity.isPhasedOut()
+    public void setChildValueBlock(GameObject vb)
     {
-        return isPhasedOut;
+        childValueBlock = vb;
     }
 
-    bool ConnectableEntity.isHidden()
+    public void setValueBlockText(string s)
     {
-        return isHidden;
-    }
-
-    float ValueEntity.getValue()
-    {
-        return value;
+        if (childValueBlock != null)
+        {
+            childValueBlock.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = s;
+        }
     }
 }

@@ -10,22 +10,22 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class LevelEntities
+    class LevelEntitiesJSON
     {
         public string winCondition;
         // the specific player and startLink objects in this level.
-        public Block player;
-        public LinkBlock startLink;
-        public Block goalPortal;
-        public Block helicopterRobot;
+        public BlockJSON player;
+        public LinkBlockJSON startLink;
+        public BlockJSON goalPortal;
+        public BlockJSON helicopterRobot;
 
-        public SizedBlock[] blocks; // basic blocks
-        public LinkBlock[] linkBlocks;
-        public Block[] objectiveBlocks;
+        public SizedBlockJSON[] blocks; // basic blocks
+        public LinkBlockJSON[] linkBlocks;
+        public BlockJSON[] objectiveBlocks;
 
         // stuff specific to single-linked lists.
-        public SingleLinkedListPlatform[] singleLinkedListPlatforms;
+        public SingleLinkedListPlatformJSON[] singleLinkedListPlatforms;
 
-        public InstructionBlock[] instructionBlocks;
+        public InstructionBlockJSON[] instructionBlocks;
     }
 }

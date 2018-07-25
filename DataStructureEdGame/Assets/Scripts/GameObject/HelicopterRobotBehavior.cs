@@ -1,23 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /**
  * The special helicopter link block
- */ 
-public class HelicopterRobotBehavior : MonoBehaviour, Loggable
+ */
+public class HelicopterRobotBehavior : MonoBehaviour, Loggable, LinkContainerEntity
 {
     public string logId;
 
     public GameController gameController;
-    public GameObject childLink;
+    public LinkBlockBehavior childLink;
     public Vector3 targetLocation;
     public float flySpeed;
 
 	void Start () {
-        childLink = transform.Find("LinkBlock").gameObject;
-        childLink.GetComponent<LinkBlockBehavior>().isHelicopterLink = true;
-        childLink.GetComponent<LinkBlockBehavior>().gameController = gameController;
+        childLink.isHelicopterLink = true;
+        childLink.gameController = gameController;
     }
 
     // Update is called once per frame
@@ -51,5 +51,30 @@ public class HelicopterRobotBehavior : MonoBehaviour, Loggable
     public string getLogID()
     {
         return logId;
+    }
+
+    public LinkBlockBehavior getChildLink()
+    {
+        return childLink;
+    }
+
+    public void setChildLink(LinkBlockBehavior lb)
+    {
+        childLink = lb;
+    }
+
+    public void updateRenderAndState()
+    {
+        // none needed.
+    }
+
+    public bool isPhasedOut()
+    {
+        return false;
+    }
+
+    public bool isHidden()
+    {
+        return false;
     }
 }

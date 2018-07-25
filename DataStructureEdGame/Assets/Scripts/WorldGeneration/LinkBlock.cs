@@ -11,7 +11,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class LinkBlock : Block
+    class LinkBlockJSON : BlockJSON
     {
         // has type, x, and y from Block
 

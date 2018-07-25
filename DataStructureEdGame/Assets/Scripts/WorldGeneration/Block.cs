@@ -11,7 +11,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class Block
+    class BlockJSON
     {
         public string type;
         public string logId; // the ID of the object when it is logged.

@@ -11,7 +11,7 @@ namespace Assets.Scripts.WorldGeneration
      * This class is for level file serialization.
      */
     [Serializable]
-    class SingleLinkedListPlatform : Block
+    class SingleLinkedListPlatformJSON : BlockJSON
     {
         // type, x, and y from Block
 
