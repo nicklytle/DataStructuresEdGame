@@ -201,7 +201,7 @@ public class GameController : MonoBehaviour {
 
                 if ((platformsToAdd.Count > 0) && (platformsToAdd[0] != null))
                 {
-                    platformsToAdd[0].gameObject.SetActive(false); // cancel placing the platform
+                    hudBehavior.setPlatformsToAddText(platformsToAdd.Count);
                     addingPlatforms = false;
                 }
             }

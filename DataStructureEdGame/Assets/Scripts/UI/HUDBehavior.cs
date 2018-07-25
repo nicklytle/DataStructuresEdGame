@@ -94,7 +94,14 @@ public class HUDBehavior : MonoBehaviour {
     public void setPlatformsToAddText(int count)
     {
         ensureReferences(); 
-        addPlatformButtonTextUI.text = "Add Platform (" + count  + ")";
+        if (count > 0)
+        {
+            addPlatformPanel.gameObject.SetActive(true);
+            addPlatformButtonTextUI.text = "Add Platform (" + count  + ")";
+        } else
+        {
+            addPlatformPanel.gameObject.SetActive(false); 
+        }
     }
 
     

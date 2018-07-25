@@ -280,7 +280,8 @@ public class WorldGenerationBehavior : MonoBehaviour {
         }
         
         gameController.codePanelBehavior.clearCodeText();
-        gameController.hudBehavior.setLevelOnText(levelFileIndex + 1); 
+        gameController.hudBehavior.setLevelOnText(levelFileIndex + 1);
+        gameController.hudBehavior.setPlatformsToAddText(gameController.platformsToAdd.Count);
     }
 
 
