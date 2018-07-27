@@ -199,6 +199,7 @@ public class GameController : MonoBehaviour {
                                 lb.setConnectionTo(null); // remove connection on double click
                                 lb.setPreviewConnection(null);
                                 lb.UpdateRendering();
+                                codePanelBehavior.appendCodeText(lb.getVariableName() + " = null;");
                                 updatePlatformEntities(); // changing links - update platforms
                                 updateObjectiveHUDAndBlocks();
                             }
@@ -220,6 +221,7 @@ public class GameController : MonoBehaviour {
                         if (lb.state == LinkBehavior.State.HOVER && selectedLink != null && selectedLink != lb) // if there IS a selected link. establish link.
                         {
                             selectedLink.setConnectionEqualTo(ref lb);
+                            codePanelBehavior.appendCodeText(selectedLink.getVariableName() + " = " + lb.getVariableName() + ";");
                             selectedLink.setPreviewConnection(null);
                             selectedLink.setState(LinkBehavior.State.NORMAL);
                             lb.UpdateRendering();
