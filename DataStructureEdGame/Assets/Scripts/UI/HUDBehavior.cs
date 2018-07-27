@@ -76,7 +76,8 @@ public class HUDBehavior : MonoBehaviour {
         ensureReferences();
         if (show)
         {
-            Color col = isWinSatisfied ? new Color(0, 1, 0, (160.0f / 255.0f)) : new Color(1, 0.02f, 0.02f, (160.0f / 255.0f));
+            Color col = isWinSatisfied ? new Color(0, 1, 0, (160.0f / 255.0f)) : new Color(1, 0.02f, 0.02f, (160.0f / 255.0f)); 
+            objectivePanel.GetComponent<Image>().color = col;
             objectivePanel.gameObject.SetActive(true);
             objectiveText.text = txt;
         } else

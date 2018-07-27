@@ -70,7 +70,7 @@ public class LoggingManager : MonoBehaviour
         singleLLlist = new List<LLPlatformForLogging>();
         foreach (Transform t in gameController.worldGenerator.levelEntities)
         {
-            if (t.GetComponent<LinkBlockBehavior>() != null)
+            if (t.GetComponent<LinkBehavior>() != null)
             {
                 //then this is of type LinkedBlock
 
@@ -78,10 +78,10 @@ public class LoggingManager : MonoBehaviour
                 newB.x = t.position.x;
                 newB.y = t.position.y;
                 newB.type = "linkBlock";
-                newB.logId = t.GetComponent<LinkBlockBehavior>().logId;
-                if(t.GetComponent<LinkBlockBehavior>().connectingEntity != null)
+                newB.logId = t.GetComponent<LoggableBehavior>().getLogID();
+                if(t.GetComponent<LinkBehavior>().connectableEntity != null)
                 {
-                    newB.objIDConnectingTo = t.GetComponent<LinkBlockBehavior>().connectingEntity.getLogID();
+                    newB.objIDConnectingTo = t.GetComponent<LinkBehavior>().connectableEntity.GetComponent<LoggableBehavior>().getLogID();
                 }
                 else
                 {
@@ -90,19 +90,24 @@ public class LoggingManager : MonoBehaviour
                 linkyList.Add(newB);
             } else if(t.GetComponent<PlatformBehavior>() != null)
             {
-                Debug.Log("I made it here");
                 LLPlatformForLogging platB = new LLPlatformForLogging();
                 platB.x = t.position.x;
                 platB.y = t.position.y;
                 platB.type = "LLplatform";
-                platB.logId = t.GetComponent<PlatformBehavior>().logId;
-                platB.objId = t.GetComponent<PlatformBehavior>().logId;
-                platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().getChildLink().logId;
-                platB.value = ((ValueEntity)t.GetComponent<PlatformBehavior>()).getValue();
+                platB.logId = t.GetComponent<LoggableBehavior>().getLogID();
+                platB.objId = t.GetComponent<LoggableBehavior>().getLogID();
+                if (t.GetComponent<PlatformBehavior>().getChildLink().connectableEntity != null)
+                {
+                    platB.childLinkBlockConnectId = t.GetComponent<PlatformBehavior>().getChildLink().connectableEntity.GetComponent<LoggableBehavior>().getLogID();
+                } else
+                {
+                    platB.childLinkBlockConnectId = "";
+                }
+                platB.value = t.GetComponent<ContainerEntityBehavior>().GetChildComponent<ValueBehavior>().getValue();
                 platB.toAdd = gameController.platformsToAdd.Contains(t.GetComponent<PlatformBehavior>());
 
-                platB.isHidden = ((ContainerEntity) t.GetComponent<PlatformBehavior>() ).isHidden();
-                platB.isSolid = !((ContainerEntity)t.GetComponent<PlatformBehavior>()).isPhasedOut();
+                platB.isHidden = t.GetComponent<ContainerEntityBehavior>().isHidden();
+                platB.isSolid = !t.GetComponent<PlatformBehavior>().isPhasedOut();
                 singleLLlist.Add(platB);
             }
             else if(t.GetComponent<PlayerBehavior>() != null)
@@ -110,7 +115,7 @@ public class LoggingManager : MonoBehaviour
                 player.x = Math.Round(t.position.x, 2);
                 player.y = Math.Round(t.position.y, 2);
                 player.type = "player";
-                player.logId = t.GetComponent<PlayerBehavior>().logId;
+                player.logId = t.GetComponent<LoggableBehavior>().getLogID();
             }
             else if(t.GetComponent<HelicopterRobotBehavior>() != null)
             {
@@ -118,7 +123,7 @@ public class LoggingManager : MonoBehaviour
                 helicopter.x = Math.Round(t.position.x, 2);
                 helicopter.y = Math.Round(t.position.y, 2);
                 helicopter.type = "helicopter";
-                helicopter.logId = t.GetComponent<HelicopterRobotBehavior>().logId;
+                helicopter.logId = t.GetComponent<LoggableBehavior>().getLogID();
             }
         }
 
@@ -128,7 +133,6 @@ public class LoggingManager : MonoBehaviour
         current.player = player;
         current.helicopter = helicopter;
         worldStateField = current.SaveString();
-        Debug.Log(current.SaveString());
 
         if (enableLogging) { 
             String timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");

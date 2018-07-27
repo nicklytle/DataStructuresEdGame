@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 61335558393703990}
   - component: {fileID: 114267956083312518}
   - component: {fileID: 50464579384253660}
+  - component: {fileID: 114001060600959174}
   m_Layer: 0
   m_Name: EnemyPinkBlob
   m_TagString: Untagged
@@ -88,6 +89,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.37, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &114001060600959174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1967917104111994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c248053ccd0bcc64786b3bc94d83efff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114267956083312518
 MonoBehaviour:
   m_ObjectHideFlags: 1

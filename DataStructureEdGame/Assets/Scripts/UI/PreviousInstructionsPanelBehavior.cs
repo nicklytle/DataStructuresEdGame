@@ -31,7 +31,6 @@ public class PreviousInstructionsPanelBehavior : MonoBehaviour {
         }
         if (!previousInstructions.Contains(panel))
         {
-            // Debug.Log("Adding panel to history");
             previousInstructions.Add(panel); // add to the end of the list.
 
             // find the button in the container

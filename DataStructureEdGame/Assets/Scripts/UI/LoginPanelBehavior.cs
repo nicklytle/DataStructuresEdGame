@@ -41,16 +41,6 @@ public class LoginPanelBehavior : MonoBehaviour {
         submitPressed = false;
     }
 
-    void skipLoginShortcut()
-    {
-        gameCanvas.gameObject.SetActive(true);
-        menuCanvas.gameObject.SetActive(false);
-        gameController.loggingManager.currentPlayerID = -1;
-        gameController.instructionScreenBehavior.ensureInstructionPanelReferences();
-        gameController.instructionScreenBehavior.revealPlatformsForLevels(gameController.worldGenerator.levelFileIndex);
-        gameController.worldGenerator.ManualStartGenerator(); 
-    }
-
     void Update()
     {
         // if there was a response sent out, wait for the response to come back.
@@ -63,7 +53,6 @@ public class LoginPanelBehavior : MonoBehaviour {
                 {
                     string[] tokens = loggingManager.getLoginAttemptResponse().Split(' ');
 
-                    //Debug.Log("Login successful! " + playerIdExtracted);
                     gameCanvas.gameObject.SetActive(true);
                     menuCanvas.gameObject.SetActive(false);
                     int playerId = System.Convert.ToInt32(tokens[1]);
@@ -86,6 +75,18 @@ public class LoginPanelBehavior : MonoBehaviour {
                 submitPressed = false;
             }
         }
+    }
+
+
+    void skipLoginShortcut()
+    {
+        gameCanvas.gameObject.SetActive(true);
+        menuCanvas.gameObject.SetActive(false);
+        gameController.loggingManager.currentPlayerID = -1;
+        gameController.instructionScreenBehavior.ensureInstructionPanelReferences();
+        gameController.instructionScreenBehavior.revealPlatformsForLevels(gameController.worldGenerator.levelFileIndex);
+        loggingManager.sendLogToServer("Logged in with debug login");
+        gameController.worldGenerator.ManualStartGenerator();
     }
 
     void onSubmitButtonPressed()

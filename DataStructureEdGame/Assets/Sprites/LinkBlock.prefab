@@ -26,7 +26,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1876506560233842
 GameObject:
   m_ObjectHideFlags: 1
@@ -87,9 +87,10 @@ GameObject:
   - component: {fileID: 4305965019959856}
   - component: {fileID: 212724816987262744}
   - component: {fileID: 61086650715076424}
-  - component: {fileID: 114958413668738304}
   - component: {fileID: 60338777340319588}
   - component: {fileID: 120100906722124066}
+  - component: {fileID: 114598048065377420}
+  - component: {fileID: 114595268814206470}
   m_Layer: 0
   m_Name: LinkBlock
   m_TagString: Untagged
@@ -202,6 +203,43 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114595268814206470
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1978956944021576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c248053ccd0bcc64786b3bc94d83efff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114598048065377420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1978956944021576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b47d95d2ba2fa419305690a074f5cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  type: 0
+  state: 0
+  variableName: 
+  connectableEntity: {fileID: 0}
+  previewConnectableEntity: {fileID: 0}
+  linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+  hoverSelectedMarkerSprite: {fileID: 21300000, guid: 9979ff910651efc418518a669e06b1e3,
+    type: 3}
+  selectSelectedMarkerSprite: {fileID: 21300000, guid: 9716eb3df792a7e4daf73d06c4227d55,
+    type: 3}
+  defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
+  nullSprite: {fileID: 21300000, guid: 8db31c4a2132b2441ad20a9e85e88020, type: 3}
+  renderArrow: 1
+  selectable: 1
 --- !u!114 &114670710951660908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,35 +273,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
---- !u!114 &114958413668738304
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1978956944021576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d104d974ccdadb7499977a0e3d0d8b76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  logId: 
-  gameController: {fileID: 0}
-  parentPlatform: {fileID: 0}
-  connectingPlatform: {fileID: 0}
-  linkArrow: {fileID: 0}
-  linkArrowHead: {fileID: 0}
-  nullLinkSprite: {fileID: 21300000, guid: 8db31c4a2132b2441ad20a9e85e88020, type: 3}
-  defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
-  defaultSelectMarkerSprite: {fileID: 21300000, guid: 9979ff910651efc418518a669e06b1e3,
-    type: 3}
-  highlightSelectMarkerSprite: {fileID: 21300000, guid: 9716eb3df792a7e4daf73d06c4227d55,
-    type: 3}
-  variableNamePanel: {fileID: 114310783900591266}
-  variableNameText: {fileID: 114670710951660908}
-  variableName: 
-  isStartingLink: 0
-  isHelicopterLink: 0
-  renderArrow: 0
 --- !u!120 &120100906722124066
 LineRenderer:
   m_ObjectHideFlags: 1

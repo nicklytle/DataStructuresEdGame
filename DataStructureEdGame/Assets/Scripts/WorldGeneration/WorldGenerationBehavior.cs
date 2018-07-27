@@ -21,7 +21,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
 
     [Header("Internal references to game objects")]
     public List<Transform> levelEntities; // all of the entities that were generated for the level.
-    private List<LinkBlockBehavior> levelLinkBlocks; // reference to link blocks used during world generation
+    public List<LinkBehavior> levelLinks; // reference to link blocks, including those which are inside other entities.
     public Sprite startLinkBlockSprite;  // references to Sprites
     public Sprite nullStartLinkBlockSprite;
     public Transform backgroundRef; // reference to the background game object
@@ -35,13 +35,20 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public Transform instructionViewBlockPreFab;
     public Transform linkBlockPreFab;
     public Transform singleLinkedListPreFab;
-    public Transform helicopterRobotPreFab;    
+    public Transform helicopterRobotPreFab;
+
+    private bool busy;
 
     public void ManualStartGenerator()
     {
         if (generateWorld)
         {
+            busy = true;
             CreateWorldFromLevelDescription();
+            busy = false;
+        } else
+        {
+            Debug.Log("generateWorld is turned off. Please turn it on in the WorldGenerator");
         }
     }
 
@@ -81,7 +88,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public void CreateWorldFromLevelDescription()
     {
         LevelEntitiesJSON level = JsonUtility.FromJson<LevelEntitiesJSON>(levelDescriptionJsonFiles[levelFileIndex].text);
-        gameController.winConditon = GetWinConditionFromString(level.winCondition); 
+        gameController.winConditon = GetWinConditionFromString(level.winCondition);
+        // list of link blocks we are creating
+        levelLinks = new List<LinkBehavior>();
+        Debug.Log("Loading blocks");
         // while generating the level, add things to levelEntities list so it can be destroyed for the next level generated.
         for (int i = 0; i < level.blocks.Length; i++)
         {
@@ -98,32 +108,32 @@ public class WorldGenerationBehavior : MonoBehaviour {
                 Vector2 sizeOfBlock = new Vector3((int)level.blocks[i].width, (int)level.blocks[i].height); 
                 obj.GetComponent<SpriteRenderer>().size = sizeOfBlock;
                 obj.GetComponent<BoxCollider2D>().size = sizeOfBlock;
-                if (objToInstances == groundPreFab || objToInstances == groundTopPreFab)
-                {
-                    obj.GetComponent<GroundBehavior>().logId = level.blocks[i].logId; // ground block 
-                }
+                obj.GetComponent<LoggableBehavior>().setLogID(level.blocks[i].logId); // ground block 
                 levelEntities.Add(obj);
             }
 
         }
+        Debug.Log("Loading player");
         // create the player
         if (level.player != null)
         {
             Vector2 loc = new Vector2((float)(level.player.x + (1 / 2f)), (float)(level.player.y - (1 / 2f)));
             gameController.playerRef = Instantiate(playerPreFab, loc, Quaternion.identity);
             gameController.playerRef.GetComponent<PlayerBehavior>().gameController = gameController;
-            gameController.playerRef.GetComponent<PlayerBehavior>().logId = level.player.logId;
+            gameController.playerRef.GetComponent<LoggableBehavior>().setLogID(level.player.logId);
             levelEntities.Add(gameController.playerRef);
             // move the backdrop right behind the player initially.
             backgroundRef.position = gameController.playerRef.position + new Vector3(0, 0, -10);
         }
+        Debug.Log("Loading goal");
         if (level.goalPortal != null)
         {
             Vector2 loc = new Vector2((float)(level.goalPortal.x + (1 / 2f)), (float)(level.goalPortal.y - (1 / 2f)));
             Transform goal = Instantiate(goalPortalPreFab, loc, Quaternion.identity);
-            goal.GetComponent<GoalBehavior>().logId = level.goalPortal.logId;
+            goal.GetComponent<LoggableBehavior>().setLogID(level.goalPortal.logId);
             levelEntities.Add(goal);
         }
+        Debug.Log("Loading helicopter robot");
         if (level.helicopterRobot != null)
         {
             Vector2 loc = new Vector2((float)(level.helicopterRobot.x + (1 / 2f)), (float)(level.helicopterRobot.y - (1 / 2f)));
@@ -131,70 +141,74 @@ public class WorldGenerationBehavior : MonoBehaviour {
             HelicopterRobotBehavior robotBehavior = robot.GetComponent<HelicopterRobotBehavior>();
             robotBehavior.gameController = gameController;
             robotBehavior.targetLocation = robot.position;
-            robotBehavior.logId = level.helicopterRobot.logId;
+            robotBehavior.GetComponent<LoggableBehavior>().setLogID(level.helicopterRobot.logId);
 
-            gameController.helicopterRobotRef = robot;
-            robotBehavior.setChildLink(robot.Find("LinkBlock").gameObject.GetComponent<LinkBlockBehavior>());
-            robotBehavior.childLink.GetComponent<LinkBlockBehavior>().logId = level.helicopterRobot.logId + "Link";
-
+            gameController.helicopterRobotRef = robot; 
+            robotBehavior.GetComponent<ContainerEntityBehavior>().refreshChildList();
+            robotBehavior.getChildLink().GetComponent<LoggableBehavior>().setLogID("helicopter");
+            robotBehavior.getChildLink().type = LinkBehavior.Type.HELICOPTER;
+            robotBehavior.getChildLink().setVariableName("temp");
+            robotBehavior.getChildLink().setContainerEntity(robot.GetComponent<ContainerEntityBehavior>()); 
             levelEntities.Add(robot);
+            levelLinks.Add(robotBehavior.GetComponent<ContainerEntityBehavior>().GetChildComponent<LinkBehavior>());
         }
         
-        // list of link blocks we are creating
-        levelLinkBlocks = new List<LinkBlockBehavior>();
         // corresponding list of IDs telling the link blocks what they should point to when the level is generated
-        List<string> levelLinkBlocksConnIds = new List<string>();
+        List<string> levelLinksConnIds = new List<string>();
+        List<LinkBehavior> levelLinkComps = new List<LinkBehavior>();
         List<ObjectiveBlockBehavior> levelObjectiveBlocks = new List<ObjectiveBlockBehavior>();
         List<PlatformBehavior> levelPlatformEntities = new List<PlatformBehavior>();
         gameController.platformsToAdd = new List<PlatformBehavior>();
         // create the start link
+        Debug.Log("Loading start link");
         if (level.startLink != null)
         {
             Vector2 loc = new Vector2((float)(level.startLink.x + (1 / 2f)), (float)(level.startLink.y - (1 / 2f)));
             Transform startLinkTran = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
-            LinkBlockBehavior startLinkBehavior = startLinkTran.GetComponent<LinkBlockBehavior>();
+            LinkBehavior startLinkBehavior = startLinkTran.GetComponent<LinkBehavior>();
             startLinkTran.position = startLinkTran.position + (new Vector3(0, 0, -5));
-            startLinkBehavior.gameController = gameController;
-            startLinkBehavior.isStartingLink = true;  // mark link as start.
+            startLinkBehavior.type = LinkBehavior.Type.START;
             startLinkBehavior.defaultSprite = startLinkBlockSprite;
-            startLinkBehavior.nullLinkSprite = nullStartLinkBlockSprite;
-            startLinkBehavior.logId = level.startLink.logId;
+            startLinkBehavior.nullSprite = nullStartLinkBlockSprite;
+            startLinkBehavior.GetComponent<LoggableBehavior>().setLogID(level.startLink.logId); 
 
             startLinkBehavior.GetComponent<SpriteRenderer>().sprite = startLinkBlockSprite;
             gameController.startingLink = startLinkBehavior; // set start link reference
-            levelLinkBlocks.Add(startLinkBehavior);
-            levelLinkBlocksConnIds.Add(level.startLink.objIDConnectingTo);
-
+            levelLinks.Add(startLinkBehavior);
             levelEntities.Add(startLinkTran);
+
+            levelLinksConnIds.Add(level.startLink.objIDConnectingTo);
+            levelLinkComps.Add(startLinkBehavior); 
         }
 
+        Debug.Log("Loading external link blocks");
         // create the indiv link blocks.
         for (int i = 0; i < level.linkBlocks.Length; i++)
         {
             Vector2 loc = new Vector2((float)(level.linkBlocks[i].x + (1 / 2f)), (float)(level.linkBlocks[i].y - (1 / 2f)));
             Transform newLink = Instantiate(linkBlockPreFab, loc, Quaternion.identity);
             newLink.position = newLink.position + (new Vector3(0,0,-5));
-            LinkBlockBehavior lb = newLink.GetComponent<LinkBlockBehavior>();
-            lb.gameController = gameController;
-            lb.logId = level.linkBlocks[i].logId;
-
-            levelLinkBlocks.Add(lb);
-            levelLinkBlocksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
+            LinkBehavior lb = newLink.GetComponent<LinkBehavior>();
+            lb.GetComponent<LoggableBehavior>().setLogID(level.linkBlocks[i].logId); 
+            levelLinks.Add(lb);
             levelEntities.Add(newLink);
+
+            levelLinksConnIds.Add(level.linkBlocks[i].objIDConnectingTo);
+            levelLinkComps.Add(lb);
         }
 
+        Debug.Log("Loading objective blocks");
         // create the objective blocks (fire)
         for (int i = 0; i < level.objectiveBlocks.Length; i++)
         {
             Vector2 loc = new Vector2((float)(level.objectiveBlocks[i].x + (1 / 2f)), (float)(level.objectiveBlocks[i].y - (1 / 2f)));
             Transform newOBlock = Instantiate(objectiveBlockPreFab, loc, Quaternion.identity);
-            ObjectiveBlockBehavior ob = newOBlock.GetComponent<ObjectiveBlockBehavior>();
-            ob.logId = level.objectiveBlocks[i].logId;
-
-            levelObjectiveBlocks.Add(ob);
+            newOBlock.GetComponent<LoggableBehavior>().setLogID(level.objectiveBlocks[i].logId);
+            levelObjectiveBlocks.Add(newOBlock.GetComponent<ObjectiveBlockBehavior>());
             levelEntities.Add(newOBlock);
         }
-        
+
+        Debug.Log("Loading instruction blocks");
         // create the instruction blocks (question marks)
         for (int i = 0; i < level.instructionBlocks.Length; i++)
         {
@@ -204,6 +218,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
             levelEntities.Add(newInstructBlock);
         }
 
+        Debug.Log("Loading the platforms");
         // create the platforms.
         Dictionary<string, PlatformBehavior> listPlatformMap = new Dictionary<string, PlatformBehavior>();
         for (int i = 0; i < level.singleLinkedListPlatforms.Length; i++)
@@ -211,77 +226,81 @@ public class WorldGenerationBehavior : MonoBehaviour {
             Vector2 loc = new Vector2((float)(level.singleLinkedListPlatforms[i].x + (3 / 2f)), (float)(level.singleLinkedListPlatforms[i].y - (1 / 2f)));
             Transform newLLPlatform = Instantiate(singleLinkedListPreFab, loc, Quaternion.identity);
             PlatformBehavior newPlat = newLLPlatform.GetComponent<PlatformBehavior>();
-            LinkBlockBehavior innerLink = newLLPlatform.Find("LinkBlock").GetComponent<LinkBlockBehavior>();
-            innerLink.gameController = gameController;
-            innerLink.containerEntity = newPlat;
-            innerLink.logId = level.singleLinkedListPlatforms[i].logId + "Link";
+            newPlat.GetComponent<ConnectableEntityBehavior>().incomingConnectionLinks = new List<LinkBehavior>();
             newPlat.gameController = gameController;
-            ((LinkContainerEntity)newPlat).setChildLink(innerLink);
-            newPlat.setChildValueBlock(newLLPlatform.Find("ValueBlock").gameObject);
-            ((ValueEntity)newPlat).setValue(level.singleLinkedListPlatforms[i].value);
-            newPlat.logId = level.singleLinkedListPlatforms[i].logId;
 
+            newPlat.GetComponent<ContainerEntityBehavior>().refreshChildList();
+            newPlat.setValue(level.singleLinkedListPlatforms[i].value);
+            newPlat.GetComponent<LoggableBehavior>().setLogID(level.singleLinkedListPlatforms[i].logId);
+            newPlat.GetComponent<ConnectableEntityBehavior>().incomingConnectionLinks = new List<LinkBehavior>();
             listPlatformMap.Add(level.singleLinkedListPlatforms[i].objId, newPlat);
-            levelLinkBlocks.Add(innerLink); // add it to the list of blocks for references
-            levelLinkBlocksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
+            newPlat.getChildLink().state = LinkBehavior.State.NORMAL;
+            newPlat.getChildLink().GetComponent<LoggableBehavior>().setLogID("child" + level.singleLinkedListPlatforms[i].logId);
+            newPlat.getChildLink().setContainerEntity(newPlat.GetComponent<ContainerEntityBehavior>());
+            levelLinks.Add(newPlat.GetComponent<ContainerEntityBehavior>().GetChildComponent<LinkBehavior>()); // add it to the list of blocks for references
             levelEntities.Add(newLLPlatform);
+
+            levelLinksConnIds.Add(level.singleLinkedListPlatforms[i].childLinkBlockConnectId);
+            levelLinkComps.Add(newPlat.getChildLink());
             levelPlatformEntities.Add(newPlat);
+
+            newPlat.isInLevel = !level.singleLinkedListPlatforms[i].toAdd;
             if (level.singleLinkedListPlatforms[i].toAdd == true)
             {
-                newLLPlatform.gameObject.SetActive(false);
-                newPlat.isInLevel = false;
+                newLLPlatform.gameObject.SetActive(false); 
                 gameController.platformsToAdd.Add(newPlat);
-                gameController.hudBehavior.setPlatformsToAddText(gameController.platformsToAdd.Count);
-            } else
-            {
-                newPlat.isInLevel = true;
             }
         }
+        gameController.hudBehavior.setPlatformsToAddText(gameController.platformsToAdd.Count);
+        Debug.Log("Completed loading " + listPlatformMap.Count + " platforms");
 
-        // establishing links for the link blocks with the platforms
-        if (levelLinkBlocksConnIds != null && levelLinkBlocksConnIds.Count > 0)
+        Debug.Log("Establishing links ");
+        // establishing links for the link blocks with the platforms 
+        for (int i = 0; i < levelLinksConnIds.Count; i++)
         {
-            for (int i = 0; i < levelLinkBlocksConnIds.Count; i++)
+            if (levelLinksConnIds[i] != null && levelLinksConnIds[i].Length > 0) // if this link has a connection.
             {
-                if (levelLinkBlocksConnIds[i] != null && levelLinkBlocksConnIds[i].Length > 0) // if this link has a connection.
+                string platformId = levelLinksConnIds[i];
+                if (listPlatformMap[platformId].isInLevel == true)
                 {
-                    string platformId = levelLinkBlocksConnIds[i];
-                    if (listPlatformMap[platformId].isInLevel == true)
-                    {
-                        // establish the connection
-                        levelLinkBlocks[i].connectingEntity = listPlatformMap[platformId];
-                        levelLinkBlocks[i].connectingEntity.addIncomingConnectingLink(levelLinkBlocks[i]);
-                        levelLinkBlocks[i].renderArrow = true;
-                    }
+                    // establish the connection
+                    levelLinkComps[i].ensureReferences();
+                    levelLinkComps[i].setConnectionTo(listPlatformMap[platformId].GetComponent<ConnectableEntityBehavior>()); 
                 }
             }
         }
 
+        Debug.Log("Assigning variable names");
+        string[] varNames = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q", "r", "z", "y" };
+        int varIndex = 0;
+        // verify that no link blocks are being displayed
+        foreach (LinkBehavior lb in levelLinks)
+        {
+            if (lb.type == LinkBehavior.Type.HELICOPTER)
+            {
+                lb.setVariableName("temp");
+            } else if (lb.type == LinkBehavior.Type.START)
+            {
+                lb.setVariableName("list.head");
+            }
+            else 
+            {
+                lb.setVariableName(varNames[varIndex++]);
+            }
+            lb.ensureReferences();
+            lb.UpdateRendering();
+        }
+        
+        Debug.Log("Updating everything");
         // update the win conditions for the objective blocks
         gameController.setLevelObjectiveBlocksList(levelObjectiveBlocks);
         gameController.setLevelPlatformEntitiesList(levelPlatformEntities);
         gameController.updateObjectiveHUDAndBlocks();
         gameController.updatePlatformEntities();
-        
-        string[] varNames = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q", "r", "z", "y" };
-        int varIndex = 0;
-        // verify that no link blocks are being displayed
-        foreach (LinkBlockBehavior lb in levelLinkBlocks)
-        {
-            if (!lb.isHelicopterLink && !lb.isStartingLink) { 
-                lb.variableName = varNames[varIndex++];
-            }
-            lb.setDisplayMarker(false);
-        }
-        // also do this for the robot
-        if (gameController.helicopterRobotRef != null)
-        {
-            gameController.helicopterRobotRef.GetComponent<HelicopterRobotBehavior>().getChildLink().setDisplayMarker(false);
-        }
-        
         gameController.codePanelBehavior.clearCodeText();
         gameController.hudBehavior.setLevelOnText(levelFileIndex + 1);
         gameController.hudBehavior.setPlatformsToAddText(gameController.platformsToAdd.Count);
+        Debug.Log("Done loading world");
     }
 
 
@@ -290,18 +309,13 @@ public class WorldGenerationBehavior : MonoBehaviour {
      */
     public void resetLevel()
     {
-        foreach (LinkBlockBehavior lb in levelLinkBlocks)
+        foreach (LinkBehavior lb in levelLinks)
         {
-            lb.removeArrowBetween();
+            lb.clearArrowInstances();
         }
 
         foreach (Transform t in levelEntities)
-        {
-            // delete any arrows associated with link blocks.
-            if (t.GetComponent<HelicopterRobotBehavior>() != null && t.GetComponent<HelicopterRobotBehavior>().getChildLink() != null)
-            {
-                t.GetComponent<HelicopterRobotBehavior>().getChildLink().removeArrowBetween();
-            } 
+        { 
             Destroy(t.gameObject);
         }
         gameController.clearReferenceLists(); // clear the references here
@@ -326,5 +340,10 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public void setGameController(GameController gc)
     {
         gameController = gc;
+    }
+
+    public bool isBusy()
+    {
+        return busy;
     }
 }

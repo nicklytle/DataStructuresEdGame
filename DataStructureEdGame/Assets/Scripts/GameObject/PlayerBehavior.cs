@@ -6,11 +6,8 @@ using UnityEngine;
 /**
  * The behavior for the main player.
  */
-public class PlayerBehavior : MonoBehaviour, Loggable
+public class PlayerBehavior : MonoBehaviour
 {
-
-    public string logId;
-
     public GameController gameController;
 
     private Rigidbody2D rb2;
@@ -65,12 +62,10 @@ public class PlayerBehavior : MonoBehaviour, Loggable
             gameController.loggingManager.sendLogToServer(actMsg2);
         }
 
-
         // reduce the shove amount as time goes on.
         shoveVector = shoveVector * 0.9f; // to offset the effects of deltaTime
         if (shoveVector.magnitude > 1 || shoveVector.magnitude < -1)
         {
-            //Debug.Log("Shove vector magnitude: " + shoveVector.magnitude);
             newMoveVect = newMoveVect + (Time.deltaTime * shoveVector); // add the shove amount to the total movement.
         } 
         rb2.velocity = newMoveVect;
@@ -101,7 +96,7 @@ public class PlayerBehavior : MonoBehaviour, Loggable
 
         if (onGround && (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)))
         {
-            string actMsg3 = "Player: " + logId + " jumped.";
+            string actMsg3 = "Player: " + GetComponent<LoggableBehavior>().getLogID() + " jumped.";
             gameController.loggingManager.sendLogToServer(actMsg3);
             onGround = false;
             rb2.velocity += new Vector2(0, jumpSpeed); 
@@ -116,29 +111,25 @@ public class PlayerBehavior : MonoBehaviour, Loggable
             onGround = true;
             if (collision.gameObject.name == "GroundTop(Clone)")
             {
-                //Debug.Log(collision.gameObject.GetComponent<GroundBehavior>().logId);
-                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<GroundBehavior>().logId))
+                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<LoggableBehavior>().getLogID()))
                 {
-                    currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+                    currentlyStandingOn = collision.gameObject.GetComponent<LoggableBehavior>().getLogID();
                     string actMsg = "Player landed onto ground: " + currentlyStandingOn;
                     gameController.loggingManager.sendLogToServer(actMsg);
-                    //Debug.Log(actMsg);
                 }
                 if (initAssgmt)
                 {
                     initAssgmt = false;
-                    currentlyStandingOn = collision.gameObject.GetComponent<GroundBehavior>().logId;
+                    currentlyStandingOn = collision.gameObject.GetComponent<LoggableBehavior>().getLogID();
                     string actMsg = "Player started by standing on ground: " + currentlyStandingOn;
                     gameController.loggingManager.sendLogToServer(actMsg);
-                    //Debug.Log(actMsg);
                 }
             }
             else if (collision.gameObject.name == "Platform(Clone)")
             {
-                //Debug.Log(collision.gameObject.GetComponent<PlatformBehavior>().logId);
-                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<PlatformBehavior>().logId))
+                if (!initAssgmt && (currentlyStandingOn != collision.gameObject.GetComponent<LoggableBehavior>().getLogID()))
                 {
-                    currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+                    currentlyStandingOn = collision.gameObject.GetComponent<LoggableBehavior>().getLogID();
                     string actMsg1 = "Player landed onto platform: " + currentlyStandingOn;
                     gameController.loggingManager.sendLogToServer(actMsg1);
                     //Debug.Log(actMsg1);
@@ -146,7 +137,7 @@ public class PlayerBehavior : MonoBehaviour, Loggable
                 if (initAssgmt)
                 {
                     initAssgmt = false;
-                    currentlyStandingOn = collision.gameObject.GetComponent<PlatformBehavior>().logId;
+                    currentlyStandingOn = collision.gameObject.GetComponent<LoggableBehavior>().getLogID();
                     string actMsg = "Player started by standing on platform: " + currentlyStandingOn;
                     gameController.loggingManager.sendLogToServer(actMsg);
                     //Debug.Log(actMsg);
@@ -200,10 +191,5 @@ public class PlayerBehavior : MonoBehaviour, Loggable
 
         //Debug.Log("PLayer being shoved!:  " + sa.x + ", " + sa.y);
         shoveVector = sa;
-    }
-
-    public string getLogID()
-    {
-        return logId;
-    }
+    } 
 }

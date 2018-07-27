@@ -7,10 +7,8 @@ using UnityEngine;
  * level's win condition is not yet met, and become passable 
  * when the level's win condition is met.
  */
-public class ObjectiveBlockBehavior : MonoBehaviour, Loggable
+public class ObjectiveBlockBehavior : MonoBehaviour
 { 
-    public string logId;
-
     [Header("Sprites")]
     public Sprite solidSprite;
     public Sprite fadedSprite;
@@ -21,9 +19,7 @@ public class ObjectiveBlockBehavior : MonoBehaviour, Loggable
     public void updatedFadedState(bool winConditionSatisfied)
     {
         // check if the win condition is met or not.
-        canMoveThrough = winConditionSatisfied;
-        //Debug.Log("We have updated the faded state of this objective block");
-        //Debug.Log(canMoveThrough);
+        canMoveThrough = winConditionSatisfied; 
         GetComponent<BoxCollider2D>().isTrigger = canMoveThrough;
         if (canMoveThrough)
         {
@@ -40,19 +36,5 @@ public class ObjectiveBlockBehavior : MonoBehaviour, Loggable
         }
     }
 
-	// Use this for initialization
-	void Start () {
-        
-
-    }
-	
-	// Update is called once per frame
-	void Update () {
-
-    }
-
-    public string getLogID()
-    {
-        return logId;
-    }
+    
 }
