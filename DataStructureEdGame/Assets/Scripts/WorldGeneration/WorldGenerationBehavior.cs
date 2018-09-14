@@ -88,7 +88,7 @@ public class WorldGenerationBehavior : MonoBehaviour {
     public void CreateWorldFromLevelDescription()
     {
         LevelEntitiesJSON level = JsonUtility.FromJson<LevelEntitiesJSON>(levelDescriptionJsonFiles[levelFileIndex].text);
-        gameController.winConditon = GetWinConditionFromString(level.winCondition);
+        gameController.winCondition = GetWinConditionFromString(level.winCondition);
         // list of link blocks we are creating
         levelLinks = new List<LinkBehavior>();
         Debug.Log("Loading blocks");

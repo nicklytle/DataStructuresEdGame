@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
     public bool enableLinkChaining = false;
 
     [Header("Level specific Properties")]
-    public WinCondition winConditon;
+    public WinCondition winCondition;
 
     [Header("Canvas References")]
     public Canvas winGameCanvas;
@@ -277,12 +277,12 @@ public class GameController : MonoBehaviour {
      */ 
     bool isWinConditonSatisfied()
     {
-        if (winConditon == WinCondition.None)
+        if (winCondition == WinCondition.None)
         {
             return true; // always beat it when there is no condition.
         }
 
-        switch (winConditon)
+        switch (winCondition)
         {
             case WinCondition.SortListDuplicatesNotAllBlocks:
                 // after ensuring the list is sorted, see if there are duplicates for this case.
@@ -340,9 +340,9 @@ public class GameController : MonoBehaviour {
                     ContainerEntityBehavior next = temp.GetChildComponent<LinkBehavior>().connectableEntity.GetComponent<ContainerEntityBehavior>();
                     next.refreshChildList();
                     
-                    if (((winConditon == WinCondition.SortListAscending || winConditon == WinCondition.SortListDuplicatesNotAllBlocks) && 
+                    if (((winCondition == WinCondition.SortListAscending || winCondition == WinCondition.SortListDuplicatesNotAllBlocks) && 
                             next.GetChildComponent<ValueBehavior>().getValue() < temp.GetChildComponent<ValueBehavior>().getValue()) ||
-                        (winConditon == WinCondition.SortListDescending && 
+                        (winCondition == WinCondition.SortListDescending && 
                             next.GetChildComponent<ValueBehavior>().getValue() > temp.GetChildComponent<ValueBehavior>().getValue()))
                     {
                         return false; // not sorted.
@@ -363,23 +363,23 @@ public class GameController : MonoBehaviour {
      */ 
     public void updateObjectiveHUDAndBlocks()
     {
-        if (winConditon != WinCondition.None)
+        if (winCondition != WinCondition.None)
         {
             bool isWinSatisfied = isWinConditonSatisfied(); 
-            if (winConditon == WinCondition.SortListAscending)
+            if (winCondition == WinCondition.SortListAscending)
             {
                 if (isWinSatisfied) 
                     hudBehavior.setObjectiveHUD("Sort the list in increasing order while including all Platforms.\nThe List is sorted!", true, isWinSatisfied);
                 else
                     hudBehavior.setObjectiveHUD("Sort the list in increasing order while including all Platforms.\nThe List is not sorted.", true, isWinSatisfied);
-            } else if (winConditon == WinCondition.SortListDescending)
+            } else if (winCondition == WinCondition.SortListDescending)
             {
                 if (isWinSatisfied)
                     hudBehavior.setObjectiveHUD("Sort the list in decreasing order while including all Platforms.\nThe List is sorted!", true, isWinSatisfied);
                 else
                     hudBehavior.setObjectiveHUD("Sort the list in decreasing order while including all Platforms.\nThe List is not sorted.", true, isWinSatisfied);
             }
-            else if (winConditon == WinCondition.SortListDuplicatesNotAllBlocks)
+            else if (winCondition == WinCondition.SortListDuplicatesNotAllBlocks)
             {
                 if (isWinSatisfied)
                     hudBehavior.setObjectiveHUD("Delete all duplicate blocks\nThe List has no duplicates!", true, isWinSatisfied);
