@@ -143,7 +143,7 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.64, y: 0.64}
-    newSize: {x: 0.2, y: 0.2}
+    newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -168,7 +168,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.64, y: 0.64}
-    newSize: {x: 0.2, y: 0.2}
+    newSize: {x: 0.64, y: 0.64}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -225,18 +225,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b47d95d2ba2fa419305690a074f5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 0}
   type: 0
   state: 0
-  variableName: 
   connectableEntity: {fileID: 0}
   previewConnectableEntity: {fileID: 0}
+  containerEntity: {fileID: 0}
   linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
+  arrowLine: {fileID: 0}
+  arrowHead: {fileID: 0}
+  previewArrowLine: {fileID: 0}
+  previewArrowHead: {fileID: 0}
   hoverSelectedMarkerSprite: {fileID: 21300000, guid: 9979ff910651efc418518a669e06b1e3,
     type: 3}
   selectSelectedMarkerSprite: {fileID: 21300000, guid: 9716eb3df792a7e4daf73d06c4227d55,
     type: 3}
-  defaultSprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 8e74529daf2ea9e44846f69e71fdd492, type: 3}
   nullSprite: {fileID: 21300000, guid: 8db31c4a2132b2441ad20a9e85e88020, type: 3}
   renderArrow: 1
   selectable: 1
@@ -388,12 +391,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8511dfa011027eb498f8dfdf93670868, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8e74529daf2ea9e44846f69e71fdd492, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
 --- !u!212 &212989300065718964

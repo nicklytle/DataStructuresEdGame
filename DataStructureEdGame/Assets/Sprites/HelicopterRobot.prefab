@@ -255,6 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultChildMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   fadedChildMaterial: {fileID: 2100000, guid: 69c0e08f02dc4b64b8ba571925b4823f, type: 2}
+  hidden: 0
 --- !u!114 &114188790139788610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -307,12 +308,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b47d95d2ba2fa419305690a074f5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameController: {fileID: 0}
   type: 0
   state: 0
-  variableName: 
   connectableEntity: {fileID: 0}
   previewConnectableEntity: {fileID: 0}
+  containerEntity: {fileID: 0}
   linePreFab: {fileID: 4738812025387528, guid: 91b428fbf9cd09a4f91bea1d574a2391, type: 2}
   arrowLine: {fileID: 0}
   arrowHead: {fileID: 0}
@@ -322,8 +322,8 @@ MonoBehaviour:
     type: 3}
   selectSelectedMarkerSprite: {fileID: 21300000, guid: 9716eb3df792a7e4daf73d06c4227d55,
     type: 3}
-  defaultSprite: {fileID: 21300000, guid: c5b6e6e5f9cc51d44be8e2e8b5146fde, type: 3}
-  nullSprite: {fileID: 21300000, guid: 028a7bd2e16094b4a9415fa3eb5c339f, type: 3}
+  defaultSprite: {fileID: 21300000, guid: effba188a52765d41be863ea54199dec, type: 3}
+  nullSprite: {fileID: 21300000, guid: a8e6573d079cce0478ae137f7b340124, type: 3}
   renderArrow: 1
   selectable: 1
 --- !u!114 &114675896306537518
@@ -463,7 +463,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c5b6e6e5f9cc51d44be8e2e8b5146fde, type: 3}
+  m_Sprite: {fileID: 21300000, guid: effba188a52765d41be863ea54199dec, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
